@@ -5,14 +5,14 @@
 
 <head>
 
-	<title>Canvas Animation Step 6 Demos</title>
+	<title>WebSim Project</title>
 
 	<meta charset="utf-8">
 
 	<style>
 
-		canvas { border: 2px dotted gray; }
-
+		canvas { border: 3px solid gray; background-color: black; border-radius: 5px; }
+		body { background-color: #B4C9D6;}
 	</style>
 
 	<script>
@@ -21,39 +21,29 @@
 
 		var ctx;
 
-		var width; 					//широчината на canvas платното
+		var width; 					//Width of Canvas element
 
-		var height; 				//височината на canvas платното
+		var height; 				//Height of Canvas element
 
-		var bgColor = "black";		//background на canvas платното
+		var bgColor 	= "black";	//Background of the Canvas
 
-		var ballRadius = 10; 		//Радиус на топчето
+		var objectColor = "white";	//Color of the object
 
-		var x = 20; 				//x позиция на топчето
+		var padX; 					//X position of the object
 
-		var y = 250; 				//y позиция на топчето
+		var padWidth;				//Width of the object
 
-		var ballColor = "white";	//цвят на топчето
+		var padHeight;				//Height of the object
 
-		var dx = 1.5;				//стойността, с която ще променяме местоположението на топчето по x координатата
+		var padColor 	= "red";	//Color of the object
 
-		var dy = -4;				//стойността, с която ще променяме местоположението на топчето по y координатата
+		var rightDown 	= false;
 
-		var padX; 					//X позиция на дъската (ще я изчисляваме динамично в init функцията
+		var leftDown 	= false;
 
-		var padWidth;				//широчина на дъската (ще я изчисляваме динамично в init функцията
+		var upDown 		= false;
 
-		var padHeight;				//височина на дъската (ще я изчисляваме динамично в init функцията
-
-		var padColor = "red";		//Цвят на дъската
-
-		var rightDown = false;
-
-		var leftDown = false;
-
-		var upDown = false;
-
-		var downDown = false;
+		var downDown 	= false;
 
 
 
@@ -67,9 +57,9 @@
 
 			height = canvas.height;
 
-			padWidth = 30;//width/4.5;
+			padWidth = 30;
 
-			padHeight = 30;//height/40;
+			padHeight = 30;
 
 			padX = 0
 
@@ -91,9 +81,7 @@
 
 			clear();
 
-			ctx.fillStyle = ballColor;
-
-			//circle(x, y, ballRadius);
+			ctx.fillStyle = objectColor;
 
 			ctx.rect(padX, padY, padWidth, padHeight);
 
@@ -117,38 +105,12 @@
 			
 			else padY -= 1;
 
-			/*ctx.fillStyle = padColor;
-
-			ctx.strokeStyle = "white";*/
-
 			ctx.fillStyle = "brown";
     		ctx.fill();
     		ctx.lineWidth = 3;
     		ctx.strokeStyle = "white";
     		ctx.stroke();
-    		
-
-			
-
-			
-
-/*			if (x + dx + ballRadius > width || x + dx - ballRadius < 0)
-
-				dx = -dx;
-
-			if (y + dy + ballRadius > height || y + dy - ballRadius < 0)
-
-				dy = -dy;
-
-			
-
-			x += dx;
-
-			y += dy;*/
-
 		}
-
-
 
 		function clear() { 
 
@@ -157,8 +119,6 @@
 			rect(0, 0, width, height);
 
 		}
-
-
 
 		function rect(x, y, width, height) {
 
@@ -169,22 +129,6 @@
 			ctx.closePath();
 
 		}
-
-
-
-		function circle(x,y,r) {
-
-			ctx.beginPath();
-
-			ctx.arc(x, y, r, 0, Math.PI*2, true);
-
-			ctx.closePath();
-
-			ctx.fill();
-
-		}
-
-		
 
 		function onKeyDown(evt) {
 
@@ -198,8 +142,6 @@
 
 		}
 
-
-
 		function onKeyUp(evt) {
 
 			if (evt.keyCode == 39) rightDown = false;
@@ -212,8 +154,6 @@
 
 		}
 
-
-
 		document.addEventListener('keydown',onKeyDown);
 
 		document.addEventListener('keyup',onKeyUp);
@@ -223,7 +163,7 @@
 </head>
 
 <body>
-
+	<br/><br/><br/><br/><br/><br/><br/>
 	<center><canvas id="my_canvas" width="400" height="400"></canvas></center>
 
 	<center><button onclick="init()">Start the simulation!</button></center>
