@@ -15,7 +15,210 @@
 
 	</style>
 
+	<script>
 
+		var canvas;
+
+		var ctx;
+
+		var width; 					//широчината на canvas платното
+
+		var height; 				//височината на canvas платното
+
+		var bgColor = "black";		//background на canvas платното
+
+		var ballRadius = 10; 		//Радиус на топчето
+
+		var x = 20; 				//x позиция на топчето
+
+		var y = 250; 				//y позиция на топчето
+
+		var ballColor = "white";	//цвят на топчето
+
+		var dx = 1.5;				//стойността, с която ще променяме местоположението на топчето по x координатата
+
+		var dy = -4;				//стойността, с която ще променяме местоположението на топчето по y координатата
+
+		var padX; 					//X позиция на дъската (ще я изчисляваме динамично в init функцията
+
+		var padWidth;				//широчина на дъската (ще я изчисляваме динамично в init функцията
+
+		var padHeight;				//височина на дъската (ще я изчисляваме динамично в init функцията
+
+		var padColor = "red";		//Цвят на дъската
+
+		var rightDown = false;
+
+		var leftDown = false;
+
+		var upDown = false;
+
+		var downDown = false;
+
+
+
+		function init() {
+
+			canvas = document.getElementById('my_canvas');
+
+			ctx = canvas.getContext("2d");
+
+			width = canvas.width;
+
+			height = canvas.height;
+
+			padWidth = 30;//width/4.5;
+
+			padHeight = 30;//height/40;
+
+			padX = 0
+
+			padY = 0;
+
+			gameInterval = setInterval(draw, 10);
+
+		}
+
+
+
+		function draw() {
+
+			ctx.beginPath();
+
+
+
+			ctx.fillStyle = bgColor;
+
+			clear();
+
+			ctx.fillStyle = ballColor;
+
+			//circle(x, y, ballRadius);
+
+			ctx.rect(padX, padY, padWidth, padHeight);
+
+			if (padX + padWidth < width && padX> 0) {
+			
+			if (rightDown) padX += 4;
+
+			else if (leftDown) padX -= 4;
+			
+			} else if (padX + padWidth < width) padX += 1;
+			
+			else padX -= 1;
+
+			if (padY + padHeight < height && padY> 0){
+
+			if (upDown) padY -= 4;
+
+			else if (downDown) padY += 4;
+			
+			} else if (padHeight + padY < height) padY += 1;
+			
+			else padY -= 1;
+
+			/*ctx.fillStyle = padColor;
+
+			ctx.strokeStyle = "white";*/
+
+			ctx.fillStyle = "brown";
+    		ctx.fill();
+    		ctx.lineWidth = 3;
+    		ctx.strokeStyle = "white";
+    		ctx.stroke();
+    		
+
+			
+
+			
+
+/*			if (x + dx + ballRadius > width || x + dx - ballRadius < 0)
+
+				dx = -dx;
+
+			if (y + dy + ballRadius > height || y + dy - ballRadius < 0)
+
+				dy = -dy;
+
+			
+
+			x += dx;
+
+			y += dy;*/
+
+		}
+
+
+
+		function clear() { 
+
+			ctx.clearRect(0, 0, width, height);
+
+			rect(0, 0, width, height);
+
+		}
+
+
+
+		function rect(x, y, width, height) {
+
+			ctx.beginPath();
+
+			ctx.fillRect(x, y, width, height);
+
+			ctx.closePath();
+
+		}
+
+
+
+		function circle(x,y,r) {
+
+			ctx.beginPath();
+
+			ctx.arc(x, y, r, 0, Math.PI*2, true);
+
+			ctx.closePath();
+
+			ctx.fill();
+
+		}
+
+		
+
+		function onKeyDown(evt) {
+
+			if (evt.keyCode == 39) rightDown = true;
+
+			else if (evt.keyCode == 37) leftDown = true;
+
+			else if (evt.keyCode == 38) upDown = true;
+
+			else if (evt.keyCode == 40) downDown = true;
+
+		}
+
+
+
+		function onKeyUp(evt) {
+
+			if (evt.keyCode == 39) rightDown = false;
+
+			else if (evt.keyCode == 37) leftDown = false;
+
+			else if (evt.keyCode == 38) upDown = false;
+
+			else if (evt.keyCode == 40) downDown = false;
+
+		}
+
+
+
+		document.addEventListener('keydown',onKeyDown);
+
+		document.addEventListener('keyup',onKeyUp);
+
+	</script>
 
 </head>
 
@@ -23,7 +226,7 @@
 
 	<center><canvas id="my_canvas" width="400" height="400"></canvas></center>
 
-	<center><button disabled="disabled">Start the simulation!(Still in progress)</button></center>
+	<center><button onclick="init()">Start the simulation!</button></center>
 
 </body>
 
