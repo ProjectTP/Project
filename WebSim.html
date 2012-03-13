@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 
-<html>
-  	
+<html>  	
 <head>
 	<title>WebSim Project</title>
 	<meta charset="utf-8">
@@ -50,9 +49,9 @@
 
 			if (padX + (padWidth/2) < width && padX > padWidth/2) {						
 				if (rightDown) {						
-					radian+=(Math.PI/180)*speed;								
+					radian+=(Math.PI/180)*speed;							
 				}else if (leftDown) {					
-					radian-=(Math.PI/180)*speed;						
+					radian-=(Math.PI/180)*speed;					
 				}			
 			} else if (padX + padWidth/2 < width) padX += 1;			
 			else padX -= 1;
@@ -81,47 +80,47 @@
 			
 			if(degrees >= 0 && degrees <= 90){
 				if(upDown){
-					padX+=math_distance(90,0,1);
-					padY-=math_distance(90,1,0);
+					padX+=calc_distance_cos(90);
+					padY-=calc_distance_sin(90);
 				}else if(downDown){
-					padX-=math_distance(90,0,1);
-					padY+=math_distance(90,1,0);
+					padX-=calc_distance_cos(90);
+					padY+=calc_distance_sin(90);
 				}			
 			}else if(degrees > 90 && degrees <= 180){
 					if(upDown){
-						padX+=math_distance(180,1,0);
-						padY+=math_distance(180,0,1);
+						padX+=calc_distance_sin(180);
+						padY+=calc_distance_cos(180);
 					}else if(downDown){
-						padX-=math_distance(180,1,0);
-						padY-=math_distance(180,0,1);
+						padX-=calc_distance_sin(180);
+						padY-=calc_distance_cos(180);
 					}
 			}else if(degrees > 180 && degrees <= 270){
 					if(upDown){
-						padX-=math_distance(270,0,1);
-						padY+=math_distance(270,1,0);
+						padX-=calc_distance_cos(270);
+						padY+=calc_distance_sin(270);
 					}else if(downDown){
-						padX+=math_distance(270,0,1);
-						padY-=math_distance(270,1,0);
+						padX+=calc_distance_cos(270);
+						padY-=calc_distance_sin(270);
 					}
 			}else if(degrees > 270 && degrees <= 360){
 					if(upDown){
-						padX-=math_distance(360,1,0);
-						padY-=math_distance(360,0,1);
+						padX-=calc_distance_sin(360);
+						padY-=calc_distance_cos(360);
 					}else if(downDown){
-						padX+=math_distance(360,1,0);
-						padY+=math_distance(360,0,1);
+						padX+=calc_distance_sin(360);
+						padY+=calc_distance_cos(360);
 					}
 			}			
 		}
 
-		function math_distance(val,sin,cos){
-			if(sin)
-				return Math.sin( ((Math.PI/180)*val)-((Math.PI/180)*degrees) ) * speed;
-			else if(cos)
-				return Math.cos( ((Math.PI/180)*val)-((Math.PI/180)*degrees) ) * speed;
+		function calc_distance_sin(val){
+			return Math.sin( ((Math.PI/180)*val)-((Math.PI/180)*degrees) ) * speed;
+		}
+
+		function calc_distance_cos(val){
+			return Math.cos( ((Math.PI/180)*val)-((Math.PI/180)*degrees) ) * speed;
 		}
 			
-
 		function make_degrees(){
 			var val=radian/(Math.PI/180);	
 					
