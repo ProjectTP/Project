@@ -139,7 +139,7 @@
 			ctx.rotate(radian);			
 //			ctx.font = "15pt Calibri";
 //    		ctx.fillText(make_degrees(), -50, -50);
-			ctx.rect(-padWidth/2,-padHeight/2,padWidth,padHeight);	
+			a = ctx.rect(-padWidth/2,-padHeight/2,padWidth,padHeight);	
 			ctx.restore();
 			ctx.fillStyle = "brown";
     		ctx.fill();
