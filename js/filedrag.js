@@ -1,8 +1,3 @@
-/*
-filedrag.js - HTML5 File Drag & Drop demonstration
-Featured on SitePoint.com
-Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
-*/
 (function() {
 
 	// getElementById
