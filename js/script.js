@@ -20,7 +20,7 @@ var gameInterval=0;
 		var start		= true;
 		var crash		= false;
 
-		
+
 		function init(speed_) {
 			if (start) {
 				canvas = document.getElementById('my_canvas');
@@ -63,6 +63,20 @@ var gameInterval=0;
 			padY = height/2;
 			radian=(Math.PI/180)*0;
 		}
+		// reseting the canvas width and height
+		function reset() {
+
+			width = 450;
+			canvas.width = width;
+			height = 450;
+			canvas.height = height;
+			if(start) {
+			padX = width/2;
+			padY = height/2;
+			radian=(Math.PI/180)*0;
+ 			}
+		}
+
 		// resizing the robot width and height
 		function robo_resize() {
 			if(document.getElementById('width_r').value >= 1 || document.getElementById('height_r').value >= 1) {
@@ -79,7 +93,15 @@ var gameInterval=0;
 			padY = height/2;
 			radian=(Math.PI/180)*0;
 		}
-		
+
+		// resetting the robot width and height
+		function robo_reset() {
+			padWidth = 50;
+			padHeight = 50;
+			padX = width/2;
+			padY = height/2;
+			radian=(Math.PI/180)*0;
+		}
 
 		function draw() {
 			disply();

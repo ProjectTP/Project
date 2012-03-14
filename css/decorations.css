@@ -18,7 +18,9 @@ h1
 
 button 
 {
-	font: 15px/20px Junge,Georgia;
+	font: 12px/20px Cutive,Junge,Georgia;
+	background-color: rgba(255,255,255,1);
+	border-radius: 10px 0px;
 }
 
 div 
@@ -123,9 +125,10 @@ form
 #width1, #width_r ,#height1 ,#height_r
 {
 	background-color: #A4C9D6;
+	background-color: rgba(255,255,255,0.7);
 	color: black;
 	font-weight: bold;
-	border-radius: 10px;
+	border-radius: 5px;
 	width: 120px;
 }
 

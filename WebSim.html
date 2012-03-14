@@ -9,6 +9,7 @@
 		<link rel="stylesheet" type="text/css" media="all" href="css/decorations.css" />
 		<link href='http://fonts.googleapis.com/css?family=Ruthie' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Junge' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Cutive' rel='stylesheet' type='text/css'>
 		
 	</head>
 	<body onload = "start=true; init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=true;">
@@ -70,11 +71,13 @@
 			Resize canvas:<br/>
   			<input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"/>
   			<input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"/><br />
-  			<button  onclick ="resize()"> Resize the table! </button><br/>
+  			<button  onclick ="resize()"> Resize the table! </button>
+  			<button  onclick ="reset()"> Reset table size! </button><br/>
   			Resize robot:<br/>
   			<input type="number" id="width_r" min="1" max = "100" step = "25" placeholder = "Robo Width"/>
   			<input type="number" id="height_r" min="1" max = "100" step = "25" placeholder = "Robo Height"/><br />
   			<button  onclick ="robo_resize()"> Resize the robot! </button>
+  			<button  onclick ="robo_reset()"> Reset the robot! </button>
   		</center>
   		<br/>
   		<footer>
