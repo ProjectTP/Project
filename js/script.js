@@ -1,4 +1,4 @@
-		var gameInterval=0;
+var gameInterval=0;
 		var canvas;
 		var ctx;
 		var width; 				
@@ -17,62 +17,117 @@
 		var radian;		
 		var degrees;
 		var speed;
-		var start = true;
-		
+		var start		= true;
+		var crash		= false;
+
 		function init(speed_) {
 			if (start) {
-			canvas = document.getElementById('my_canvas');
-			ctx = canvas.getContext("2d");			
-			width = canvas.width;
-			height = canvas.height;
-			padWidth = 45;
-			padHeight = 45;
-			padX = width/2;
-			padY = height/2;
-			radian=(Math.PI/180)*0;
-			start = false;
-
+				canvas = document.getElementById('my_canvas');
+				ctx = canvas.getContext("2d");			
+				width = canvas.width;
+				height = canvas.height;
+				padWidth = 50;
+				padHeight = 50;
+				padX = width/2;
+				padY = height/2;
+				radian=(Math.PI/180)*0;
+				start = false;
 			}
 			speed=speed_;
-
 			clearInterval(gameInterval);
 			gameInterval = setInterval(draw, 20);
 		}
 
 		function draw() {
 			disply();
-
-			if (padX + (padWidth/2) < width && padX > padWidth/2) {						
+			check_rect_angles();
+			if (padX + padWidth/2 < width && padX > padWidth/2) {						
 				if (rightDown) {						
 					radian+=(Math.PI/180)*speed;							
 				}else if (leftDown) {					
 					radian-=(Math.PI/180)*speed;					
 				}			
-			} else if (padX + padWidth/2 < width) padX += 1;			
-			else padX -= 1;
+			}
 
 			if (padY + (padHeight/2) < height && padY > padHeight/2){
 				if (upDown){
 					calc_coord();	
-					if(padX + (padWidth/2) > width)
+					if(padX + padWidth/2 > width){
+						crash=true;
 						padX-=speed+1;			
-					if(padX < padWidth/2)
+					}
+					if(padX < padWidth/2){
+						crash=true;
 						padX+=speed+1;
-				}
-				else if (downDown){
+					}
+				}else if (downDown){
 					calc_coord();
-					if(padX + (padWidth/2) > width)
+					if(padX + padWidth/2 > width)
 						padX-=speed+1;			
 					if(padX < padWidth/2)
 						padX+=speed+1;		
 				}
-			} else if (padHeight/2 + padY < height) padY += 1;			
-			else padY -= 1;   				
+			}else if (padHeight/2 + padY < height) {
+				padY += speed + 1;
+				crash=true;	
+			}else{
+				padY -= speed + 1;   	
+				crash=true;						
+			}
+		}
+
+		function check_rect_angles(){
+			if( padX+check_angleX(1) > width || padX+check_angleX(2) > width || padX+check_angleX(3) > width || padX+check_angleX(4) > width || 
+				padX+check_angleX(1) < 0 || padX+check_angleX(2) < 0 || padX+check_angleX(3) < 0 || padX+check_angleX(4) < 0 ||
+				padY+check_angleY(1) > height || padY+check_angleY(2) > height || padY+check_angleY(3) > height || padY+check_angleY(4) > height ||
+				padY+check_angleY(1) < 0 || padY+check_angleY(2) < 0 || padY+check_angleY(3) < 0 || padY+check_angleY(4) < 0 ){
+				crash=true;
+			}else{
+				crash=false;	
+			}
+		}
+
+		function check_angleX(angle){
+			var x=0;
+			degrees=make_degrees();
+
+			if(angle==1){
+				x=Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*padHeight/2;
+				return x-( Math.cos((Math.PI/180)*degrees)*padWidth/2);
+			}else if(angle==2){
+				x=Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*padHeight/2;
+				return x+( Math.cos((Math.PI/180)*degrees)*padWidth/2);
+			}else if(angle==3){
+				x= -Math.sin((Math.PI/180)*degrees)*padHeight/2;
+				return x+( Math.cos((Math.PI/180)*degrees)*padWidth/2);
+			}else if(angle==4){				
+				x=Math.sin((Math.PI/180)*degrees)*padHeight/2;
+				return -(x+( Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*padWidth/2));
+			}
+		}
+
+		function check_angleY(angle){
+			var y=0;
+			degrees=make_degrees();
+
+			if(angle==1){
+				y= -Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*padHeight/2;
+				return y-( Math.sin((Math.PI/180)*degrees)*padWidth/2);
+			}else if(angle==2){
+				y= -Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*padHeight/2;
+				return y+( Math.sin((Math.PI/180)*degrees)*padWidth/2);
+			}else if(angle==3){
+				y= Math.cos((Math.PI/180)*degrees)*padHeight/2;
+				return y+( Math.sin((Math.PI/180)*degrees)*padWidth/2);
+			}else if(angle==4){				
+				y= -Math.cos((Math.PI/180)*degrees)*padHeight/2;
+				return -(y+( Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*padWidth/2));
+			}
 		}
 
 		function calc_coord(){			
 			degrees=make_degrees();
-			
+
 			if(degrees >= 0 && degrees <= 90){
 				if(upDown){
 					padX+=calc_distance_cos(90);
@@ -115,10 +170,10 @@
 		function calc_distance_cos(val){
 			return Math.cos( ((Math.PI/180)*val)-((Math.PI/180)*degrees) ) * speed;
 		}
-			
+
 		function make_degrees(){
 			var val=radian/(Math.PI/180);	
-					
+
 			while(val>360 || val<-360){				
 					if(val>360)
 						val-=360;			
@@ -133,13 +188,18 @@
 			ctx.beginPath();
 			ctx.fillStyle = bgColor;						
 			clear();					
+			if(crash){
+				ctx.fillStyle= "red";
+				ctx.font = "bold 25pt Calibri";
+				ctx.fillText("CRASH", width/2-45, height/2);
+			}
 			ctx.fillStyle = objectColor;
 			ctx.save();		
 			ctx.translate(padX,padY);	
 			ctx.rotate(radian);			
-//			ctx.font = "15pt Calibri";
-//    		ctx.fillText(make_degrees(), -50, -50);
-			a = ctx.rect(-padWidth/2,-padHeight/2,padWidth,padHeight);	
+			ctx.rect(-padWidth/2,-padHeight/2,padWidth,padHeight);	
+			ctx.font = "bold 30pt Calibri";
+			ctx.fillText("*",-padWidth/6,-padHeight/3);	
 			ctx.restore();
 			ctx.fillStyle = "brown";
     		ctx.fill();
