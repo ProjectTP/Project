@@ -20,6 +20,7 @@ var gameInterval=0;
 		var start		= true;
 		var crash		= false;
 
+		
 		function init(speed_) {
 			if (start) {
 				canvas = document.getElementById('my_canvas');
@@ -40,20 +41,29 @@ var gameInterval=0;
 
 		// resizing the canvas width and height
 		function resize() {
-			if(document.getElementById('width1').value > 150 || document.getElementById('height1').value > 150) {
-				if(document.getElementById('width1').value > 150) {
+
+ 			if(start) {
+ 				init(6);
+ 				resize();
+ 			}
+
+			if(document.getElementById('width1').value >= 150 || document.getElementById('height1').value >= 150) {
+				if(document.getElementById('width1').value > 150 && document.getElementById('width1').value < 1000) {
 					canvas.width  = document.getElementById('width1').value;
 					width = canvas.width;
 				}
-				if(document.getElementById('height1').value > 150) {
+				if(document.getElementById('height1').value > 150 && document.getElementById('height1').value < 1000) {
 					canvas.height = document.getElementById('height1').value;
 					height = canvas.height;
 				}
 			} else if(start == false) {
 				alert('Please enter width/height higher than 150');
 			}
+			padX = width/2;
+			padY = height/2;
+			radian=(Math.PI/180)*0;
 		}
-
+		// resizing the robot width and height
 		function robo_resize() {
 			if(document.getElementById('width_r').value >= 1 || document.getElementById('height_r').value >= 1) {
 				if(document.getElementById('width_r').value >= 1 && document.getElementById('width_r').value < 100) {
@@ -65,7 +75,12 @@ var gameInterval=0;
 			} else if(start == false) {
 				alert('Please enter width/height for the robot higher than 1');
 			}
+			padX = width/2;
+			padY = height/2;
+			radian=(Math.PI/180)*0;
 		}
+		
+
 		function draw() {
 			disply();
 			check_rect_angles();
