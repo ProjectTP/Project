@@ -5,6 +5,7 @@
 		<title>WebSim Project</title>
 		<meta charset="utf-8">
 		<script type="text/javascript" src="js/script.js"></script>
+		<script type="text/javascript" src="js/resize.js"></script>
 		<link rel="stylesheet" type="text/css" media="all" href="css/decorations.css" />
 		<link href='http://fonts.googleapis.com/css?family=Ruthie' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Junge' rel='stylesheet' type='text/css'>
@@ -63,10 +64,14 @@
 			<button id="but2" disabled onclick="init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;">Normal
 			</button>
 			<button id="but3" disabled onclick="init(9); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;">Fast
-			</button>
+			</button><br/>
 		</center>
-		
-		
+		<center>
+  		
+			<input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"/>
+  			<input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"/><br />
+  			<button  onclick ="resize()"> Resize! </button>
+  		</center>
 		<script src="js/filedrag.js"></script>
 	</body>
 </html>

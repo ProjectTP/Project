@@ -122,3 +122,30 @@ form
 	right: 0px;
 	float: right;
 }
+
+#width1
+{
+	background-color: #A4C9D6;
+	color: black;
+	font-weight: bold;
+	border-radius: 10px;
+}
+
+#height1
+{
+	background-color: #A4C9D6;
+	color: black;
+	font-weight: bold;
+	border-radius: 10px;
+}
+
+::-webkit-input-placeholder  
+{
+	font-weight: normal;
+	color:#393954;
+}
+
+input:-moz-placeholder {
+	font-weight: normal;
+	color:#393954;
+}

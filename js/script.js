@@ -1,8 +1,8 @@
 var gameInterval=0;
 		var canvas;
 		var ctx;
-		var width; 				
-		var height; 				
+		var width = 400; 				
+		var height = 400; 				
 		var bgColor 	= "black";	
 		var objectColor = "white";	
 		var padX; 					
@@ -23,7 +23,7 @@ var gameInterval=0;
 		function init(speed_) {
 			if (start) {
 				canvas = document.getElementById('my_canvas');
-				ctx = canvas.getContext("2d");			
+				ctx = canvas.getContext("2d");
 				width = canvas.width;
 				height = canvas.height;
 				padWidth = 50;
@@ -32,12 +32,27 @@ var gameInterval=0;
 				padY = height/2;
 				radian=(Math.PI/180)*0;
 				start = false;
-			}
+			}			
 			speed=speed_;
 			clearInterval(gameInterval);
 			gameInterval = setInterval(draw, 20);
 		}
 
+		// resizing the canvas width and height
+		function resize() {
+			if(document.getElementById('width1').value > 150 || document.getElementById('height1').value > 150) {
+				if(document.getElementById('width1').value > 150) {
+					canvas.width  = document.getElementById('width1').value;
+					width = canvas.width;
+				}
+				if(document.getElementById('height1').value > 150) {
+					canvas.height = document.getElementById('height1').value;
+					height = canvas.height;
+				}
+			} else if(start == false) {
+				alert('Please enter width/height higher than 150');
+			}
+		}
 		function draw() {
 			disply();
 			check_rect_angles();
