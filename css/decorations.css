@@ -140,3 +140,8 @@ input:-moz-placeholder {
 	font:italic 13px Junge,Georgia;
 	color:#393954;
 }
+
+footer
+{
+	font: bold 11px Junge,Georgia;
+}
