@@ -67,11 +67,16 @@
 			</button><br/>
 		</center>
 		<center>
-  		
-			<input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"/>
+			Resize canvas:<br/>
+  			<input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"/>
   			<input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"/><br />
-  			<button  onclick ="resize()"> Resize! </button>
+  			<button  onclick ="resize()"> Resize! </button><br/>
+  			Resize robot:<br/>
+  			<input type="number" id="width_r" min="1" max = "100" step = "25" placeholder = "Robo Width"/>
+  			<input type="number" id="height_r" min="1" max = "100" step = "25" placeholder = "Robo Height"/><br />
+  			<button  onclick ="robo_resize()"> Resize the robot! </button>
   		</center>
+
 		<script src="js/filedrag.js"></script>
 	</body>
 </html>

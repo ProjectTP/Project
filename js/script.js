@@ -53,6 +53,19 @@ var gameInterval=0;
 				alert('Please enter width/height higher than 150');
 			}
 		}
+
+		function robo_resize() {
+			if(document.getElementById('width_r').value >= 1 || document.getElementById('height_r').value >= 1) {
+				if(document.getElementById('width_r').value >= 1 && document.getElementById('width_r').value < 100) {
+					padWidth = document.getElementById('width_r').value;
+				}
+				if(document.getElementById('height_r').value >= 1 && document.getElementById('height_r').value < 100) {
+					padHeight = document.getElementById('height_r').value;
+				}
+			} else if(start == false) {
+				alert('Please enter width/height for the robot higher than 1');
+			}
+		}
 		function draw() {
 			disply();
 			check_rect_angles();

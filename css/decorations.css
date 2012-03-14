@@ -123,21 +123,15 @@ form
 	float: right;
 }
 
-#width1
+#width1, #width_r ,#height1 ,#height_r
 {
 	background-color: #A4C9D6;
 	color: black;
 	font-weight: bold;
 	border-radius: 10px;
+	width: 120px;
 }
 
-#height1
-{
-	background-color: #A4C9D6;
-	color: black;
-	font-weight: bold;
-	border-radius: 10px;
-}
 
 ::-webkit-input-placeholder  
 {
