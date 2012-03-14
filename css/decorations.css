@@ -1,0 +1,24 @@
+canvas 
+{ 
+	border: 3px solid gray;
+	background-color: black;
+	border-radius: 5px;
+}
+body 
+{ 
+	background-color: #B4C9D6;
+} 
+h1 
+{ 
+	font:bold 50px/60px Cutive,Georgia, serif;
+	color: rgb(200,10,10);
+}
+button 
+{
+	font:italic 15px/20px Georgia;
+}
+div 
+{
+	font: bold 20px Georgia;
+	padding: 15px 0 5px 0;
+}	
