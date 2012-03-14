@@ -1,138 +1,41 @@
 <!DOCTYPE html>
 
-<html>
-
-<head>
-
-	<title>WebSim Project</title>
-
-	<meta charset="utf-8">
-
-	<style>
-		canvas { border: 3px solid gray; background-color: black;  border-radius: 5px; }
-		body { background-color: #B4C9D6;}
-	</style>
-
-	<script>
-		var canvas;
-		var ctx;
-		var width; 				
-		var height; 				
-		var bgColor 	= "black";	
-		var objectColor = "white";	
-		var padX; 					
-		var padY; 					
-		var padWidth;				
-		var padHeight;				
-		var padColor 	= "red";	
-		var rightDown 	= false;
-		var leftDown 	= false;
-		var upDown 		= false;
-		var downDown 	= false;
-		var radian=0;		
+<html>  	
+	<head>
+		<title>WebSim Project</title>
+		<meta charset="utf-8">
+		<script type="text/javascript" src="js/script.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/decorations.css" />
+		<link href='http://fonts.googleapis.com/css?family=Cutive' rel='stylesheet' type='text/css'>
+	</head>
+	<body>
+		<br/>
+		<h1> 
+			<center>
+				WebSim Project
+			</center> 
+		</h1>
+		<br/>
+		<br/>
+		<center>
+			<canvas id="my_canvas" width="450" height="450"></canvas>
+		</center>
+		<center>
+			<div> 
+				Speed: 
+			</div>
+		</center>
+		<center>
+			<button id="but1" disabled onclick="init(3); javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false; ">Slow
+			</button>
+			<button id="but2" disabled onclick="init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;">Normal
+			</button>
+			<button id="but3" disabled onclick="init(9); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;">Fast
+			</button>
+		</center>
 		
-		function init() {
-			canvas = document.getElementById('my_canvas');
-			ctx = canvas.getContext("2d");			
-			width = canvas.width;
-			height = canvas.height;
-			padWidth = 45;
-			padHeight = 45;
-			padX = width/2;
-			padY = height/2;
-			radian=0;
-			gameInterval = setInterval(draw, 20);
-		}
-
-		function draw() {
-			disply();
-			if (padX + padWidth < width && padX> padHeight/2) {						
-				if (rightDown) {						
-					radian-=0.08;							
-				}else if (leftDown) {					
-					radian+=0.08;					
-				}			
-			} else if (padX + padWidth < width) padX += 1;			
-			else padX -= 1;
-			if (padY + (padHeight/2) < height && padY> padHeight/2){
-			if (upDown) padY -= 4;
-			else if (downDown) padY += 4;			
-			} else if (padHeight + padY < height) padY += 1;			
-			else padY -= 1;   		
-			return 0;
-		}
-
-		function disply() {
-				
-			ctx.beginPath();
-			ctx.fillStyle = bgColor;						
-			clear();					
-			ctx.fillStyle = objectColor;		
-			ctx.translate(padX,padY);	
-			ctx.rotate(radian);			
-			ctx.rect(-padWidth/2,-padHeight/2,padWidth,padHeight);	
-			ctx.rotate(-radian);		
-			ctx.translate(-padX,-padY);
-			ctx.fillStyle = "brown";
-    		ctx.fill();
-    		ctx.lineWidth = 3;
-    		ctx.strokeStyle = "white";
-    		ctx.stroke(); 	
-		}
-
-
-		function clear() { 				
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			rect(0, 0, width, height);
-		}
-
-		function rect(x, y, width, height) {			
-			ctx.beginPath();
-			ctx.fillRect(x, y, width, height);
-			ctx.closePath();
-		}
-
-		function onKeyDown(evt) {
-
-			if (evt.keyCode == 39)
-				rightDown = true;
-
-			else if (evt.keyCode == 37)
-				leftDown = true;
-
-			else if (evt.keyCode == 38)
-				upDown = true;
-
-			else if (evt.keyCode == 40)
-				downDown = true;
-
-		}
-
-		function onKeyUp(evt) {
-
-			if (evt.keyCode == 39)
-				rightDown = false;
-
-			else if (evt.keyCode == 37)
-				leftDown = false;
-
-			else if (evt.keyCode == 38)
-				upDown = false;
-
-			else if (evt.keyCode == 40)
-				downDown = false;
-		}
-
-		document.addEventListener('keydown',onKeyDown);
-		document.addEventListener('keyup',onKeyUp);
-	</script>
-
-</head>
-
-<body>
-	<br/><br/><br/><br/><br/><br/><br/>
-	<center><canvas id="my_canvas" width="450" height="450"></canvas></center>
-	<center><button onclick="init()">Start the simulation!</button></center>
-</body>
-
+		<center>
+			<button id="startb" onclick="start=true; init(3); javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false; "> Start/Reset </button>
+		</center>
+	</body>
 </html>
