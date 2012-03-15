@@ -77,6 +77,12 @@ var gameInterval=0;
  			}
 		}
 
+		function resetpos() {
+			padX = width/2;
+			padY = height/2;
+			radian=(Math.PI/180)*0;
+		}
+
 		// resizing the robot width and height
 		function robo_resize() {
 			if(document.getElementById('width_r').value >= 1 || document.getElementById('height_r').value >= 1) {
@@ -264,9 +270,9 @@ var gameInterval=0;
 			ctx.rotate(radian);			
 			ctx.rect(-padWidth/2,-padHeight/2,padWidth,padHeight);	
 			ctx.font = "bold 30pt Calibri";
-			ctx.fillText("*",-padWidth/6,-padHeight/3);	
+			ctx.fillText("=",-padWidth/6,-padHeight/3);	
 			ctx.restore();
-			ctx.fillStyle = "brown";
+			ctx.fillStyle = "#400000";
     		ctx.fill();
     		ctx.lineWidth = 3;
     		ctx.strokeStyle = "white";
