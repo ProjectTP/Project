@@ -5,10 +5,10 @@ var gameInterval=0;
 		var height = 400; 				
 		var bgColor 	= "black";	
 		var objectColor = "white";	
-		var padX; 					
-		var padY; 					
-		var padWidth;				
-		var padHeight;				
+		var roboX; 					
+		var roboY; 					
+		var roboWidth;				
+		var roboHeight;				
 		var padColor 	= "red";	
 		var rightDown 	= false;
 		var leftDown 	= false;
@@ -27,10 +27,18 @@ var gameInterval=0;
 				ctx = canvas.getContext("2d");
 				width = canvas.width;
 				height = canvas.height;
-				padWidth = 50;
-				padHeight = 50;
-				padX = width/2;
-				padY = height/2;
+				roboWidth = 50;
+				roboHeight = 50;
+				lWheelWidth = 7;
+				lWheelHeight = 40;
+				rWheelWidth = 7;
+				rWheelHeight = 40;
+				roboX = width/2;
+				roboY = height/2;
+				lWheelX  = roboX;
+				lWheelY = roboY;
+				rWheelX = roboX;
+				rWheelY = roboY;
 				radian=(Math.PI/180)*0;
 				start = false;
 			}			
@@ -59,8 +67,8 @@ var gameInterval=0;
 			} else if(start == false) {
 				alert('Please enter width/height higher than 150');
 			}
-			padX = width/2;
-			padY = height/2;
+			roboX = width/2;
+			roboY = height/2;
 			radian=(Math.PI/180)*0;
 		}
 		// reseting the canvas width and height
@@ -71,15 +79,15 @@ var gameInterval=0;
 			height = 450;
 			canvas.height = height;
 			if(start) {
-			padX = width/2;
-			padY = height/2;
+			roboX = width/2;
+			roboY = height/2;
 			radian=(Math.PI/180)*0;
  			}
 		}
 
 		function resetpos() {
-			padX = width/2;
-			padY = height/2;
+			roboX = width/2;
+			roboY = height/2;
 			radian=(Math.PI/180)*0;
 		}
 
@@ -87,32 +95,32 @@ var gameInterval=0;
 		function robo_resize() {
 			if(document.getElementById('width_r').value >= 1 || document.getElementById('height_r').value >= 1) {
 				if(document.getElementById('width_r').value >= 1 && document.getElementById('width_r').value < 100) {
-					padWidth = document.getElementById('width_r').value;
+					roboWidth = document.getElementById('width_r').value;
 				}
 				if(document.getElementById('height_r').value >= 1 && document.getElementById('height_r').value < 100) {
-					padHeight = document.getElementById('height_r').value;
+					roboHeight = document.getElementById('height_r').value;
 				}
 			} else if(start == false) {
 				alert('Please enter width/height for the robot higher than 1');
 			}
-			padX = width/2;
-			padY = height/2;
+			roboX = width/2;
+			roboY = height/2;
 			radian=(Math.PI/180)*0;
 		}
 
 		// resetting the robot width and height
 		function robo_reset() {
-			padWidth = 50;
-			padHeight = 50;
-			padX = width/2;
-			padY = height/2;
+			roboWidth = 50;
+			roboHeight = 50;
+			roboX = width/2;
+			roboY = height/2;
 			radian=(Math.PI/180)*0;
 		}
 
 		function draw() {
-			disply();
+			display();
 			check_rect_angles();
-			if (padX + padWidth/2 < width && padX > padWidth/2) {						
+			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
 				if (rightDown) {						
 					radian+=(Math.PI/180)*speed;							
 				}else if (leftDown) {					
@@ -120,38 +128,38 @@ var gameInterval=0;
 				}			
 			}
 
-			if (padY + (padHeight/2) < height && padY > padHeight/2){
+			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2){
 				if (upDown){
 					calc_coord();	
-					if(padX + padWidth/2 > width){
+					if(roboX + roboWidth/2 > width){
 						crash=true;
-						padX-=speed+1;			
+						roboX-=speed+1;			
 					}
-					if(padX < padWidth/2){
+					if(roboX < roboWidth/2){
 						crash=true;
-						padX+=speed+1;
+						roboX+=speed+1;
 					}
 				}else if (downDown){
 					calc_coord();
-					if(padX + padWidth/2 > width)
-						padX-=speed+1;			
-					if(padX < padWidth/2)
-						padX+=speed+1;		
+					if(roboX + roboWidth/2 > width)
+						roboX-=speed+1;			
+					if(roboX < roboWidth/2)
+						roboX+=speed+1;		
 				}
-			}else if (padHeight/2 + padY < height) {
-				padY += speed + 1;
+			}else if (roboHeight/2 + roboY < height) {
+				roboY += speed + 1;
 				crash=true;	
 			}else{
-				padY -= speed + 1;   	
+				roboY -= speed + 1;   	
 				crash=true;						
 			}
 		}
 
 		function check_rect_angles(){
-			if( padX+check_angleX(1) > width || padX+check_angleX(2) > width || padX+check_angleX(3) > width || padX+check_angleX(4) > width || 
-				padX+check_angleX(1) < 0 || padX+check_angleX(2) < 0 || padX+check_angleX(3) < 0 || padX+check_angleX(4) < 0 ||
-				padY+check_angleY(1) > height || padY+check_angleY(2) > height || padY+check_angleY(3) > height || padY+check_angleY(4) > height ||
-				padY+check_angleY(1) < 0 || padY+check_angleY(2) < 0 || padY+check_angleY(3) < 0 || padY+check_angleY(4) < 0 ){
+			if( roboX+check_angleX(1) > width || roboX+check_angleX(2) > width || roboX+check_angleX(3) > width || roboX+check_angleX(4) > width || 
+				roboX+check_angleX(1) < 0 || roboX+check_angleX(2) < 0 || roboX+check_angleX(3) < 0 || roboX+check_angleX(4) < 0 ||
+				roboY+check_angleY(1) > height || roboY+check_angleY(2) > height || roboY+check_angleY(3) > height || roboY+check_angleY(4) > height ||
+				roboY+check_angleY(1) < 0 || roboY+check_angleY(2) < 0 || roboY+check_angleY(3) < 0 || roboY+check_angleY(4) < 0 ){
 				crash=true;
 			}else{
 				crash=false;	
@@ -163,17 +171,17 @@ var gameInterval=0;
 			degrees=make_degrees();
 
 			if(angle==1){
-				x=Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*padHeight/2;
-				return x-( Math.cos((Math.PI/180)*degrees)*padWidth/2);
+				x=Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*roboHeight/2;
+				return x-( Math.cos((Math.PI/180)*degrees)*roboWidth/2);
 			}else if(angle==2){
-				x=Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*padHeight/2;
-				return x+( Math.cos((Math.PI/180)*degrees)*padWidth/2);
+				x=Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*roboHeight/2;
+				return x+( Math.cos((Math.PI/180)*degrees)*roboWidth/2);
 			}else if(angle==3){
-				x= -Math.sin((Math.PI/180)*degrees)*padHeight/2;
-				return x+( Math.cos((Math.PI/180)*degrees)*padWidth/2);
+				x= -Math.sin((Math.PI/180)*degrees)*roboHeight/2;
+				return x+( Math.cos((Math.PI/180)*degrees)*roboWidth/2);
 			}else if(angle==4){				
-				x=Math.sin((Math.PI/180)*degrees)*padHeight/2;
-				return -(x+( Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*padWidth/2));
+				x=Math.sin((Math.PI/180)*degrees)*roboHeight/2;
+				return -(x+( Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*roboWidth/2));
 			}
 		}
 
@@ -182,17 +190,17 @@ var gameInterval=0;
 			degrees=make_degrees();
 
 			if(angle==1){
-				y= -Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*padHeight/2;
-				return y-( Math.sin((Math.PI/180)*degrees)*padWidth/2);
+				y= -Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*roboHeight/2;
+				return y-( Math.sin((Math.PI/180)*degrees)*roboWidth/2);
 			}else if(angle==2){
-				y= -Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*padHeight/2;
-				return y+( Math.sin((Math.PI/180)*degrees)*padWidth/2);
+				y= -Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*roboHeight/2;
+				return y+( Math.sin((Math.PI/180)*degrees)*roboWidth/2);
 			}else if(angle==3){
-				y= Math.cos((Math.PI/180)*degrees)*padHeight/2;
-				return y+( Math.sin((Math.PI/180)*degrees)*padWidth/2);
+				y= Math.cos((Math.PI/180)*degrees)*roboHeight/2;
+				return y+( Math.sin((Math.PI/180)*degrees)*roboWidth/2);
 			}else if(angle==4){				
-				y= -Math.cos((Math.PI/180)*degrees)*padHeight/2;
-				return -(y+( Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*padWidth/2));
+				y= -Math.cos((Math.PI/180)*degrees)*roboHeight/2;
+				return -(y+( Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*roboWidth/2));
 			}
 		}
 
@@ -201,35 +209,35 @@ var gameInterval=0;
 
 			if(degrees >= 0 && degrees <= 90){
 				if(upDown){
-					padX+=calc_distance_cos(90);
-					padY-=calc_distance_sin(90);
+					roboX+=calc_distance_cos(90);
+					roboY-=calc_distance_sin(90);
 				}else if(downDown){
-					padX-=calc_distance_cos(90);
-					padY+=calc_distance_sin(90);
+					roboX-=calc_distance_cos(90);
+					roboY+=calc_distance_sin(90);
 				}			
 			}else if(degrees > 90 && degrees <= 180){
 					if(upDown){
-						padX+=calc_distance_sin(180);
-						padY+=calc_distance_cos(180);
+						roboX+=calc_distance_sin(180);
+						roboY+=calc_distance_cos(180);
 					}else if(downDown){
-						padX-=calc_distance_sin(180);
-						padY-=calc_distance_cos(180);
+						roboX-=calc_distance_sin(180);
+						roboY-=calc_distance_cos(180);
 					}
 			}else if(degrees > 180 && degrees <= 270){
 					if(upDown){
-						padX-=calc_distance_cos(270);
-						padY+=calc_distance_sin(270);
+						roboX-=calc_distance_cos(270);
+						roboY+=calc_distance_sin(270);
 					}else if(downDown){
-						padX+=calc_distance_cos(270);
-						padY-=calc_distance_sin(270);
+						roboX+=calc_distance_cos(270);
+						roboY-=calc_distance_sin(270);
 					}
 			}else if(degrees > 270 && degrees <= 360){
 					if(upDown){
-						padX-=calc_distance_sin(360);
-						padY-=calc_distance_cos(360);
+						roboX-=calc_distance_sin(360);
+						roboY-=calc_distance_cos(360);
 					}else if(downDown){
-						padX+=calc_distance_sin(360);
-						padY+=calc_distance_cos(360);
+						roboX+=calc_distance_sin(360);
+						roboY+=calc_distance_cos(360);
 					}
 			}			
 		}
@@ -255,22 +263,33 @@ var gameInterval=0;
 			return val;
 		}
 
-		function disply() {						
+		function display() {						
 			ctx.beginPath();
 			ctx.fillStyle = bgColor;						
 			clear();					
 			if(crash){
-				ctx.fillStyle= "red";
-				ctx.font = "bold 25pt Calibri";
-				ctx.fillText("CRASH", width/2-45, height/2);
+				ctx.fillStyle= "white";
+				ctx.font = "bold 50pt Calibri,Times New Roman";
+				ctx.fillText("CRASH!", width/2-100, height/2 + 10);
 			}
 			ctx.fillStyle = objectColor;
 			ctx.save();		
-			ctx.translate(padX,padY);	
+			ctx.translate(roboX,roboY);
+			
+			// robot
 			ctx.rotate(radian);			
-			ctx.rect(-padWidth/2,-padHeight/2,padWidth,padHeight);	
+			ctx.rect(-roboWidth/2,-roboHeight/2,roboWidth,roboHeight);
+			
+			// left wheel
+			
+			ctx.rect(-30,-lWheelHeight/2,lWheelWidth,lWheelHeight);
+			
+			// right wheel
+			
+			ctx.rect(rWheelWidth + 15,-rWheelHeight/2,rWheelWidth,rWheelHeight);
+			
 			ctx.font = "bold 30pt Calibri";
-			ctx.fillText("=",-padWidth/6,-padHeight/3);	
+			ctx.fillText("*",-roboWidth/6,-roboHeight/3);	
 			ctx.restore();
 			ctx.fillStyle = "#400000";
     		ctx.fill();
