@@ -9,7 +9,7 @@ var gameInterval=0;
 		var roboY; 					
 		var roboWidth;				
 		var roboHeight;				
-		var padColor 	= "red";	
+		var roboColor 	= "red";	
 		var rightDown 	= false;
 		var leftDown 	= false;
 		var upDown 		= false;
@@ -28,7 +28,7 @@ var gameInterval=0;
 				width = canvas.width;
 				height = canvas.height;
 				roboWidth = 50;
-				roboHeight = 60;
+				roboHeight = 53;
 				lWheelWidth = 7;
 				lWheelHeight = 40;
 				rWheelWidth = 7;
@@ -100,6 +100,13 @@ var gameInterval=0;
 				if(document.getElementById('height_r').value >= 1 && document.getElementById('height_r').value < 100) {
 					roboHeight = document.getElementById('height_r').value;
 				}
+				if (document.getElementById('height_r').value > 100 && document.getElementById('width_r').value > 100) {
+					alert('Please enter height and width for the robot less than 100');
+				} else if (document.getElementById('height_r').value > 100) {
+					alert('Please enter height for the robot less than 100');
+				} else if (document.getElementById('width_r').value > 100) {
+					alert('Please enter width for the robot less than 100');
+				}
 			} else if(start == false) {
 				alert('Please enter width/height for the robot higher than 1');
 			}
@@ -111,7 +118,7 @@ var gameInterval=0;
 		// resetting the robot width and height
 		function robo_reset() {
 			roboWidth = 50;
-			roboHeight = 60;
+			roboHeight = 53;
 			roboX = width/2;
 			roboY = height/2;
 			radian=(Math.PI/180)*0;
@@ -280,6 +287,7 @@ var gameInterval=0;
 			ctx.rotate(radian);			
 			ctx.rect(-roboWidth/2,-roboHeight/2,roboWidth,roboHeight);
 			
+
 			// left wheel
 			
 			ctx.rect(-32,-lWheelHeight/2,lWheelWidth,lWheelHeight);
@@ -288,10 +296,11 @@ var gameInterval=0;
 			
 			ctx.rect(rWheelWidth + 18,-rWheelHeight/2,rWheelWidth,rWheelHeight);
 			
+			
 			// lines for the wheels 
 
 			// for right wheel
-
+			
 			ctx.moveTo(rWheelWidth + 18, rWheelHeight/2 - 20);
 			ctx.lineTo(31, 0);
 
@@ -315,10 +324,10 @@ var gameInterval=0;
 			ctx.font = "bold 30pt Calibri";
 			ctx.fillText("*",-roboWidth/6,-roboHeight/3);	
 			ctx.restore();
-			ctx.fillStyle = "#400000";
+			ctx.fillStyle = "white";
     		ctx.fill();
     		ctx.lineWidth = 3;
-    		ctx.strokeStyle = "white";
+    		ctx.strokeStyle = "black";
     		ctx.stroke(); 	
 		}
 

@@ -3,7 +3,8 @@ canvas
 	border: 10px solid white;
 	background-color: black;
 	border-radius: 15px;
-	box-shadow: 0px 0px 15px 15px rgba(0,0,0,0.5);
+	box-shadow: 0px 0px 15px 15px rgba(0,0,0,0.5), 0px 0px 5px 5px #400000;
+
 }
 
 body 
@@ -16,6 +17,8 @@ h1
 	font: 65px/75px Ruthie,Georgia, serif;
 	color: rgb(200,10,10);
 	text-shadow:  1px 1px rgba(255,255,255,0.8);
+	margin-bottom: 30px;
+	margin-top: 10px;
 }
 
 button 
@@ -27,7 +30,13 @@ button
 
 button:active
 {
-	background-color: rgba(255,255,255,0.5);
+	/*background-color: rgba(255,255,255,0.5);*/
+}
+
+button:disabled 
+{
+	background-color: rgba(255,255,255,0.1);
+	color: rgba(255,255,255,0.5);
 }
 
 div 
@@ -52,9 +61,8 @@ footer
 }
 
 
-#width1, #width_r ,#height1 ,#height_r
+input
 {
-	background-color: #A4C9D6;
 	background-color: rgba(255,255,255,0.7);
 	color: black;
 	font-weight: bold;
@@ -62,6 +70,13 @@ footer
 	width: 120px;
 }
 
+input:disabled
+{
+	background-color: rgba(255,255,255,0.2);
+	color: gray;
+	border-radius: 5px;
+	width: 120px;
+}
 
 ::-webkit-input-placeholder  
 {
@@ -73,3 +88,9 @@ input:-moz-placeholder {
 	font:italic 13px Junge,Georgia;
 	color:#393954;
 }
+
+#startb
+{
+	margin-top: 10px;
+}
+
