@@ -28,7 +28,7 @@ var gameInterval=0;
 				width = canvas.width;
 				height = canvas.height;
 				roboWidth = 50;
-				roboHeight = 50;
+				roboHeight = 60;
 				lWheelWidth = 7;
 				lWheelHeight = 40;
 				rWheelWidth = 7;
@@ -111,7 +111,7 @@ var gameInterval=0;
 		// resetting the robot width and height
 		function robo_reset() {
 			roboWidth = 50;
-			roboHeight = 50;
+			roboHeight = 60;
 			roboX = width/2;
 			roboY = height/2;
 			radian=(Math.PI/180)*0;
@@ -282,12 +282,36 @@ var gameInterval=0;
 			
 			// left wheel
 			
-			ctx.rect(-30,-lWheelHeight/2,lWheelWidth,lWheelHeight);
+			ctx.rect(-32,-lWheelHeight/2,lWheelWidth,lWheelHeight);
 			
 			// right wheel
 			
-			ctx.rect(rWheelWidth + 15,-rWheelHeight/2,rWheelWidth,rWheelHeight);
+			ctx.rect(rWheelWidth + 18,-rWheelHeight/2,rWheelWidth,rWheelHeight);
 			
+			// lines for the wheels 
+
+			// for right wheel
+
+			ctx.moveTo(rWheelWidth + 18, rWheelHeight/2 - 20);
+			ctx.lineTo(31, 0);
+
+			ctx.moveTo(rWheelWidth + 18, rWheelHeight/2 - 30);
+			ctx.lineTo(31, -10);
+
+			ctx.moveTo(rWheelWidth + 18, rWheelHeight/2 - 10);
+			ctx.lineTo(31, 10);
+
+			// for left wheel
+
+			ctx.moveTo(rWheelWidth - 38, rWheelHeight/2 - 20);
+			ctx.lineTo(-24, 0);
+
+			ctx.moveTo(rWheelWidth - 38, rWheelHeight/2 - 30);
+			ctx.lineTo(-24, -10);
+
+			ctx.moveTo(rWheelWidth - 38, rWheelHeight/2 - 10);
+			ctx.lineTo(-24, 10);
+
 			ctx.font = "bold 30pt Calibri";
 			ctx.fillText("*",-roboWidth/6,-roboHeight/3);	
 			ctx.restore();
