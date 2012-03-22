@@ -19,7 +19,10 @@ var gameInterval=0;
 		var speed;
 		var start		= true;
 		var crash		= false;
-
+		var lWheelPosX;
+		var lWheelPosY;
+		var rWheelPosX;
+		var rWheelPosY;
 
 		function init(speed_) {
 			if (start) {
@@ -41,6 +44,10 @@ var gameInterval=0;
 				rWheelY = roboY;
 				radian=(Math.PI/180)*0;
 				start = false;
+				lWheelPosX = -roboWidth/2 - 7;
+				lWheelPosY = -roboHeight/2 + roboHeight/8;
+				rWheelPosX = roboWidth/2;
+				rWheelPosY = -roboHeight/2 + roboHeight/8;
 			}			
 			speed=speed_;
 			clearInterval(gameInterval);
@@ -50,21 +57,21 @@ var gameInterval=0;
 		// resizing the canvas width and height
 		function resize() {
 
- 			if(start) {
+ 			if (start) {
  				init(6);
  				resize();
  			}
 
-			if(document.getElementById('width1').value >= 150 || document.getElementById('height1').value >= 150) {
-				if(document.getElementById('width1').value > 150 && document.getElementById('width1').value < 1000) {
+			if (document.getElementById('width1').value >= 150 || document.getElementById('height1').value >= 150) {
+				if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value < 1000) {
 					canvas.width  = document.getElementById('width1').value;
 					width = canvas.width;
 				}
-				if(document.getElementById('height1').value > 150 && document.getElementById('height1').value < 1000) {
+				if (document.getElementById('height1').value >= 150 && document.getElementById('height1').value < 1000) {
 					canvas.height = document.getElementById('height1').value;
 					height = canvas.height;
 				}
-			} else if(start == false) {
+			} else if (start == false) {
 				alert('Please enter width/height higher than 150');
 			}
 			roboX = width/2;
@@ -78,7 +85,7 @@ var gameInterval=0;
 			canvas.width = width;
 			height = 450;
 			canvas.height = height;
-			if(start) {
+			if (start) {
 			roboX = width/2;
 			roboY = height/2;
 			radian=(Math.PI/180)*0;
@@ -93,11 +100,13 @@ var gameInterval=0;
 
 		// resizing the robot width and height
 		function robo_resize() {
-			if(document.getElementById('width_r').value >= 1 || document.getElementById('height_r').value >= 1) {
-				if(document.getElementById('width_r').value >= 1 && document.getElementById('width_r').value < 100) {
+			if (document.getElementById('width_r').value >= 1 || document.getElementById('height_r').value >= 1) {
+				if (document.getElementById('width_r').value >= 1 && document.getElementById('width_r').value < 100) {
 					roboWidth = document.getElementById('width_r').value;
+					lWheelPosX = -roboWidth/2 - 7;
+					rWheelPosX = roboWidth/2;
 				}
-				if(document.getElementById('height_r').value >= 1 && document.getElementById('height_r').value < 100) {
+				if (document.getElementById('height_r').value >= 1 && document.getElementById('height_r').value < 100) {
 					roboHeight = document.getElementById('height_r').value;
 				}
 				if (document.getElementById('height_r').value > 100 && document.getElementById('width_r').value > 100) {
@@ -107,7 +116,7 @@ var gameInterval=0;
 				} else if (document.getElementById('width_r').value > 100) {
 					alert('Please enter width for the robot less than 100');
 				}
-			} else if(start == false) {
+			} else if (start == false) {
 				alert('Please enter width/height for the robot higher than 1');
 			}
 			roboX = width/2;
@@ -124,148 +133,213 @@ var gameInterval=0;
 			radian=(Math.PI/180)*0;
 		}
 
+		// resizing the robot wheels
+		function wheel_resize() {
+			if (document.getElementById('width_w').value >= 1 || document.getElementById('height_w').value >= 1) {
+				if (document.getElementById('width_w').value >= 1 && document.getElementById('width_w').value < 100) {
+					lWheelWidth = document.getElementById('width_w').value;
+					lWheelPosX = -roboWidth/2 - 7;
+					lWheelPosX -= document.getElementById('width_w').value - 7;
+					rWheelWidth = document.getElementById('width_w').value;
+				}
+				if (document.getElementById('height_w').value >= 1 && document.getElementById('height_w').value < 100) {
+					lWheelHeight = document.getElementById('height_w').value;
+					rWheelHeight = document.getElementById('height_w').value;
+				}
+				if (document.getElementById('height_w').value > 100 && document.getElementById('width_w').value > 100) {
+					alert('Please enter height and width for the robot less than 100');
+				} else if (document.getElementById('height_w').value > 100) {
+					alert('Please enter height for the robot less than 100');
+				} else if (document.getElementById('width_w').value > 100) {
+					alert('Please enter width for the robot wheels less than 100');
+				}
+			} else if (start == false) {
+				alert('Please enter width/height for the robot higher than 1');
+			}
+			roboX = width/2;
+			roboY = height/2;
+
+		}
+
+
+		// resetting the robot wheels
+		function wheel_reset() {
+			lWheelWidth = 7;
+			lWheelHeight = 40;
+			rWheelWidth = 7;
+			rWheelHeight = 40;
+		}
+
+
 		function draw() {
 			display();
 			check_rect_angles();
 			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
 				if (rightDown) {						
 					radian+=(Math.PI/180)*speed;							
-				}else if (leftDown) {					
+				} else if (leftDown) {					
 					radian-=(Math.PI/180)*speed;					
 				}			
 			}
 
-			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2){
-				if (upDown){
+			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
+				if (upDown) {
 					calc_coord();	
-					if(roboX + roboWidth/2 > width){
+					if (roboX + roboWidth/2 > width) {
 						crash=true;
 						roboX-=speed+1;			
 					}
-					if(roboX < roboWidth/2){
+					if (roboX < roboWidth/2) {
 						crash=true;
 						roboX+=speed+1;
 					}
-				}else if (downDown){
+				} else if (downDown) {
 					calc_coord();
-					if(roboX + roboWidth/2 > width)
+					if (roboX + roboWidth/2 > width)
 						roboX-=speed+1;			
-					if(roboX < roboWidth/2)
+					if (roboX < roboWidth/2)
 						roboX+=speed+1;		
 				}
-			}else if (roboHeight/2 + roboY < height) {
+			} else if (roboHeight/2 + roboY < height) {
 				roboY += speed + 1;
 				crash=true;	
-			}else{
+			} else {
 				roboY -= speed + 1;   	
 				crash=true;						
 			}
+
+			if ((roboHeight/2) + rWheelY < height && rWheelY > (roboHeight/2)) {
+				if (upDown) {
+						
+					if (rWheelX + roboWidth/2 > width || lWheelX + roboWidth/2 > width) {
+						crash=true;
+						roboX-=speed + rWheelWidth;			
+					}
+					if (rWheelX < roboWidth/2 || lWheelX < roboWidth/2) {
+						crash=true;
+						roboX+=speed + rWheelWidth;
+					}
+				} else if (downDown) {
+					
+					if (rWheelX + roboWidth/2 > width || lWheelX + roboWidth/2 > width)
+						roboX-=speed + rWheelWidth;			
+					if (rWheelX < rWheelWidth/2 || lWheelX < lWheelWidth/2)
+						roboX+=speed + rWheelWidth;		
+				}
+			} else if (roboHeight/2 + rWheelY < height || roboHeight/2 + lWheelY < height) {
+				roboY += speed + rWheelHeight;
+				crash=true;	
+			} else {
+				roboY -= speed + rWheelHeight;   	
+				crash=true;						
+			}
+			
 		}
 
-		function check_rect_angles(){
-			if( roboX+check_angleX(1) > width || roboX+check_angleX(2) > width || roboX+check_angleX(3) > width || roboX+check_angleX(4) > width || 
+		function check_rect_angles() {
+			if ( roboX+check_angleX(1) > width || roboX+check_angleX(2) > width || roboX+check_angleX(3) > width || roboX+check_angleX(4) > width || 
 				roboX+check_angleX(1) < 0 || roboX+check_angleX(2) < 0 || roboX+check_angleX(3) < 0 || roboX+check_angleX(4) < 0 ||
 				roboY+check_angleY(1) > height || roboY+check_angleY(2) > height || roboY+check_angleY(3) > height || roboY+check_angleY(4) > height ||
-				roboY+check_angleY(1) < 0 || roboY+check_angleY(2) < 0 || roboY+check_angleY(3) < 0 || roboY+check_angleY(4) < 0 ){
+				roboY+check_angleY(1) < 0 || roboY+check_angleY(2) < 0 || roboY+check_angleY(3) < 0 || roboY+check_angleY(4) < 0 ) {
 				crash=true;
-			}else{
+			} else {
 				crash=false;	
 			}
 		}
 
-		function check_angleX(angle){
+		function check_angleX(angle) {
 			var x=0;
 			degrees=make_degrees();
 
-			if(angle==1){
+			if (angle==1) {
 				x=Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*roboHeight/2;
 				return x-( Math.cos((Math.PI/180)*degrees)*roboWidth/2);
-			}else if(angle==2){
+			} else if (angle==2) {
 				x=Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*roboHeight/2;
 				return x+( Math.cos((Math.PI/180)*degrees)*roboWidth/2);
-			}else if(angle==3){
+			} else if (angle==3) {
 				x= -Math.sin((Math.PI/180)*degrees)*roboHeight/2;
 				return x+( Math.cos((Math.PI/180)*degrees)*roboWidth/2);
-			}else if(angle==4){				
+			} else if (angle==4) {				
 				x=Math.sin((Math.PI/180)*degrees)*roboHeight/2;
 				return -(x+( Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*roboWidth/2));
 			}
 		}
 
-		function check_angleY(angle){
+		function check_angleY(angle) {
 			var y=0;
 			degrees=make_degrees();
 
-			if(angle==1){
+			if (angle==1) {
 				y= -Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*roboHeight/2;
 				return y-( Math.sin((Math.PI/180)*degrees)*roboWidth/2);
-			}else if(angle==2){
+			} else if (angle==2) {
 				y= -Math.sin((Math.PI/180)*90-(Math.PI/180)*degrees)*roboHeight/2;
 				return y+( Math.sin((Math.PI/180)*degrees)*roboWidth/2);
-			}else if(angle==3){
+			} else if (angle==3) {
 				y= Math.cos((Math.PI/180)*degrees)*roboHeight/2;
 				return y+( Math.sin((Math.PI/180)*degrees)*roboWidth/2);
-			}else if(angle==4){				
+			} else if (angle==4) {				
 				y= -Math.cos((Math.PI/180)*degrees)*roboHeight/2;
 				return -(y+( Math.cos((Math.PI/180)*90-(Math.PI/180)*degrees)*roboWidth/2));
 			}
 		}
 
-		function calc_coord(){			
+		function calc_coord() {			
 			degrees=make_degrees();
 
-			if(degrees >= 0 && degrees <= 90){
-				if(upDown){
+			if (degrees >= 0 && degrees <= 90) {
+				if (upDown) {
 					roboX+=calc_distance_cos(90);
 					roboY-=calc_distance_sin(90);
-				}else if(downDown){
+				} else if (downDown) {
 					roboX-=calc_distance_cos(90);
 					roboY+=calc_distance_sin(90);
 				}			
-			}else if(degrees > 90 && degrees <= 180){
-					if(upDown){
+			} else if (degrees > 90 && degrees <= 180) {
+					if (upDown) {
 						roboX+=calc_distance_sin(180);
 						roboY+=calc_distance_cos(180);
-					}else if(downDown){
+					} else if (downDown) {
 						roboX-=calc_distance_sin(180);
 						roboY-=calc_distance_cos(180);
 					}
-			}else if(degrees > 180 && degrees <= 270){
-					if(upDown){
+			} else if (degrees > 180 && degrees <= 270) {
+					if (upDown) {
 						roboX-=calc_distance_cos(270);
 						roboY+=calc_distance_sin(270);
-					}else if(downDown){
+					} else if (downDown) {
 						roboX+=calc_distance_cos(270);
 						roboY-=calc_distance_sin(270);
 					}
-			}else if(degrees > 270 && degrees <= 360){
-					if(upDown){
+			} else if (degrees > 270 && degrees <= 360) {
+					if (upDown) {
 						roboX-=calc_distance_sin(360);
 						roboY-=calc_distance_cos(360);
-					}else if(downDown){
+					} else if (downDown) {
 						roboX+=calc_distance_sin(360);
 						roboY+=calc_distance_cos(360);
 					}
 			}			
 		}
 
-		function calc_distance_sin(val){
+		function calc_distance_sin(val) {
 			return Math.sin( ((Math.PI/180)*val)-((Math.PI/180)*degrees) ) * speed;
 		}
 
-		function calc_distance_cos(val){
+		function calc_distance_cos(val) {
 			return Math.cos( ((Math.PI/180)*val)-((Math.PI/180)*degrees) ) * speed;
 		}
 
-		function make_degrees(){
+		function make_degrees() {
 			var val=radian/(Math.PI/180);	
 
-			while(val>360 || val<-360){				
-					if(val>360)
+			while(val>360 || val<-360) {				
+					if (val>360)
 						val-=360;			
 					else val+=360;
 			}
-			if(val<0)
+			if (val<0)
 				val=360+val;		
 			return val;
 		}
@@ -274,10 +348,16 @@ var gameInterval=0;
 			ctx.beginPath();
 			ctx.fillStyle = bgColor;						
 			clear();					
-			if(crash){
+			if (crash) {
 				ctx.fillStyle= "white";
+				
+				if ( width < 200) {
+					ctx.font = "bold 30pt Calibri,Times New Roman";
+					ctx.fillText("CRASH!", width/2-65, height/2 + 10);
+				} else {
 				ctx.font = "bold 50pt Calibri,Times New Roman";
 				ctx.fillText("CRASH!", width/2-100, height/2 + 10);
+				}
 			}
 			ctx.fillStyle = objectColor;
 			ctx.save();		
@@ -290,37 +370,12 @@ var gameInterval=0;
 
 			// left wheel
 			
-			ctx.rect(-32,-lWheelHeight/2,lWheelWidth,lWheelHeight);
+			ctx.rect(lWheelPosX,lWheelPosY,lWheelWidth,lWheelHeight);
 			
 			// right wheel
 			
-			ctx.rect(rWheelWidth + 18,-rWheelHeight/2,rWheelWidth,rWheelHeight);
+			ctx.rect(rWheelPosX,rWheelPosY,rWheelWidth,rWheelHeight);
 			
-			
-			// lines for the wheels 
-
-			// for right wheel
-			
-			ctx.moveTo(rWheelWidth + 18, rWheelHeight/2 - 20);
-			ctx.lineTo(31, 0);
-
-			ctx.moveTo(rWheelWidth + 18, rWheelHeight/2 - 30);
-			ctx.lineTo(31, -10);
-
-			ctx.moveTo(rWheelWidth + 18, rWheelHeight/2 - 10);
-			ctx.lineTo(31, 10);
-
-			// for left wheel
-
-			ctx.moveTo(rWheelWidth - 38, rWheelHeight/2 - 20);
-			ctx.lineTo(-24, 0);
-
-			ctx.moveTo(rWheelWidth - 38, rWheelHeight/2 - 30);
-			ctx.lineTo(-24, -10);
-
-			ctx.moveTo(rWheelWidth - 38, rWheelHeight/2 - 10);
-			ctx.lineTo(-24, 10);
-
 			ctx.font = "bold 30pt Calibri";
 			ctx.fillText("*",-roboWidth/6,-roboHeight/3);	
 			ctx.restore();
