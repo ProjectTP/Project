@@ -119,6 +119,9 @@ var gameInterval=0;
 			} else if (start == false) {
 				alert('Please enter width/height for the robot higher than 1');
 			}
+			lWheelPosX = -roboWidth/2 - 7;
+			rWheelPosX = roboWidth/2;
+			lWheelPosX -= lWheelWidth -7;
 			roboX = width/2;
 			roboY = height/2;
 			radian=(Math.PI/180)*0;
@@ -128,6 +131,9 @@ var gameInterval=0;
 		function robo_reset() {
 			roboWidth = 50;
 			roboHeight = 53;
+			lWheelPosX = -roboWidth/2 - 7;
+			lWheelPosX -= lWheelWidth -7;
+			rWheelPosX = roboWidth/2;
 			roboX = width/2;
 			roboY = height/2;
 			radian=(Math.PI/180)*0;
@@ -136,31 +142,32 @@ var gameInterval=0;
 		// resizing the robot wheels
 		function wheel_resize() {
 			if (document.getElementById('width_w').value >= 1 || document.getElementById('height_w').value >= 1) {
-				if (document.getElementById('width_w').value >= 1 && document.getElementById('width_w').value < 100) {
+				if (document.getElementById('width_w').value >= 1 && document.getElementById('width_w').value <= 35) {
 					lWheelWidth = document.getElementById('width_w').value;
 					lWheelPosX = -roboWidth/2 - 7;
 					lWheelPosX -= document.getElementById('width_w').value - 7;
 					rWheelWidth = document.getElementById('width_w').value;
 				}
-				if (document.getElementById('height_w').value >= 1 && document.getElementById('height_w').value < 100) {
+				if (document.getElementById('height_w').value >= 1 && document.getElementById('height_w').value <= 100) {
 					lWheelHeight = document.getElementById('height_w').value;
 					rWheelHeight = document.getElementById('height_w').value;
 				}
-				if (document.getElementById('height_w').value > 100 && document.getElementById('width_w').value > 100) {
-					alert('Please enter height and width for the robot less than 100');
-				} else if (document.getElementById('height_w').value > 100) {
-					alert('Please enter height for the robot less than 100');
-				} else if (document.getElementById('width_w').value > 100) {
-					alert('Please enter width for the robot wheels less than 100');
+				if (document.getElementById('width_w').value > 35) {
+					alert('Please enter width for the robot wheels less than 35');
 				}
-			} else if (start == false) {
-				alert('Please enter width/height for the robot higher than 1');
-			}
+				if (document.getElementById('height_w').value > 100 && document.getElementById('width_w').value > 35) {
+					if (document.getElementById('height_w').value > 100) {
+						alert('Please enter height for the robot less than 100');
+					}
+					if (document.getElementById('width_w').value > 35) {
+						alert('Please enter width for the robot wheels less than 35');
+					}
+				}
 			roboX = width/2;
 			roboY = height/2;
 
+			}
 		}
-
 
 		// resetting the robot wheels
 		function wheel_reset() {
@@ -198,41 +205,23 @@ var gameInterval=0;
 					if (roboX + roboWidth/2 > width)
 						roboX-=speed+1;			
 					if (roboX < roboWidth/2)
-						roboX+=speed+1;		
+						roboX+=speed+1;
 				}
 			} else if (roboHeight/2 + roboY < height) {
 				roboY += speed + 1;
 				crash=true;	
+				
+			} else if (roboHeight/2 + roboY > height + rWheelHeight) {
+				ctx.font = "bold 50pt Calibri,Times New Roman";
+				ctx.fillText("TESTING", width/2-100, height/2 + 10);
+				roboY -= speed + 1;
+
 			} else {
 				roboY -= speed + 1;   	
-				crash=true;						
+				crash=true;		
+
 			}
 
-			if ((roboHeight/2) + rWheelY < height && rWheelY > (roboHeight/2)) {
-				if (upDown) {
-						
-					if (rWheelX + roboWidth/2 > width || lWheelX + roboWidth/2 > width) {
-						crash=true;
-						roboX-=speed + rWheelWidth;			
-					}
-					if (rWheelX < roboWidth/2 || lWheelX < roboWidth/2) {
-						crash=true;
-						roboX+=speed + rWheelWidth;
-					}
-				} else if (downDown) {
-					
-					if (rWheelX + roboWidth/2 > width || lWheelX + roboWidth/2 > width)
-						roboX-=speed + rWheelWidth;			
-					if (rWheelX < rWheelWidth/2 || lWheelX < lWheelWidth/2)
-						roboX+=speed + rWheelWidth;		
-				}
-			} else if (roboHeight/2 + rWheelY < height || roboHeight/2 + lWheelY < height) {
-				roboY += speed + rWheelHeight;
-				crash=true;	
-			} else {
-				roboY -= speed + rWheelHeight;   	
-				crash=true;						
-			}
 			
 		}
 

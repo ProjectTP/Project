@@ -10,6 +10,7 @@
 		<link href='http://fonts.googleapis.com/css?family=Ruthie' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Junge' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Cutive' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Antic+Didone' rel='stylesheet' type='text/css'>
 	</head>
 	
 	<body onload = "start=true; init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=true;">
@@ -18,51 +19,69 @@
 				WebSim Project
 			</center> 
 		</h1>
-
+		<table id = "tableform">
+		  	<tr>
+		    	<th colspan="2">Resize canvas</th>
+		  	</tr>
+			<tr>
+			    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Canvas Width"/></td>
+			    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Canvas Height"/></td>
+			</tr>
+			<tr>
+			    <td><button  onclick ="resize()"> Resize the table! </button></td>
+				<td><button  onclick ="reset()"> Reset table size! </button></td>
+			</tr>
+			<tr>
+				<th>Resize robot</th>
+				<th>Resize wheels</th>
+			</tr>
+			<tr>
+				<td><input type="number" id="width_r" min="1" max = "100" step = "1" placeholder = "Robo Width"/></td>
+				<td><input type="number" id="width_w" min="1" max = "35" step = "1" placeholder = "Wheel Width"/></td>
+			</tr>
+			<tr>
+				<td><input type="number" id="height_r" min="1" max = "100" step = "1" placeholder = "Robo Height"/></td>
+				<td><input type="number" id="height_w" min="1" max = "100" step = "1" placeholder = "Wheel Height"/></td>
+			</tr>
+			<tr>
+				<td><button  onclick ="robo_resize()"> Resize the robot! </button></td>
+				<td><button  onclick ="wheel_resize()" > Resize the wheels! </button></td>
+			</tr>
+			<tr>
+				<td><button  onclick ="robo_reset()"> Reset the robot! </button></td>
+				<td><button  onclick ="wheel_reset()" > Reset the wheels! </button></td>
+			</tr>
+		</table>
 
 
 		<center>
 			<canvas id="my_canvas" width="450" height="450"></canvas>
 		</center>
-		<center>
-			<button id="startb" onclick="start=false; resetpos(); "> Reset position </button>
-		</center>
-		<center>
-			<div> 
-				Speed: 
-			</div>
-		</center>
-
-		
 
 		<center>
-			<button id="but1" disabled onclick="init(3); javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false; ">Slow
-			</button>
-			<button id="but2" disabled onclick="init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;">Normal
-			</button>
-			<button id="but3" disabled onclick="init(9); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;">Fast
-			</button><br/>
-		</center>
-		<center>
-			Resize canvas:<br/>
-  			<input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"/>
-  			<input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"/><br />
-  			<button  onclick ="resize()"> Resize the table! </button>
-  			<button  onclick ="reset()"> Reset table size! </button><br/>
+			<table id = "tablespeed">
+				<tr>
+					<td colspan = "3"><button id="startb" onclick="start=false; resetpos(); "> Reset position </button></td>
+				</tr>
+				<tr>
+					<th colspan = "3">Speed</th>
+				</tr>
+				<tr>
+					<td>
+						<button id="but1" disabled onclick="init(3); javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false; ">Slow
+						</button>
+					</td>
+					<td>
+						<button id="but2" disabled onclick="init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;">Normal
+						</button>
+					</td>
+					<td>
+						<button id="but3" disabled onclick="init(9); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;">Fast
+						</button>
+					</td>
+				</tr>
+				</table>
 
-  			Resize robot: Resize wheels:<br/>
-  			<input type="number" id="width_r" min="1" max = "100" step = "25" placeholder = "Robo Width"/>
-  			
-
-
-  			
-  			<input type="number" id="width_w" min="1" max = "100" step = "25" placeholder = "Wheel Width"/><br/>
-  			<input type="number" id="height_r" min="1" max = "100" step = "25" placeholder = "Robo Height"/>
-  			<input type="number" id="height_w" min="1" max = "100" step = "25" placeholder = "Wheel Height"/><br />
-  			<button  onclick ="robo_resize()"> Resize the robot! </button>
-  			<button  onclick ="wheel_resize()" > Resize the wheels! </button><br/>
-  			<button  onclick ="robo_reset()"> Reset the robot! </button>
-  			<button  onclick ="wheel_reset()" > Reset the wheels! </button>
   		</center>
   		<br/>
   		<footer>

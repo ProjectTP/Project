@@ -1,49 +1,28 @@
+body 
+{ 
+	background-color: #B4C9D6;
+} 
+
+/* --------------------- Canvas Decorations --------------------- */
+
 canvas 
 { 
 	border: 10px solid white;
 	background-color: black;
 	border-radius: 15px;
 	box-shadow: 0px 0px 15px 15px rgba(0,0,0,0.5), 0px 0px 5px 5px #400000;
-
 }
 
-body 
-{ 
-	background-color: #B4C9D6;
-} 
+/* --------------------- Header Decorations --------------------- */
 
 h1 
 { 
 	font: 65px/75px Ruthie,Georgia, serif;
 	color: rgb(200,10,10);
 	text-shadow:  1px 1px rgba(255,255,255,0.8);
-	margin-bottom: 30px;
-	margin-top: 10px;
+	margin-bottom: 40px;
+	margin-top: 30px;
 }
-
-button 
-{
-	font: 12px/20px Cutive,Junge,Georgia;
-	background-color: rgba(255,255,255,1);
-	border-radius: 10px 0px;
-}
-
-button:active
-{
-	/*background-color: rgba(255,255,255,0.5);*/
-}
-
-button:disabled 
-{
-	border: solid 2px rgba(0,0,0,0.6);
-	color: black;
-}
-
-div 
-{
-	font: bold 20px Junge,Georgia;
-	padding: 15px 0 5px 0;
-}	
 
 h3
 {
@@ -52,14 +31,31 @@ h3
 	font-weight: bold;
 }
 
+/* --------------------- Footer Decorations --------------------- */
 
 footer
 {
-	font: bold 8px Cutive,Junge,Georgia;
+	font: bold 9px Cutive,Junge,Georgia;
 	color: rgba(0,0,0,0.8);
-	text-shadow:  1px 1px rgba(255,255,255,0.8);
+	text-shadow:  1px 1px rgba(255,255,255,0.3);
 }
 
+/* --------------------- Button Decorations --------------------- */
+
+button 
+{
+	font: 12px/20px Cutive,Junge,Georgia;
+	background-color: rgba(255,255,255,1);
+	border-radius: 10px 0px;
+}
+
+button:disabled 
+{
+	border: solid 3px rgba(0,0,0,0.2);
+	color: rgba(0,0,0,0.4);
+}
+
+/* --------------------- Input Decorations --------------------- */
 
 input
 {
@@ -78,19 +74,50 @@ input:disabled
 	width: 120px;
 }
 
+/* ---------------- Placeholder Decorations -------------------- */
+
 ::-webkit-input-placeholder  
 {
-	font:italic 13px Junge,Georgia;
+	font: 13px Junge,Georgia;
 	color:#393954;
+	color: rgba(0,0,0,0.2);
 }
 
 input:-moz-placeholder {
-	font:italic 13px Junge,Georgia;
+	font: 13px Junge,Georgia;
 	color:#393954;
+	color: rgba(0,0,0,0.2);
 }
 
-#startb
+/* ------------------- Table Decorations ------------------------ */
+
+#tableform , #tablespeed
 {
-	margin-top: 10px;
+	border: solid 5px rgba(0,0,0,0.1);
+	border-radius: 10px;
+	background: rgba(255,255,255,0.2);
+	box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.3);
 }
 
+#tableform td, #tablespeed td
+{
+	text-align: center;
+}
+#tableform th , #tablespeed th
+{
+	background: rgba(255,255,255,0.5);
+	border-radius: 3px;
+	border: solid 2px rgba(0,0,0,0.1);
+	font-family: 'Antic Didone', 'Times New Roman', Serif;
+	font-size: 15px;
+}
+#tableform
+{
+	position: absolute;
+	right: 100px;
+	margin-top: 100px;
+}
+#tablespeed
+{
+	margin-top: 20px;
+}
