@@ -72,7 +72,7 @@ var gameInterval=0;
 					height = canvas.height;
 				}
 			} else if (start == false) {
-				alert('Please enter width/height higher than 150');
+				javascript:popup('Please enter width/height higher than 150 and less than 1000.');
 			}
 			roboX = width/2;
 			roboY = height/2;
@@ -110,14 +110,14 @@ var gameInterval=0;
 					roboHeight = document.getElementById('height_r').value;
 				}
 				if (document.getElementById('height_r').value > 100 && document.getElementById('width_r').value > 100) {
-					alert('Please enter height and width for the robot less than 100');
+					javascript:popup('Please enter height and width for the robot less than 100');
 				} else if (document.getElementById('height_r').value > 100) {
-					alert('Please enter height for the robot less than 100');
+					javascript:popup('Please enter height for the robot less than 100');
 				} else if (document.getElementById('width_r').value > 100) {
-					alert('Please enter width for the robot less than 100');
+					javascript:popup('Please enter width for the robot less than 100');
 				}
 			} else if (start == false) {
-				alert('Please enter width/height for the robot higher than 1');
+				javascript:popup('Please enter width/height for the robot higher than 1');
 			}
 			lWheelPosX = -roboWidth/2 - 7;
 			rWheelPosX = roboWidth/2;
@@ -153,14 +153,14 @@ var gameInterval=0;
 					rWheelHeight = document.getElementById('height_w').value;
 				}
 				if (document.getElementById('width_w').value > 35) {
-					alert('Please enter width for the robot wheels less than 35');
+					javascript:popup('Please enter width for the robot wheels less than 35');
 				}
 				if (document.getElementById('height_w').value > 100 && document.getElementById('width_w').value > 35) {
 					if (document.getElementById('height_w').value > 100) {
-						alert('Please enter height for the robot less than 100');
+						javascript:popup('Please enter height for the robot less than 100');
 					}
 					if (document.getElementById('width_w').value > 35) {
-						alert('Please enter width for the robot wheels less than 35');
+						javascript:popup('Please enter width for the robot wheels less than 35');
 					}
 				}
 			roboX = width/2;
@@ -176,7 +176,6 @@ var gameInterval=0;
 			rWheelWidth = 7;
 			rWheelHeight = 40;
 		}
-
 
 		function draw() {
 			display();
@@ -410,3 +409,4 @@ var gameInterval=0;
 
 		document.addEventListener('keydown',onKeyDown);
 		document.addEventListener('keyup',onKeyUp);
+
