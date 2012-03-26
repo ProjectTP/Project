@@ -2,6 +2,7 @@
 
 <html>  	
 	<head>
+		<link rel="shortcut icon" href="http://clasma.net/common/res/warning.gif">
 		<title>WebSim Project</title>
 		<meta charset="utf-8">
 		<script type="text/javascript" src="js/script.js"></script>
@@ -13,6 +14,17 @@
 		<link href='http://fonts.googleapis.com/css?family=Antic+Didone' rel='stylesheet' type='text/css'>
 
 		<script type="text/javascript">
+					var ar=new Array(33,34,35,36,37,38,39,40);
+		// function to disable the scrolling when pressing the arrow keys.
+		$(document).keydown(function(e) {
+		     var key = e.which;
+		      
+		      if($.inArray(key,ar) > -1) {
+		          e.preventDefault();
+		          return false;
+		      }
+		      return true;
+		});
 
 			// Check if the resolution width is less than 1300 then the right table should move to the right.
 			function resolution() {
