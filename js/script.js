@@ -1,4 +1,4 @@
-var gameInterval=0;
+		var gameInterval=0;
 		var canvas;
 		var ctx;
 		var width = 400; 				
@@ -63,16 +63,16 @@ var gameInterval=0;
  			}
 
 			if (document.getElementById('width1').value >= 150 || document.getElementById('height1').value >= 150) {
-				if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value < 1000) {
+				if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000) {
 					canvas.width  = document.getElementById('width1').value;
 					width = canvas.width;
 				}
-				if (document.getElementById('height1').value >= 150 && document.getElementById('height1').value < 1000) {
+				if (document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
 					canvas.height = document.getElementById('height1').value;
 					height = canvas.height;
 				}
 			} else if (start == false) {
-				javascript:popup('Please enter width/height higher than 150 and less than 1000.');
+				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width/height higher than 150 and less than 1000.');
 			}
 			roboX = width/2;
 			roboY = height/2;
@@ -90,6 +90,8 @@ var gameInterval=0;
 			roboY = height/2;
 			radian=(Math.PI/180)*0;
  			}
+ 			document.getElementById('width1').value = "";
+			document.getElementById('height1').value = "";
 		}
 
 		function resetpos() {
@@ -110,14 +112,14 @@ var gameInterval=0;
 					roboHeight = document.getElementById('height_r').value;
 				}
 				if (document.getElementById('height_r').value > 100 && document.getElementById('width_r').value > 100) {
-					javascript:popup('Please enter height and width for the robot less than 100');
+					popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter height and width for the robot less than 100');
 				} else if (document.getElementById('height_r').value > 100) {
-					javascript:popup('Please enter height for the robot less than 100');
+					popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter height for the robot less than 100');
 				} else if (document.getElementById('width_r').value > 100) {
-					javascript:popup('Please enter width for the robot less than 100');
+					popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot less than 100');
 				}
 			} else if (start == false) {
-				javascript:popup('Please enter width/height for the robot higher than 1');
+				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width/height for the robot higher than 1');
 			}
 			lWheelPosX = -roboWidth/2 - 7;
 			rWheelPosX = roboWidth/2;
@@ -137,6 +139,8 @@ var gameInterval=0;
 			roboX = width/2;
 			roboY = height/2;
 			radian=(Math.PI/180)*0;
+			document.getElementById('width_r').value = "";
+			document.getElementById('height_r').value = "";
 		}
 
 		// resizing the robot wheels
@@ -153,14 +157,14 @@ var gameInterval=0;
 					rWheelHeight = document.getElementById('height_w').value;
 				}
 				if (document.getElementById('width_w').value > 35) {
-					javascript:popup('Please enter width for the robot wheels less than 35');
+					popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot wheels less than 35');
 				}
 				if (document.getElementById('height_w').value > 100 && document.getElementById('width_w').value > 35) {
 					if (document.getElementById('height_w').value > 100) {
-						javascript:popup('Please enter height for the robot less than 100');
+						popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter height for the robot less than 100');
 					}
 					if (document.getElementById('width_w').value > 35) {
-						javascript:popup('Please enter width for the robot wheels less than 35');
+						popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot wheels less than 35');
 					}
 				}
 			roboX = width/2;
@@ -175,6 +179,11 @@ var gameInterval=0;
 			lWheelHeight = 40;
 			rWheelWidth = 7;
 			rWheelHeight = 40;
+			lWheelPosX = -roboWidth/2 - 7;
+			lWheelPosX -= lWheelWidth -7;
+			rWheelPosX = roboWidth/2;
+			document.getElementById('width_w').value = "";
+			document.getElementById('height_w').value = "";
 		}
 
 		function draw() {
@@ -410,3 +419,14 @@ var gameInterval=0;
 		document.addEventListener('keydown',onKeyDown);
 		document.addEventListener('keyup',onKeyUp);
 
+		var ar=new Array(33,34,35,36,37,38,39,40);
+		// function to disable the scrolling when pressing the arrow keys.
+		$(document).keydown(function(e) {
+		     var key = e.which;
+		      
+		      if($.inArray(key,ar) > -1) {
+		          e.preventDefault();
+		          return false;
+		      }
+		      return true;
+		});
