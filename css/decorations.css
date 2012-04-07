@@ -64,6 +64,24 @@ button:disabled
 {
 	border: solid 3px rgba(0,0,0,0.2);
 	color: rgba(0,0,0,0.4);
+    cursor: default;
+}
+
+button:hover
+{
+    background: rgba(100,100,100,0.1);
+    -webkit-box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
+}
+
+button:disabled:hover
+{
+    background: rgba(200,0,0,0.1);
+    -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.6);
+}
+
+button:active
+{
+    background: rgba(100,100,100,0.5);
 }
 
 /* --------------------- Input Decorations --------------------- */
