@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html>  	
+	<head>
+		<title>WebSim Project</title>
+		<meta charset="utf-8">
+		<script type="text/javascript" src="js/scriptplay.js"></script>
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<link rel="stylesheet" type="text/css" media="all" href="css/decorations.css" />
+		<link href='http://fonts.googleapis.com/css?family=Ruthie' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Junge' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Cutive' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Antic+Didone' rel='stylesheet' type='text/css'>
+
+		<script type="text/javascript">
+
+			// Check if the resolution width is less than 1300 then the right table should move to the right.
+			function resolution() {
+				var elem = document.getElementById("tableform");
+				if (screen.width < 1300) {
+					elem.setAttribute("style","right: 0px;");
+				}
+			}
+
+			// Dialog box functions. 
+
+			$(document).ready(function () {
+			
+				$('a.btn-ok, #dialog-overlay, #dialog-box').click(function () {		
+					$('#dialog-overlay, #dialog-box').hide();		
+					return false;
+				});
+					
+				$(window).resize(function () {
+					
+					if (!$('#dialog-box').is(':hidden')) popup();		
+				});	
+				
+				
+			});
+			
+			function popup(message) {
+					  
+				var maskHeight = $(document).height();  
+				var maskWidth = $(window).width();
+
+				var dialogTop =  (maskHeight/3); 
+				var dialogLeft = (maskWidth/2) - ($('#dialog-box').width()/2); 
+				
+				$('#dialog-overlay').css({height:maskHeight, width:maskWidth}).show();
+				$('#dialog-box').css({top:dialogTop, left:dialogLeft}).show();
+				
+				$('#dialog-message').html(message);	
+			}
+
+		</script>
+	</head>
+	
+	<body onload = "start=true; init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=true; resolution();">
+
+
+		<button class="switch" onclick = "window.location.href='WebSimulation.html'"style = "float:right; width: 180px; ">Go to Simulation Page</button>
+		
+		<h1> 
+			<center>
+				<a class = "logo" href ="WebSimWelcome.html">WebSim Project</a>
+			</center> 
+		</h1>
+
+
+		<table id = "tableform">
+		  	<tr>
+		    	<th colspan="2">Resize canvas</th>
+		  	</tr>
+			<tr>
+			    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Canvas Width"/></td>
+			    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Canvas Height"/></td>
+			</tr>
+			<tr>
+			    <td><button  onclick ="resize()"> Resize the table! </button></td>
+				<td><button  onclick ="reset()"> Reset table size! </button></td>
+			</tr>
+			<tr>
+				<th>Resize robot</th>
+				<th>Resize wheels</th>
+			</tr>
+			<tr>
+				<td><input type="number" id="width_r" min="1" max = "100" step = "1" placeholder = "Robo Width"/></td>
+				<td><input type="number" id="width_w" min="1" max = "35" step = "1" placeholder = "Wheel Width"/></td>
+			</tr>
+			<tr>
+				<td><input type="number" id="height_r" min="1" max = "100" step = "1" placeholder = "Robo Height"/></td>
+				<td><input type="number" id="height_w" min="1" max = "100" step = "1" placeholder = "Wheel Height"/></td>
+			</tr>
+			<tr>
+				<td><button  onclick ="robo_resize()"> Resize the robot! </button></td>
+				<td><button  onclick ="wheel_resize()" > Resize the wheels! </button></td>
+			</tr>
+			<tr>
+				<td><button  onclick ="robo_reset()"> Reset the robot! </button></td>
+				<td><button  onclick ="wheel_reset()" > Reset the wheels! </button></td>
+			</tr>
+		</table>
+				
+
+		<center>
+			<canvas id="my_canvas" width="450" height="450"></canvas>
+		</center>
+
+		<center>
+			<table id = "tablespeed">
+				<tr>
+					<td colspan = "3"><button id="startb" onclick="start=false; resetpos(); "> Reset position </button></td>
+				</tr>
+				<tr>
+					<th colspan = "3">Speed</th>
+				</tr>
+				<tr>
+					<td>
+						<button id="but1" disabled onclick="init(3); javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false; ">Slow
+						</button>
+					</td>
+					<td>
+						<button id="but2" disabled onclick="init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;">Normal
+						</button>
+					</td>
+					<td>
+						<button id="but3" disabled onclick="init(9); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;">Fast
+						</button>
+					</td>
+				</tr>
+				</table>
+
+  		</center>
+  		<br/>
+
+  		<footer>
+  			<center>&copy; 2012 WebSim Project. Designed and coded by Konstantin Todorov and Anton Dudov. All rights reserved.</center>
+  		</footer>
+		
+		<div id="dialog-overlay"></div>
+		<div id="dialog-box">
+			<div class="dialog-content">
+				<div id="dialog-message"></div>
+				<a href="#" class="button">Close</a>
+			</div>
+		</div>
+
+</form>
+
+		<script src="js/filedrag.js"></script>
+	</body>
+</html>

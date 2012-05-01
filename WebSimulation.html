@@ -69,9 +69,12 @@
 	</head>
 	
 	<body onload = "start=true; init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=true; resolution();">
+
+		<button class = "switch"onclick = "window.location.href='WebSimPlay.html'"style = "float:right; width: 140px; ">Go to Play Page</button>
+
 		<h1> 
 			<center>
-				WebSim Project
+				<a class = "logo" href ="WebSimWelcome.html">WebSim Project</a>
 			</center> 
 		</h1>
 
@@ -109,7 +112,6 @@
 				<td><button  onclick ="wheel_reset()" > Reset the wheels! </button></td>
 			</tr>
 		</table>
-
 
 		<center>
 			<canvas id="my_canvas" width="450" height="450"></canvas>
