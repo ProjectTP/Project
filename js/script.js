@@ -1,7 +1,5 @@
 		var gameInterval=0;
 		var canvas;
-		var outcanvas;
-		var outctx;
 		var ctx;
 		var width 		= 400; 				
 		var height 		= 400; 				
@@ -28,18 +26,14 @@
 		var distance    =0;
 		var motorA		=false;
 		var motorB		=false;
-		var temp_distance;
 		var last_step   =0;
 		var temp        =new Array();
 		var get_path    =false;
-		var gagaga=13;
 
 		function init(speed_) {
 			if (start) {
 				canvas = document.getElementById('my_canvas');
 				ctx = canvas.getContext("2d");
-				outcanvas = document.getElementById('output');
-				outctx = outcanvas.getContext("2d");
 				width = canvas.width;
 				height = canvas.height;
 				roboWidth = 50;
@@ -60,6 +54,12 @@
 				lWheelPosY = -roboHeight/2 + roboHeight/8;
 				rWheelPosX = roboWidth/2;
 				rWheelPosY = -roboHeight/2 + roboHeight/8;
+				motorA=false;
+				motorB=false;
+	//			temp.splice(0,last_step-2);
+				last_step=0;
+				distance=0;
+				crash=false;
 			}			
 			speed=speed_;
 			clearInterval(gameInterval);
@@ -110,12 +110,6 @@
 			roboX = width/2;
 			roboY = height/2;
 			radian=(Math.PI/180)*0;
-			document.getElementById('path').disabled=false;
-			get_path=false;
-			outctx.fillStyle = bgColor;
-			clear(outctx);
-			last_step=0;
-			gagaga=0;
 		}
 
 		// resizing the robot width and height
@@ -208,42 +202,57 @@
 			display();
 			check_rect_angles();
 			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
-				if (rightDown) {						
-					radian+=(Math.PI/180)*speed;							
-				} else if (leftDown) {					
-					radian-=(Math.PI/180)*speed;					
+				if (motorA && !motorB && distance>0) {						
+					radian+=(Math.PI/180)*speed;
+					if(distance>speed){
+						distance-=speed;
+					}else{
+						distance=0;							
+					}
+				} else if (!motorA && motorB && distance>0) {	
+					radian-=(Math.PI/180)*speed;
+					if(distance>speed){
+						distance-=speed;
+					}else{
+						distance=0;							
+					}						
 				}			
 			}
 
 			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
-				if (upDown) {
+				if (motorA && motorB && distance>0) {
+					if(distance>speed){
+						distance-=speed;
+					}else{
+						distance=0;							
+					}	
 					calc_coord();	
 					if (roboX + roboWidth/2 > width) {
 						crash=true;
-						roboX-=speed+1;			
+					//	roboX-=speed+1;			
 					}
 					if (roboX < roboWidth/2) {
 						crash=true;
-						roboX+=speed+1;
+					//	roboX+=speed+1;
 					}
-				} else if (downDown) {
+				} /*else if (downDown) {
 					calc_coord();
 					if (roboX + roboWidth/2 > width)
 						roboX-=speed+1;			
 					if (roboX < roboWidth/2)
 						roboX+=speed+1;
-				}
+				}*/
 			} else if (roboHeight/2 + roboY < height) {
-				roboY += speed + 1;
+			//	roboY += speed + 1;
 				crash=true;	
 				
 			} else if (roboHeight/2 + roboY > height + rWheelHeight) {
 				ctx.font = "bold 50pt Calibri,Times New Roman";
 				ctx.fillText("TESTING", width/2-100, height/2 + 10);
-				roboY -= speed + 1;
+			//	roboY -= speed + 1;
 
 			} else {
-				roboY -= speed + 1;   	
+			//	roboY -= speed + 1;   	
 				crash=true;		
 
 			}
@@ -304,37 +313,37 @@
 			degrees=make_degrees();
 
 			if (degrees >= 0 && degrees <= 90) {
-				if (upDown) {
+				if (motorA && motorB) {
 					roboX+=calc_distance_cos(90);
 					roboY-=calc_distance_sin(90);
-				} else if (downDown) {
+				} /*else if (downDown) {
 					roboX-=calc_distance_cos(90);
 					roboY+=calc_distance_sin(90);
-				}			
+				}			*/
 			} else if (degrees > 90 && degrees <= 180) {
-					if (upDown) {
+					if (motorA && motorB) {
 						roboX+=calc_distance_sin(180);
 						roboY+=calc_distance_cos(180);
-					} else if (downDown) {
+					}/* else if (downDown) {
 						roboX-=calc_distance_sin(180);
 						roboY-=calc_distance_cos(180);
-					}
+					}*/
 			} else if (degrees > 180 && degrees <= 270) {
-					if (upDown) {
+					if (motorA && motorB) {
 						roboX-=calc_distance_cos(270);
 						roboY+=calc_distance_sin(270);
-					} else if (downDown) {
+					} /*else if (downDown) {
 						roboX+=calc_distance_cos(270);
 						roboY-=calc_distance_sin(270);
-					}
+					}*/
 			} else if (degrees > 270 && degrees <= 360) {
-					if (upDown) {
+					if (motorA && motorB) {
 						roboX-=calc_distance_sin(360);
 						roboY-=calc_distance_cos(360);
-					} else if (downDown) {
+					}/* else if (downDown) {
 						roboX+=calc_distance_sin(360);
 						roboY+=calc_distance_cos(360);
-					}
+					}*/
 			}			
 		}
 
@@ -364,42 +373,57 @@
 			if(!get_path){
 				temp=document.getElementById('robo_path').value.split(/\r\n|\r|\n|\s/);
 				document.getElementById('path').disabled=true;		
-							document.getElementById('out_path').value = "";
-				get_path=true;		
+				document.getElementById('out_path').value = "";
+				document.getElementById('out_path').style.color="green";
+				get_path=true;	
+				start=true;
+				init(speed);	
 			}
-			if(temp[last_step+1]*1>0){
-			motorA=false;
-			motorB=false;
-			outctx.fillStyle = "lightgreen";
-			outctx.font = "10pt Calibri,Times New Roman";
 
-			if(temp[last_step]=="A"){
-				motorA=true;
-			}else if(temp[last_step]=="B"){
-				motorB=true;
-			}else if(temp[last_step]=="AB"){
-				motorA=true;
-				motorB=true;
-			}
-			distance=temp[last_step+1] * 1;
-			outctx.fillText(temp[last_step],3, gagaga);
-			outctx.fillText(distance,30, gagaga);
-			outctx.fillText(motorA,60, gagaga);
-			outctx.fillText(motorB,100, gagaga);	
-			
-			document.getElementById('out_path').value += temp[last_step] + ' ' + distance + ' ' + motorA + ' ' + motorB + '\n';
-		
+			if(temp[last_step+1]*1>0){ // check if there is more steps
+				motorA=false;
+				motorB=false;
+				if(temp[last_step]=="A"){
+					motorA=true;
+				}else if(temp[last_step]=="B"){
+					motorB=true;
+				}else if(temp[last_step]=="AB"){
+					motorA=true;
+					motorB=true;
+				}
+				distance=temp[last_step+1] * 1;		
+				calc_distacne();		
+				document.getElementById('out_path').value += temp[last_step] + ' ' + temp[last_step+1] + '\n';							
+				last_step+=2;
+			}else{
+				document.getElementById('path').disabled=false;	
+				get_path=false;
+			}						
+		}
+
+		function crash_mess(){
+			last_step-=2;	
+			document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ temp[last_step]+ ' ' + temp[last_step+1] + ')' + '\n';
 			last_step+=2;
-			gagaga+=20;
+			for(;temp[last_step+1]*1>0;last_step+=2){
+				document.getElementById('out_path').value += temp[last_step] + ' ' + temp[last_step+1] + '\n';	
 			}
-						
+			document.getElementById('path').disabled=false;	
+
+		}
+
+		function calc_distacne(){
+			distance=(360/(rWheelHeight*3.14))*distance;
 		}
 
 		function display() {						
 			ctx.beginPath();
 			ctx.fillStyle = bgColor;						
-			clear(ctx);					
+			clear();					
 			if (crash) {
+
+				crash_mess();
+
 				ctx.fillStyle= "white";
 				
 				if ( width < 200) {
@@ -408,6 +432,8 @@
 				} else {
 				ctx.font = "bold 50pt Calibri,Times New Roman";
 				ctx.fillText("CRASH!", width/2-100, height/2 + 10);
+				get_path=false;
+				clearInterval(gameInterval);
 				}
 			}
 			ctx.fillStyle = objectColor;
@@ -417,12 +443,11 @@
 			// robot
 			ctx.rotate(radian);			
 			ctx.rect(-roboWidth/2,-roboHeight/2,roboWidth,roboHeight);
-			ctx.font = "bold 10pt Calibri,Times New Roman";
-			ctx.fillText(document.getElementById('robo_path').value, -100, 40);
-			distance=0;
+			ctx.font = "bold 19pt Calibri,Times New Roman";
 			if(get_path && distance==0 ){
 				robo_path();
 			}
+		//	ctx.fillText(distance, 0,50);
 			// left wheel
 			
 			ctx.rect(lWheelPosX,lWheelPosY,lWheelWidth,lWheelHeight);
@@ -442,15 +467,19 @@
 
 		}
 
-		function clear(ctx) { 				
+		function clear() { 				
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			rect(ctx, 0, 0, width, height);
+			rect(0, 0, width, height);
 		}
 
-		function rect(ctx, x, y, width, height) {			
+		function rect(x, y, width, height) {			
 			ctx.beginPath();
 			ctx.fillRect(x, y, width, height);
 			ctx.closePath();
+		}
+
+		function replace_path(){
+			document.getElementById('robo_path').value = document.getElementById('out_path').value;	
 		}
 
 		function onKeyDown(evt) {

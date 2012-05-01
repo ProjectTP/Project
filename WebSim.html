@@ -136,24 +136,28 @@
 						<button id="but3" disabled onclick="init(9); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;">Fast
 						</button>
 					</td>
-				</tr
+				</tr>
 				</table>				
 				<table  id = "tablespeed">
 					<tr>
 						<th colspan = "3">Path</th> 
 						<tr>
 							<td>
-								<textarea  id="robo_path"  placeholder="Robo path" >AB 30
+
+								<textarea  id="robo_path"  placeholder="In path" >AB 300
 A 30
 B 60
-AB 120
+AB 12
 								</textarea>
-								<canvas id="output" width="185" height="200"></canvas>
-								<textarea  id="out_path"  ></textarea>
+								<textarea  id="out_path" placeholder="Out path- step by step" ></textarea>
+
 							</td>
 						</tr>
 						<tr>
-							<td><button  id="path" onclick ="robo_path()"> Submit! </button></td>
+							<td>
+								<button  id="path" onclick ="robo_path()"> Submit </button>
+								<button  id="replace_path" onclick ="replace_path()"> Replace in input </button>
+							</td>
 						</tr>
 					</tr>
 				</table>
