@@ -1,8 +1,10 @@
 		var gameInterval=0;
 		var canvas;
+		var outcanvas;
+		var outctx;
 		var ctx;
-		var width = 400; 				
-		var height = 400; 				
+		var width 		= 400; 				
+		var height 		= 400; 				
 		var bgColor 	= "black";	
 		var objectColor = "white";	
 		var roboX; 					
@@ -23,11 +25,21 @@
 		var lWheelPosY;
 		var rWheelPosX;
 		var rWheelPosY;
+		var distance    =0;
+		var motorA		=false;
+		var motorB		=false;
+		var temp_distance;
+		var last_step   =0;
+		var temp        =new Array();
+		var get_path    =false;
+		var gagaga=13;
 
 		function init(speed_) {
 			if (start) {
 				canvas = document.getElementById('my_canvas');
 				ctx = canvas.getContext("2d");
+				outcanvas = document.getElementById('output');
+				outctx = outcanvas.getContext("2d");
 				width = canvas.width;
 				height = canvas.height;
 				roboWidth = 50;
@@ -98,6 +110,12 @@
 			roboX = width/2;
 			roboY = height/2;
 			radian=(Math.PI/180)*0;
+			document.getElementById('path').disabled=false;
+			get_path=false;
+			outctx.fillStyle = bgColor;
+			clear(outctx);
+			last_step=0;
+			gagaga=0;
 		}
 
 		// resizing the robot width and height
@@ -341,10 +359,46 @@
 			return val;
 		}
 
+		// get the robo path
+		function robo_path(){
+			if(!get_path){
+				temp=document.getElementById('robo_path').value.split(/\r\n|\r|\n|\s/);
+				document.getElementById('path').disabled=true;		
+							document.getElementById('out_path').value = "";
+				get_path=true;		
+			}
+			if(temp[last_step+1]*1>0){
+			motorA=false;
+			motorB=false;
+			outctx.fillStyle = "lightgreen";
+			outctx.font = "10pt Calibri,Times New Roman";
+
+			if(temp[last_step]=="A"){
+				motorA=true;
+			}else if(temp[last_step]=="B"){
+				motorB=true;
+			}else if(temp[last_step]=="AB"){
+				motorA=true;
+				motorB=true;
+			}
+			distance=temp[last_step+1] * 1;
+			outctx.fillText(temp[last_step],3, gagaga);
+			outctx.fillText(distance,30, gagaga);
+			outctx.fillText(motorA,60, gagaga);
+			outctx.fillText(motorB,100, gagaga);	
+			
+			document.getElementById('out_path').value += temp[last_step] + ' ' + distance + ' ' + motorA + ' ' + motorB + '\n';
+		
+			last_step+=2;
+			gagaga+=20;
+			}
+						
+		}
+
 		function display() {						
 			ctx.beginPath();
 			ctx.fillStyle = bgColor;						
-			clear();					
+			clear(ctx);					
 			if (crash) {
 				ctx.fillStyle= "white";
 				
@@ -363,8 +417,12 @@
 			// robot
 			ctx.rotate(radian);			
 			ctx.rect(-roboWidth/2,-roboHeight/2,roboWidth,roboHeight);
-			
-
+			ctx.font = "bold 10pt Calibri,Times New Roman";
+			ctx.fillText(document.getElementById('robo_path').value, -100, 40);
+			distance=0;
+			if(get_path && distance==0 ){
+				robo_path();
+			}
 			// left wheel
 			
 			ctx.rect(lWheelPosX,lWheelPosY,lWheelWidth,lWheelHeight);
@@ -381,14 +439,15 @@
     		ctx.lineWidth = 3;
     		ctx.strokeStyle = "black";
     		ctx.stroke(); 	
+
 		}
 
-		function clear() { 				
+		function clear(ctx) { 				
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			rect(0, 0, width, height);
+			rect(ctx, 0, 0, width, height);
 		}
 
-		function rect(x, y, width, height) {			
+		function rect(ctx, x, y, width, height) {			
 			ctx.beginPath();
 			ctx.fillRect(x, y, width, height);
 			ctx.closePath();
@@ -418,4 +477,3 @@
 
 		document.addEventListener('keydown',onKeyDown);
 		document.addEventListener('keyup',onKeyUp);
-
