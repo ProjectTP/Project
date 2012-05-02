@@ -14,18 +14,6 @@
 		<link href='http://fonts.googleapis.com/css?family=Antic+Didone' rel='stylesheet' type='text/css'>
 
 		<script type="text/javascript">
-					var ar=new Array(33,34,35,36,37,38,39,40);
-		// function to disable the scrolling when pressing the arrow keys.
-		$(document).keydown(function(e) {
-		     var key = e.which;
-		      
-		      if($.inArray(key,ar) > -1) {
-		          e.preventDefault();
-		          return false;
-		      }
-		      return true;
-		});
-
 			// Check if the resolution width is less than 1300 then the right table should move to the right.
 			function resolution() {
 				var elem = document.getElementById("tableform");
@@ -170,7 +158,7 @@ AB 12
 						</tr>
 						<tr>
 							<td>
-								<button  id="path" onclick ="robo_path();javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;"> Submit </button>
+								<button  id="path" onclick ="generate_path(); get_new_step(); javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;"> Submit </button>
 								<button  id="replace_path" onclick ="replace_path()"> Replace in input </button>
 							</td>
 						</tr>

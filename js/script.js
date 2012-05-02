@@ -70,12 +70,10 @@
 
 		// resizing the canvas width and height
 		function resize() {
-
  			if (start) {
  				init(6);
  				resize();
  			}
-
 			
 			if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000) {
 				canvas.width  = document.getElementById('width1').value;
@@ -131,8 +129,8 @@
 			roboY  = height/2;
 			radian = (Math.PI/180)*0;
 			init(speed);
-			resetpos_=true;//used only when pause button is down and reset position button is down
-			if(crash){  //if the robo is out of table and the reset positon button is down
+			resetpos_=true;
+			if(crash){  
 				crash=false;
 				display();
 			}
@@ -159,9 +157,13 @@
 			} else if (start == false) {
 				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width/height for the robot higher than 1');
 			}
-			lWheelPosX  = -roboWidth/2 - 7;
-			rWheelPosX  = roboWidth/2;
+			robo_data_reset()
+		}
+
+		function robo_data_reset(){
+			lWheelPosX 	= -roboWidth/2 - 7;
 			lWheelPosX -= lWheelWidth -7;
+			rWheelPosX 	= roboWidth/2;
 			roboX 		= width/2;
 			roboY 		= height/2;
 			radian 		= (Math.PI/180)*0;
@@ -171,12 +173,7 @@
 		function robo_reset() {
 			roboWidth 	= 50;
 			roboHeight 	= 53;
-			lWheelPosX 	= -roboWidth/2 - 7;
-			lWheelPosX -= lWheelWidth -7;
-			rWheelPosX 	= roboWidth/2;
-			roboX 		= width/2;
-			roboY 		= height/2;
-			radian 		= (Math.PI/180)*0;
+			robo_data_reset();
 			document.getElementById('width_r').value  = "";
 			document.getElementById('height_r').value = "";
 		}
@@ -258,8 +255,7 @@
 					crash=true;	
 				}	
 			} 
-			if( pause_&& resetpos_){// check if resetpos button and pause button are pressed or is crashed
-				document.getElementById('out_path').value += "fgafas";
+			if( pause_&& resetpos_){
 				resetpos_=false;
 				display();
 			}				
@@ -333,20 +329,20 @@
 					roboY-=calc_distance_sin(90);
 				} 
 			} else if (degrees > 90 && degrees <= 180) {
-					if (motorA && motorB) {
-						roboX+=calc_distance_sin(180);
-						roboY+=calc_distance_cos(180);
-					}
+				if (motorA && motorB) {
+					roboX+=calc_distance_sin(180);
+					roboY+=calc_distance_cos(180);
+				}
 			} else if (degrees > 180 && degrees <= 270) {
-					if (motorA && motorB) {
-						roboX-=calc_distance_cos(270);
-						roboY+=calc_distance_sin(270);
-					} 
+				if (motorA && motorB) {
+					roboX-=calc_distance_cos(270);
+					roboY+=calc_distance_sin(270);
+				} 
 			} else if (degrees > 270 && degrees <= 360) {
-					if (motorA && motorB) {
-						roboX-=calc_distance_sin(360);
-						roboY-=calc_distance_cos(360);
-					}
+				if (motorA && motorB) {
+					roboX-=calc_distance_sin(360);
+					roboY-=calc_distance_cos(360);
+				}
 			}			
 		}
 
@@ -371,20 +367,23 @@
 			return val;
 		}
 
-		// get the robo path
-		function robo_path(){
+		// generate new path
+		function generate_path(){
+			temp=document.getElementById('robo_path').value.split(/\r\n|\r|\n|\s/);
+			document.getElementById('out_path').value = "";
+			document.getElementById('path').disabled=true;	
+			document.getElementById('replace_path').disabled=true;	
+			document.getElementById('out_path').style.color="green";
+			get_path=true;	
+			start=true;
+			init(speed);	
+		}
 
-			if(!get_path){
-				temp=document.getElementById('robo_path').value.split(/\r\n|\r|\n|\s/);
-				document.getElementById('path').disabled=true;	
-				document.getElementById('replace_path').disabled=true;	
-				document.getElementById('out_path').value = "";
-				document.getElementById('out_path').style.color="green";
-				get_path=true;	
-				start=true;
-				init(speed);	
-			}
+		function calc_distacne(){
+			distance=(360/(rWheelHeight*3.14))*distance;
+		}
 
+		function get_new_step(){
 			if(temp[last_step+1]*1>0){ // check if there is more steps
 				motorA=false;
 				motorB=false;
@@ -402,11 +401,7 @@
 				last_step+=2;
 			}else{
 				stop_simulation();
-			}						
-		}
-
-		function calc_distacne(){
-			distance=(360/(rWheelHeight*3.14))*distance;
+			}	
 		}
 
 		function display() {						
@@ -414,42 +409,23 @@
 			ctx.fillStyle = bgColor;						
 			clear();					
 			
-			if (crash) {
-				ctx.fillStyle= "white";
-				
-				if ( width < 200) {
-					ctx.font = "bold 30pt Calibri,Times New Roman";
-					ctx.fillText("CRASH!", width/2-65, height/2 + 10);
-				} else {
-				ctx.font = "bold 50pt Calibri,Times New Roman";
-				ctx.fillText("CRASH!", width/2-100, height/2 + 10);
-
+			if (crash) {		
 				crash_mess();
-				}
 			}
 			ctx.fillStyle = objectColor;
 			ctx.save();		
 			ctx.translate(roboX,roboY);
-			
-			// robot
 			ctx.rotate(radian);			
 			ctx.rect(-roboWidth/2,-roboHeight/2,roboWidth,roboHeight);
 			ctx.font = "bold 19pt Calibri,Times New Roman";
 
-			// get new step 
-			
 			if(get_path && distance==0 ){
-				robo_path();
-			}
-			
-			// left wheel
-			
-			ctx.rect(lWheelPosX,lWheelPosY,lWheelWidth,lWheelHeight);
-			
-			// right wheel
-			
+				get_new_step();
+			}		
+
+			ctx.rect(lWheelPosX,lWheelPosY,lWheelWidth,lWheelHeight);				
 			ctx.rect(rWheelPosX,rWheelPosY,rWheelWidth,rWheelHeight);
-			
+
 			ctx.font = "bold 30pt Calibri";
 			ctx.fillText("*",-roboWidth/6,-roboHeight/3);	
 			ctx.restore();
@@ -462,12 +438,8 @@
 
 		function clear() { 				
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			rect(0, 0, width, height);
-		}
-
-		function rect(x, y, width, height) {			
 			ctx.beginPath();
-			ctx.fillRect(x, y, width, height);
+			ctx.fillRect(0, 0, width, height);
 			ctx.closePath();
 		}
 
@@ -476,14 +448,19 @@
 		}
 
 		function crash_mess(){
-			last_step-=2;	
-			document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ temp[last_step]+ ' ' + temp[last_step+1] + ')' + '\n';
-			last_step+=2;
-
+			ctx.fillStyle= "white";	
+			if ( width < 200) {
+				ctx.font = "bold 30pt Calibri,Times New Roman";
+				ctx.fillText("CRASH!", width/2-65, height/2 + 10);
+			} else {
+				ctx.font = "bold 50pt Calibri,Times New Roman";
+				ctx.fillText("CRASH!", width/2-100, height/2 + 10);				
+			}
+	
+			document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ temp[last_step-2]+ ' ' + temp[last_step-1] + ')' + '\n';
 			for(;temp[last_step+1]*1>0;last_step+=2){
 				document.getElementById('out_path').value += temp[last_step] + ' ' + temp[last_step+1] + '\n';	
 			}
-
 			stop_simulation();
 		}
 
