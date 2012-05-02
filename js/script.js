@@ -200,7 +200,6 @@
 
 		function draw() {
 			if(!pause_){
-				document.getElementById('play').disabled=true;	
 				display();
 				check_rect_angles();
 
