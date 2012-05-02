@@ -25,6 +25,7 @@
 		var last_step   =0;
 		var temp        =new Array();
 		var get_path    =false;
+		var pause_ 		=false;
 
 		function init(speed_) {
 			if (start) {
@@ -55,6 +56,10 @@
 				last_step=0;
 				distance=0;
 				crash=false;
+				pause_=false;
+				document.getElementById('play').disabled=true;	
+				document.getElementById('pause').disabled=true;	
+				document.getElementById('stop').disabled=true;
 			}			
 			speed=speed_;
 			clearInterval(gameInterval);
@@ -194,38 +199,41 @@
 		}
 
 		function draw() {
-			display();
-			check_rect_angles();
+			if(!pause_){
+				document.getElementById('play').disabled=true;	
+				display();
+				check_rect_angles();
 
-			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
-				if (motorA && !motorB && distance>0) {						
-					radian+=(Math.PI/180)*speed;
-					recalc_distance();
-				} else if (!motorA && motorB && distance>0) {	
-					radian-=(Math.PI/180)*speed;
-					recalc_distance();						
-				}			
-			}
+				if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
+					if (motorA && !motorB && distance>0) {						
+						radian+=(Math.PI/180)*speed;
+						recalc_distance();
+					} else if (!motorA && motorB && distance>0) {	
+						radian-=(Math.PI/180)*speed;
+						recalc_distance();						
+					}			
+				}
 
-			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
-				if (motorA && motorB && distance>0) {
-					recalc_distance();
-					calc_coord();	
-					if (roboX + roboWidth/2 > width) {
-						crash=true;		
-					}
-					if (roboX < roboWidth/2) {
-						crash=true;
-					}
-				} 
-			} else if (roboHeight/2 + roboY < height) {
-				crash=true;					
-			} else if (roboHeight/2 + roboY > height + rWheelHeight) {
-				ctx.font = "bold 50pt Calibri,Times New Roman";
-				ctx.fillText("TESTING", width/2-100, height/2 + 10);	
-			} else {			 	
-				crash=true;	
-			}		
+				if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
+					if (motorA && motorB && distance>0) {
+						recalc_distance();
+						calc_coord();	
+						if (roboX + roboWidth/2 > width) {
+							crash=true;		
+						}
+						if (roboX < roboWidth/2) {
+							crash=true;
+						}
+					} 
+				} else if (roboHeight/2 + roboY < height) {
+					crash=true;					
+				} else if (roboHeight/2 + roboY > height + rWheelHeight) {
+					ctx.font = "bold 50pt Calibri,Times New Roman";
+					ctx.fillText("TESTING", width/2-100, height/2 + 10);	
+				} else {			 	
+					crash=true;	
+				}	
+			}				
 		}
 
 		// recalculate distance
@@ -340,7 +348,7 @@
 			if(!get_path){
 				temp=document.getElementById('robo_path').value.split(/\r\n|\r|\n|\s/);
 				document.getElementById('path').disabled=true;	
-				document.getElementById('replace_path').disabled=true;		
+				document.getElementById('replace_path').disabled=true;	
 				document.getElementById('out_path').value = "";
 				document.getElementById('out_path').style.color="green";
 				get_path=true;	
@@ -364,23 +372,8 @@
 				document.getElementById('out_path').value += temp[last_step] + ' ' + temp[last_step+1] + '\n';							
 				last_step+=2;
 			}else{
-				document.getElementById('path').disabled=false;	
-				document.getElementById('replace_path').disabled=false;	
-				get_path=false;
+				stop_simulation();
 			}						
-		}
-
-		function crash_mess(){
-			last_step-=2;	
-			document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ temp[last_step]+ ' ' + temp[last_step+1] + ')' + '\n';
-			last_step+=2;
-
-			for(;temp[last_step+1]*1>0;last_step+=2){
-				document.getElementById('out_path').value += temp[last_step] + ' ' + temp[last_step+1] + '\n';	
-			}
-
-			document.getElementById('path').disabled=false;	
-			document.getElementById('replace_path').disabled=false;
 		}
 
 		function calc_distacne(){
@@ -393,8 +386,6 @@
 			clear();					
 			
 			if (crash) {
-				crash_mess();
-
 				ctx.fillStyle= "white";
 				
 				if ( width < 200) {
@@ -403,8 +394,8 @@
 				} else {
 				ctx.font = "bold 50pt Calibri,Times New Roman";
 				ctx.fillText("CRASH!", width/2-100, height/2 + 10);
-				get_path=false;
-				clearInterval(gameInterval);
+
+				crash_mess();
 				}
 			}
 			ctx.fillStyle = objectColor;
@@ -417,6 +408,7 @@
 			ctx.font = "bold 19pt Calibri,Times New Roman";
 
 			// get new step 
+			
 			if(get_path && distance==0 ){
 				robo_path();
 			}
@@ -452,4 +444,45 @@
 
 		function replace_path(){
 			document.getElementById('robo_path').value = document.getElementById('out_path').value;	
+		}
+
+		function crash_mess(){
+			last_step-=2;	
+			document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ temp[last_step]+ ' ' + temp[last_step+1] + ')' + '\n';
+			last_step+=2;
+
+			for(;temp[last_step+1]*1>0;last_step+=2){
+				document.getElementById('out_path').value += temp[last_step] + ' ' + temp[last_step+1] + '\n';	
+			}
+
+			stop_simulation();
+		}
+
+		function play(){
+			pause_=false;
+			document.getElementById('play').disabled=true;	
+			document.getElementById('pause').disabled=false;	
+			document.getElementById('stop').disabled=false;
+		}
+
+		function pause(){
+			pause_=true;
+			document.getElementById('play').disabled=false;	
+			document.getElementById('pause').disabled=true;	
+			document.getElementById('stop').disabled=false;
+		}
+
+		function stop(){
+			document.getElementById('out_path').value +='\n' + "Stoped!";			
+			stop_simulation();
+		}
+
+		function stop_simulation(){
+			document.getElementById('path').disabled=false;	
+			document.getElementById('replace_path').disabled=false;
+			document.getElementById('play').disabled=true;	
+			document.getElementById('pause').disabled=true;	
+			document.getElementById('stop').disabled=true;
+			get_path=false;
+			clearInterval(gameInterval);
 		}
