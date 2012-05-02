@@ -10,10 +10,6 @@
 		var roboWidth;				
 		var roboHeight;				
 		var roboColor 	= "red";	
-		var rightDown 	= false;
-		var leftDown 	= false;
-		var upDown 		= false;
-		var downDown 	= false;
 		var radian;		
 		var degrees;
 		var speed;
@@ -56,7 +52,6 @@
 				rWheelPosY = -roboHeight/2 + roboHeight/8;
 				motorA=false;
 				motorB=false;
-	//			temp.splice(0,last_step-2);
 				last_step=0;
 				distance=0;
 				crash=false;
@@ -86,21 +81,22 @@
 			} else if (start == false) {
 				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width/height higher than 150 and less than 1000.');
 			}
+
 			roboX = width/2;
 			roboY = height/2;
 			radian=(Math.PI/180)*0;
 		}
 		// reseting the canvas width and height
 		function reset() {
-
 			width = 450;
 			canvas.width = width;
 			height = 450;
 			canvas.height = height;
+
 			if (start) {
-			roboX = width/2;
-			roboY = height/2;
-			radian=(Math.PI/180)*0;
+				roboX = width/2;
+				roboY = height/2;
+				radian=(Math.PI/180)*0;
  			}
  			document.getElementById('width1').value = "";
 			document.getElementById('height1').value = "";
@@ -181,7 +177,6 @@
 				}
 			roboX = width/2;
 			roboY = height/2;
-
 			}
 		}
 
@@ -201,65 +196,48 @@
 		function draw() {
 			display();
 			check_rect_angles();
+
 			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
 				if (motorA && !motorB && distance>0) {						
 					radian+=(Math.PI/180)*speed;
-					if(distance>speed){
-						distance-=speed;
-					}else{
-						distance=0;							
-					}
+					recalc_distance();
 				} else if (!motorA && motorB && distance>0) {	
 					radian-=(Math.PI/180)*speed;
-					if(distance>speed){
-						distance-=speed;
-					}else{
-						distance=0;							
-					}						
+					recalc_distance();						
 				}			
 			}
 
 			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
 				if (motorA && motorB && distance>0) {
-					if(distance>speed){
-						distance-=speed;
-					}else{
-						distance=0;							
-					}	
+					recalc_distance();
 					calc_coord();	
 					if (roboX + roboWidth/2 > width) {
-						crash=true;
-					//	roboX-=speed+1;			
+						crash=true;		
 					}
 					if (roboX < roboWidth/2) {
 						crash=true;
-					//	roboX+=speed+1;
 					}
-				} /*else if (downDown) {
-					calc_coord();
-					if (roboX + roboWidth/2 > width)
-						roboX-=speed+1;			
-					if (roboX < roboWidth/2)
-						roboX+=speed+1;
-				}*/
+				} 
 			} else if (roboHeight/2 + roboY < height) {
-			//	roboY += speed + 1;
-				crash=true;	
-				
+				crash=true;					
 			} else if (roboHeight/2 + roboY > height + rWheelHeight) {
 				ctx.font = "bold 50pt Calibri,Times New Roman";
-				ctx.fillText("TESTING", width/2-100, height/2 + 10);
-			//	roboY -= speed + 1;
-
-			} else {
-			//	roboY -= speed + 1;   	
-				crash=true;		
-
-			}
-
-			
+				ctx.fillText("TESTING", width/2-100, height/2 + 10);	
+			} else {			 	
+				crash=true;	
+			}		
 		}
 
+		// recalculate distance
+		function recalc_distance(){
+			if(distance>speed){
+				distance-=speed;
+			}else{
+				distance=0;							
+			}
+		}
+
+		// check if any angle of the robo is out of the table
 		function check_rect_angles() {
 			if ( roboX+check_angleX(1) > width || roboX+check_angleX(2) > width || roboX+check_angleX(3) > width || roboX+check_angleX(4) > width || 
 				roboX+check_angleX(1) < 0 || roboX+check_angleX(2) < 0 || roboX+check_angleX(3) < 0 || roboX+check_angleX(4) < 0 ||
@@ -316,34 +294,22 @@
 				if (motorA && motorB) {
 					roboX+=calc_distance_cos(90);
 					roboY-=calc_distance_sin(90);
-				} /*else if (downDown) {
-					roboX-=calc_distance_cos(90);
-					roboY+=calc_distance_sin(90);
-				}			*/
+				} 
 			} else if (degrees > 90 && degrees <= 180) {
 					if (motorA && motorB) {
 						roboX+=calc_distance_sin(180);
 						roboY+=calc_distance_cos(180);
-					}/* else if (downDown) {
-						roboX-=calc_distance_sin(180);
-						roboY-=calc_distance_cos(180);
-					}*/
+					}
 			} else if (degrees > 180 && degrees <= 270) {
 					if (motorA && motorB) {
 						roboX-=calc_distance_cos(270);
 						roboY+=calc_distance_sin(270);
-					} /*else if (downDown) {
-						roboX+=calc_distance_cos(270);
-						roboY-=calc_distance_sin(270);
-					}*/
+					} 
 			} else if (degrees > 270 && degrees <= 360) {
 					if (motorA && motorB) {
 						roboX-=calc_distance_sin(360);
 						roboY-=calc_distance_cos(360);
-					}/* else if (downDown) {
-						roboX+=calc_distance_sin(360);
-						roboY+=calc_distance_cos(360);
-					}*/
+					}
 			}			
 		}
 
@@ -370,9 +336,11 @@
 
 		// get the robo path
 		function robo_path(){
+
 			if(!get_path){
 				temp=document.getElementById('robo_path').value.split(/\r\n|\r|\n|\s/);
-				document.getElementById('path').disabled=true;		
+				document.getElementById('path').disabled=true;	
+				document.getElementById('replace_path').disabled=true;		
 				document.getElementById('out_path').value = "";
 				document.getElementById('out_path').style.color="green";
 				get_path=true;	
@@ -397,6 +365,7 @@
 				last_step+=2;
 			}else{
 				document.getElementById('path').disabled=false;	
+				document.getElementById('replace_path').disabled=false;	
 				get_path=false;
 			}						
 		}
@@ -405,11 +374,13 @@
 			last_step-=2;	
 			document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ temp[last_step]+ ' ' + temp[last_step+1] + ')' + '\n';
 			last_step+=2;
+
 			for(;temp[last_step+1]*1>0;last_step+=2){
 				document.getElementById('out_path').value += temp[last_step] + ' ' + temp[last_step+1] + '\n';	
 			}
-			document.getElementById('path').disabled=false;	
 
+			document.getElementById('path').disabled=false;	
+			document.getElementById('replace_path').disabled=false;
 		}
 
 		function calc_distacne(){
@@ -420,8 +391,8 @@
 			ctx.beginPath();
 			ctx.fillStyle = bgColor;						
 			clear();					
+			
 			if (crash) {
-
 				crash_mess();
 
 				ctx.fillStyle= "white";
@@ -444,10 +415,12 @@
 			ctx.rotate(radian);			
 			ctx.rect(-roboWidth/2,-roboHeight/2,roboWidth,roboHeight);
 			ctx.font = "bold 19pt Calibri,Times New Roman";
+
+			// get new step 
 			if(get_path && distance==0 ){
 				robo_path();
 			}
-		//	ctx.fillText(distance, 0,50);
+			
 			// left wheel
 			
 			ctx.rect(lWheelPosX,lWheelPosY,lWheelWidth,lWheelHeight);
@@ -463,8 +436,7 @@
     		ctx.fill();
     		ctx.lineWidth = 3;
     		ctx.strokeStyle = "black";
-    		ctx.stroke(); 	
-
+    		ctx.stroke(); 
 		}
 
 		function clear() { 				
@@ -481,28 +453,3 @@
 		function replace_path(){
 			document.getElementById('robo_path').value = document.getElementById('out_path').value;	
 		}
-
-		function onKeyDown(evt) {
-			if (evt.keyCode == 39)
-				rightDown = true;
-			else if (evt.keyCode == 37)
-				leftDown = true;
-			else if (evt.keyCode == 38)
-				upDown = true;
-			else if (evt.keyCode == 40)
-				downDown = true;
-		}
-
-		function onKeyUp(evt) {
-			if (evt.keyCode == 39)
-				rightDown = false;
-			else if (evt.keyCode == 37)
-				leftDown = false;
-			else if (evt.keyCode == 38)
-				upDown = false;
-			else if (evt.keyCode == 40)
-				downDown = false;
-		}
-
-		document.addEventListener('keydown',onKeyDown);
-		document.addEventListener('keyup',onKeyUp);
