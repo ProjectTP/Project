@@ -307,20 +307,27 @@ table a:hover
 button.welcome
 {
     background: rgba(0,0,0,0.3);
-    box-shadow: 0px 0px;
-    width: 250px;
+    width: 240px;
     border-radius: 5px;
-    border: 0px;
+    border: 1px solid rgba(255,255,255,0.5);
     font-size: 30px;
-    height: 45px;
+    height: 50px;
     font-family: 'Just Me Again Down Here', cursive;
     text-shadow:  1px 1px rgba(0,0,0,0.8);
+    box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.3);
 }
 button.welcome:hover
 {
     background: rgba(0,0,0,0.26);
     color: black;
     text-shadow:  1px 1px rgba(255,255,255,0.8);
+    box-shadow: 0px 0px 4px 4px rgba(0,0,0,0.4);
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+button.welcome:active
+{
+    box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.3);
 }
 
 td.wel, center.choose
