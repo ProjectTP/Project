@@ -52,7 +52,6 @@
 				rWheelPosY = -roboHeight/2 + roboHeight/8;
 				motorA=false;
 				motorB=false;
-	//			temp.splice(0,last_step-2);
 				last_step=0;
 				distance=0;
 				crash=false;
@@ -201,28 +200,16 @@
 			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
 				if (motorA && !motorB && distance>0) {						
 					radian+=(Math.PI/180)*speed;
-					if(distance>speed){
-						distance-=speed;
-					}else{
-						distance=0;							
-					}
+					recalc_distance();
 				} else if (!motorA && motorB && distance>0) {	
 					radian-=(Math.PI/180)*speed;
-					if(distance>speed){
-						distance-=speed;
-					}else{
-						distance=0;							
-					}						
+					recalc_distance();						
 				}			
 			}
 
 			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
 				if (motorA && motorB && distance>0) {
-					if(distance>speed){
-						distance-=speed;
-					}else{
-						distance=0;							
-					}	
+					recalc_distance();
 					calc_coord();	
 					if (roboX + roboWidth/2 > width) {
 						crash=true;		
@@ -241,6 +228,16 @@
 			}		
 		}
 
+		// recalculate distance
+		function recalc_distance(){
+			if(distance>speed){
+				distance-=speed;
+			}else{
+				distance=0;							
+			}
+		}
+
+		// check if any angle of the robo is out of the table
 		function check_rect_angles() {
 			if ( roboX+check_angleX(1) > width || roboX+check_angleX(2) > width || roboX+check_angleX(3) > width || roboX+check_angleX(4) > width || 
 				roboX+check_angleX(1) < 0 || roboX+check_angleX(2) < 0 || roboX+check_angleX(3) < 0 || roboX+check_angleX(4) < 0 ||
