@@ -23,7 +23,7 @@
 		var motorA		 	 = false;
 		var motorB		 	 = false;
 		var last_step    	 = 0;
-		var temp         	 = new Array();
+		var steps        	 = new Array();
 		var get_path     	 = false;
 		var pause_ 		 	 = false;
 		var resetpos_		 = false;
@@ -367,9 +367,25 @@
 			return val;
 		}
 
+		function check_inpath(){
+			temp_input="";
+			temp=document.getElementById('robo_path').value;
+			for(var k=0;k<temp.length;k++){
+				if( temp[k]!=' ' && temp[k]!='\n' ){
+					temp_input+=temp[k];
+				}
+				if(temp[k]==' ' || temp[k]=='\n'){
+					if(temp[k-1]!=' ' && temp[k-1]!='\n' && k>0){
+						temp_input+=temp[k];
+					}					
+				}
+			}
+			steps=temp_input.split(/\r\n|\r|\n|\s/);
+		}
+
 		// generate new path
 		function generate_path(){
-			temp=document.getElementById('robo_path').value.split(/\r\n|\r|\n|\s/);
+			check_inpath();
 			document.getElementById('out_path').value = "";
 			document.getElementById('path').disabled=true;	
 			document.getElementById('replace_path').disabled=true;	
@@ -384,20 +400,20 @@
 		}
 
 		function get_new_step(){
-			if(temp[last_step+1]*1>0){ // check if there is more steps
+			if(steps[last_step+1]*1>0){ // check if there is more steps
 				motorA=false;
 				motorB=false;
-				if(temp[last_step]=="A"){
+				if(steps[last_step]=="A"){
 					motorA=true;
-				}else if(temp[last_step]=="B"){
+				}else if(steps[last_step]=="B"){
 					motorB=true;
-				}else if(temp[last_step]=="AB"){
+				}else if(steps[last_step]=="AB"){
 					motorA=true;
 					motorB=true;
 				}
-				distance=temp[last_step+1] * 1;		
+				distance=steps[last_step+1] * 1;		
 				calc_distacne();		
-				document.getElementById('out_path').value += temp[last_step] + ' ' + temp[last_step+1] + '\n';							
+				document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';							
 				last_step+=2;
 			}else{
 				stop_simulation();
@@ -457,9 +473,9 @@
 				ctx.fillText("CRASH!", width/2-100, height/2 + 10);				
 			}
 	
-			document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ temp[last_step-2]+ ' ' + temp[last_step-1] + ')' + '\n';
-			for(;temp[last_step+1]*1>0;last_step+=2){
-				document.getElementById('out_path').value += temp[last_step] + ' ' + temp[last_step+1] + '\n';	
+			document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
+			for(;steps[last_step+1]*1>0;last_step+=2){
+				document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';	
 			}
 			stop_simulation();
 		}
