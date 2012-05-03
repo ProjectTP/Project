@@ -1,0 +1,379 @@
+body 
+{ 
+	background-color: #B4C9D6;
+} 
+
+/* --------------------- Canvas Decorations --------------------- */
+
+canvas 
+{ 
+	border: 10px solid white;
+	background-color: black;
+	border-radius: 15px;
+	box-shadow: 0px 0px 15px 15px rgba(0,0,0,0.5), 0px 0px 5px 5px #400000;
+}
+
+/* --------------------- Output canvas Decorations --------------------- */
+#output 
+{ 
+    border: 2px solid white;
+    background-color: black;
+    border-radius: 3px;
+    box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.5), 0px 0px 5px 5px #400000;
+}
+
+/* --------------------- Header Decorations --------------------- */
+
+h1, a.logo
+{ 
+	font: 65px/75px Ruthie,Georgia, serif;
+	color: rgb(200,10,10);
+	text-decoration: none;
+    text-shadow:  1px 1px rgba(255,255,255,0.8);
+	margin-bottom: 40px;
+	margin-top: 30px;
+}
+
+h3
+{
+	color: black;
+	padding: none;
+	font-weight: bold;
+}
+
+/* --------------------- Footer Decorations --------------------- */
+
+footer
+{
+	font: bold 9px Cutive,Junge,Georgia;
+	color: rgba(0,0,0,0.8);
+	text-shadow:  1px 1px rgba(255,255,255,0.3);
+}
+
+/* --------------------- Button Decorations --------------------- */
+
+button 
+{
+	font: 12px/20px Cutive,Junge,Georgia;
+	background: rgba(200,0,0,0.1);
+    color: rgba(255,255,255,0.8);
+    font-size: 12px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    -moz-border-bottom: 1px solid rgba(0,0,0,0.25);
+    -webkit-border-bottom: 1px solid rgba(0,0,0,0.25);
+    position: relative;
+    cursor: pointer;
+}
+
+button:disabled 
+{
+	border: solid 3px rgba(0,0,0,0.2);
+	color: rgba(0,0,0,0.4);
+    cursor: default;
+}
+
+button:hover
+{
+    background: rgba(100,100,100,0.1);
+    -webkit-box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
+}
+
+button:disabled:hover
+{
+    background: rgba(200,0,0,0.1);
+    -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.6);
+}
+
+button:active
+{
+    background: rgba(100,100,100,0.5);
+}
+
+button.switch
+{
+    margin-top: -30px;
+    margin-right: -8px;
+    background-color: rgba(0,0,0,0.1);
+    box-shadow: 0px 0px;
+    border-radius: 0px;
+    border-radius: 0px 0px 0px 15px;
+    border: 5px solid rgba(255,255,255,0.4);
+    border-right:none;
+    border-top:none;
+    font-family: 'Just Me Again Down Here', cursive;
+    text-shadow:  1px 1px rgba(0,0,0,0.8);
+    font-size: 15px;
+}
+
+button.switch:hover
+{
+    border: 5px solid rgba(255,255,255,0.6);
+    border-right:none;
+    border-top:none;
+}
+/* --------------------- Input Decorations --------------------- */
+
+input
+{
+	background-color: rgba(255,255,255,0.7);
+	color: black;
+	font-weight: bold;
+	border-radius: 5px;
+	width: 120px;
+	box-shadow:  0px 0px 2px 2px rgba(255,255,255,0.6)
+}
+#robo_path,#robo_output,#out_path
+{
+    background-color: rgba(255,255,255,0.7);
+    color: black;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 250px;
+    height: 200px;
+    box-shadow:  0px 0px 2px 2px rgba(255,255,255,0.6)
+}
+
+input:disabled
+{
+	background-color: rgba(255,255,255,0.2);
+	color: gray;
+	border-radius: 5px;
+	width: 120px;
+}
+
+::-webkit-input-placeholder  
+{
+	font: 13px Junge,Georgia;
+	color:#393954;
+	color: rgba(0,0,0,0.2);
+}
+
+input:-moz-placeholder {
+	font: 13px Junge,Georgia;
+	color:#393954;
+	color: rgba(0,0,0,0.2);
+}
+
+/* ------------------- Table Decorations ------------------------ */
+
+#tableform , #tablespeed, table
+{
+	border: solid 5px rgba(0,0,0,0.1);
+    -moz-border: solid 5px rgba(0,0,0,0.1);
+    -webkit-border: solid 5px rgba(0,0,0,0.1);
+	border-radius: 10px;
+	background: rgba(105,60,9,0.3);
+	box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.3);
+}
+
+#tableform td, #tablespeed td, table td
+{
+	text-align: center;
+}
+#tableform th , #tablespeed th, table th
+{
+	background: rgba(255,255,255,0.4);
+	border-radius: 3px;
+	border: solid 2px rgba(0,0,0,0.1);
+    -moz-border: solid 2px rgba(0,0,0,0.1);
+    -webkit-border: solid 2px rgba(0,0,0,0.1);
+	font-family: 'Antic Didone', 'Times New Roman', Serif;
+	font-size: 16px;
+	color: rgba(0,0,0,0.6);
+}
+#tableform
+{
+	position: absolute;
+	right: 100px;
+	margin-top: 100px;
+}
+#tablespeed
+{
+	margin-top: 20px;
+}
+table tr
+{
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 5px;
+}
+table tr.top
+{
+    border: 1px solid white;
+}
+table
+{
+    border: solid 10px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    background: rgba(105,60,9,0.1);
+    box-shadow: 0px 0px 15px 15px rgba(0,0,0,0.3);
+}
+
+/* ----------------------- Dialog Box Decorations --------------------- */
+
+#dialog-overlay /* Darken the whole window */
+{
+ 	width:100%; 
+    height:100%;
+	filter:alpha(opacity=50); 
+    -moz-opacity:0.7; 
+    -khtml-opacity: 0.7; 
+    opacity: 0.7; 
+    background:#000; 
+ 	position:absolute; 
+    top:0; left:0;
+ 	display:none;
+}
+ 
+#dialog-box
+{
+	-webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	border: 7px solid rgba(0,0,0,0.7);
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgb(255,255,255);
+    width:400px;  
+    position:absolute; 
+    z-index:5000; 
+    display:none;
+}
+ 
+#dialog-box .dialog-content
+{
+    text-align:center;
+    font-weight: bold;
+    padding:25px;
+    color:#666; 
+    font-family:'Cutive',arial;
+    font-size:13px;
+}
+
+#dialog-box .dialog-content p
+{
+    font-weight:700; margin:0;
+}
+ 
+#dialog-box .dialog-content ul
+{
+    margin:10px 0 10px 20px; 
+    padding:0; 
+    height:50px;
+}
+
+a.button
+{
+    margin:10px auto 0 auto;
+    text-align: middle;
+    display: block;
+    width:75px;
+    padding: 4px 0px;
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    font-weight: normal;
+    line-height: 1; 
+    background: rgba(149,184,245,0.8); 
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5); 
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    -moz-border-bottom: 1px solid rgba(0,0,0,0.25);
+    -webkit-border-bottom: 1px solid rgba(0,0,0,0.25);
+    cursor: pointer;
+}
+
+a.button:hover
+{
+    background: rgba(149,184,245,1);
+}
+
+a.button:active
+{
+    -moz-box-shadow: 0px 0px;
+    -webkit-box-shadow: 0px 0px;
+    box-shadow: 0px 0px;  
+}
+
+table a
+{
+    color: black;
+    text-decoration: none;
+}
+table a:hover
+{
+    color: white;
+}
+button.welcome
+{
+    background: rgba(0,0,0,0.3);
+    width: 240px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.5);
+    font-size: 30px;
+    height: 50px;
+    font-family: 'Just Me Again Down Here', cursive;
+    text-shadow:  1px 1px rgba(0,0,0,0.8);
+    box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.3);
+}
+button.welcome:hover
+{
+    background: rgba(0,0,0,0.26);
+    color: black;
+    text-shadow:  1px 1px rgba(255,255,255,0.8);
+    box-shadow: 0px 0px 4px 4px rgba(0,0,0,0.4);
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+button.welcome:active
+{
+    box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.3);
+}
+
+td.wel, center.choose
+{
+    font: bold 17px Junge,Georgia;
+    color: rgba(0,0,0,0.9);
+}
+center.choose
+{
+    font-size: 18px;
+}
+button.link
+{
+    border: 5px solid white;
+}
+#langchange
+{
+    color: white;
+    box-shadow: 0px 0px;
+    border: 0px;
+    background: rgba(0,0,0,0.2);
+    margin-top: 25px;
+}
+#langchange img
+{
+    border-radius: 5px;
+    vertical-align: bottom;
+    border: 2px solid rgba(255,0,0,0.1);
+}
+#langchange:hover
+{
+    background: rgba(0,0,0,0.4);
+}
+#langchange:hover img
+{
+    border: 2px solid rgba(0,0,0,0.3);
+}
