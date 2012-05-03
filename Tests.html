@@ -6,38 +6,8 @@
   <link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
   <script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
   <script type="text/javascript" src="js/script.js"></script>
-  <script>
+  <script type="text/javascript" src="js/tests.js"></script>
 
-    function isEven(val) {  
-      return val == true;  
-    }
-
-    function stopsim(val) {
-      return (w < 5) && (w > -5);
-    }
-
-    function size(val) {
-      return val < 1000 && val > 150;
-    }
-
-    /* -------------- Tests ------------ */
-    test('isEven', function() { 
-      ok(isEven(start), 'Start is true.');
-    }) 
-
-    test('StopSim', function() {
-    	ok(stopsim(start), 'W value is normal.');
-    })
-
-    test('Canvas Width', function() {
-      ok(size(width), 'Width is ok.');
-    })
-
-    test('Canvas Height', function() {
-      ok(size(height), 'Height is ok.');
-    })
-
-  </script>
   
 </head>
 <body>

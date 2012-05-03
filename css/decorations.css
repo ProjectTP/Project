@@ -34,6 +34,11 @@ h1, a.logo
 	margin-top: 30px;
 }
 
+a.logo:hover
+{
+    text-shadow: 1px 1.5px rgba(255,255,255,0.8);
+}
+
 h3
 {
 	color: black;
@@ -110,6 +115,10 @@ button.switch
     font-family: 'Just Me Again Down Here', cursive;
     text-shadow:  1px 1px rgba(0,0,0,0.8);
     font-size: 15px;
+    -webkit-transition: -webkit-box-shadow 0.5s ease-out;;
+    -moz-transition: -moz-box-shadow 0.5s ease-out;
+    -o-transition: box-shadow 0.5s ease-out;
+
 }
 
 button.switch:hover
@@ -117,6 +126,9 @@ button.switch:hover
     border: 5px solid rgba(255,255,255,0.6);
     border-right:none;
     border-top:none;
+    -moz-box-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+    -webkit-box-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+    box-shadow: 0px 0px 20px rgba(255,255,255,0.8);
 }
 /* --------------------- Input Decorations --------------------- */
 
@@ -318,6 +330,9 @@ table a:hover
 }
 button.welcome
 {
+    /*
+    
+    */
     background: rgba(0,0,0,0.3);
     width: 240px;
     border-radius: 5px;
@@ -326,15 +341,20 @@ button.welcome
     height: 50px;
     font-family: 'Just Me Again Down Here', cursive;
     text-shadow:  1px 1px rgba(0,0,0,0.8);
-    box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.3);
+    text-align: center;
+ 
+    /*Transition*/
+    -webkit-transition: -webkit-box-shadow 0.5s ease-out;;
+    -moz-transition: -moz-box-shadow 0.5s ease-out;
+    -o-transition: box-shadow 0.5s ease-out;
 }
 button.welcome:hover
 {
-    background: rgba(0,0,0,0.26);
+   -moz-box-shadow: 0px 0px 18px rgba(0,0,0,0.8);
+    -webkit-box-shadow: 0px 0px 18px rgba(0,0,0,0.8);
+    box-shadow: 0px 0px 18px rgba(0,0,0,0.8);
     color: black;
     text-shadow:  1px 1px rgba(255,255,255,0.8);
-    box-shadow: 0px 0px 4px 4px rgba(0,0,0,0.4);
-    border: 2px solid rgba(255,255,255,0.3);
 }
 
 button.welcome:active
@@ -355,25 +375,36 @@ button.link
 {
     border: 5px solid white;
 }
-#langchange
+#langchange, #tests
 {
     color: white;
     box-shadow: 0px 0px;
     border: 0px;
     background: rgba(0,0,0,0.2);
-    margin-top: 25px;
+
+    -webkit-transition: -webkit-box-shadow 0.5s ease-out;;
+    -moz-transition: -moz-box-shadow 0.5s ease-out;
+    -o-transition: box-shadow 0.5s ease-out;
 }
-#langchange img
+#langchange img, #tests img
 {
     border-radius: 5px;
     vertical-align: bottom;
-    border: 2px solid rgba(255,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.1);
 }
-#langchange:hover
+#langchange:hover, #tests:hover
 {
-    background: rgba(0,0,0,0.4);
+    /*background: rgba(0,0,0,0.4);*/
+    -moz-box-shadow: 0px 0px 18px rgba(0,0,0,0.8);
+    -webkit-box-shadow: 0px 0px 18px rgba(0,0,0,0.8);
+    box-shadow: 0px 0px 18px rgba(0,0,0,0.8);
 }
-#langchange:hover img
+#langchange:hover img, #tests:hover img
 {
-    border: 2px solid rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+#langchange, #tests
+{
+    border: 1px solid rgba(255,255,255,0.6);
 }
