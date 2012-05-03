@@ -295,6 +295,18 @@ a.button
     cursor: pointer;
 }
 
+a.button:hover
+{
+    background: rgba(149,184,245,1);
+}
+
+a.button:active
+{
+    -moz-box-shadow: 0px 0px;
+    -webkit-box-shadow: 0px 0px;
+    box-shadow: 0px 0px;  
+}
+
 table a
 {
     color: black;
