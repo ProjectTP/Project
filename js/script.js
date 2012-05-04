@@ -1,8 +1,8 @@
 		var gameInterval 	 = 0;
 		var canvas;
 		var ctx;
-		var width 		 	 = 400; 				
-		var height 		 	 = 400; 				
+		var width 		 	 = 450; 				
+		var height 		 	 = 450; 				
 		var bgColor 	 	 = "black";	
 		var objectColor  	 = "white";	
 		var roboX; 					
@@ -28,6 +28,14 @@
 		var pause_ 		 	 = false;
 		var resetpos_		 = false;
 		var w = 0
+		
+		function loadanime() {
+			$("#my_canvas").animate({
+				    	width:  450,
+				    	height: 450 
+				    }, "slow");
+		}
+		
 		function init(speed_)
 		{
 			if (start) {
@@ -77,11 +85,30 @@
  				resize();
  			}
 			
+ 			if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000 && 
+ 				document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
+ 				$("#my_canvas").animate({
+			    	width:  document.getElementById('width1').value,
+			    	height: document.getElementById('height1').value 
+			    },"slow");
+ 				canvas.width  = document.getElementById('width1').value;
+				width = canvas.width;
+				canvas.height = document.getElementById('height1').value;
+				height = canvas.height;
+ 			}
+
 			if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000) {
+				$("#my_canvas").animate({
+			    	width:  document.getElementById('width1').value,
+			    },"slow");
 				canvas.width  = document.getElementById('width1').value;
 				width = canvas.width;
+
 			}
 			if (document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
+				$("#my_canvas").animate({ 
+			    	height: document.getElementById('height1').value,
+			    },"slow");
 				canvas.height = document.getElementById('height1').value;
 				height = canvas.height;
 			} 

@@ -31,9 +31,9 @@
 			</center> 
 		</h1>
 
-		<center><table style = "width: 250px; height: 170px; border-radius: 20px;">
+		<center><table class = "welcome" style = "width: 250px; height: 170px; border-radius: 20px;">
 			<tr>
-				<td class = "wel">View our project</td>
+				<th class = "wel1" style = "border-bottom: 0px;">View our project</th>
 			</tr>
 			<tr>
 				<td class="link">
@@ -43,24 +43,26 @@
 				</td>
 			</tr>
 			<tr>
-				<td class = "wel">Or simulate your path</td>
+				<th class = "wel" style = "border-top : 0px; border-bottom: 0px;">Or simulate your path</th>
 			</tr>
 			<tr>
 				<td class="link"><button onclick = "window.location.href='WebSimulation.html'" class = "welcome">Simulate</button></td>
 			</tr>
+			<tr>
+				<th  class = "wel" style = "border-radius: 0px 0px 10px 10px; border-top : 0px; padding: 10px;">
+					<button id = "langchange" onclick = "window.location.href='WebSimWelcomeBG.html'">
+						Bulgarian version
+						<img src = "img/bg.gif" width = 30 height = 20/>
+					</button>
+					<br/>
+					<button id = "tests" onclick = "window.location.href='Tests.html'">
+						To the tests
+					</button>
+				</th>
+			</tr>
+			
 		</table></center>
-		<center>
-			<button id = "langchange" onclick = "window.location.href='WebSimWelcomeBG.html'" style = "margin-top: 25px;">
-				Bulgarian version
-				<img src = "img/bg.gif" width = 30 height = 20/>
-			</button>
-		</center>
-		<center>
-			<button id = "tests" onclick = "window.location.href='Tests.html'">
-				To the tests
-			</button>
-		</center>
-
+	
 		<footer style = "padding-top: 20px;">
   			<center>&copy; 2012 WebSim Project. Designed and coded by Konstantin Todorov and Anton Dudov. All rights reserved.</center>
   		</footer>
