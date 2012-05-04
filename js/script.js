@@ -27,6 +27,7 @@
 		var get_path     	 = false;
 		var pause_ 		 	 = false;
 		var resetpos_		 = false;
+		var stop_   		 = false;
 		var w = 0
 		
 		function loadanime() {
@@ -68,6 +69,7 @@
 				crash 	 	 = false;
 				pause_	 	 = false;
 				resetpos_	 = false;
+				stop_ 		 = false;
 				document.getElementById('play').disabled  = true;	
 				document.getElementById('pause').disabled = true;	
 				document.getElementById('stop').disabled  = true;
@@ -258,7 +260,7 @@
 
 		function draw()
 		{
-			if(!pause_) {
+			if(!pause_ && !stop_) {
 				display();
 				check_rect_angles();
 
@@ -292,7 +294,7 @@
 					crash = true;	
 				}	
 			} 
-			if(pause_&& resetpos_) {
+			if( (pause_ || stop_ )&& resetpos_) {
 				resetpos_ = false;
 				display();
 			}				
@@ -536,7 +538,9 @@
 				ctx.fillText("CRASH!", width/2-100, height/2 + 10);				
 			}
 	
-			document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
+			if(!stop_){
+				document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
+			}
 			for (; steps[last_step + 1] * 1 > 0; last_step += 2) {
 				document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';	
 			}
@@ -560,5 +564,6 @@
 			get_path = false;
 			distance = 0;
 			pause_ 	 = false;
+			stop_ 	 = true;
 			clearInterval(gameInterval);
 		}
