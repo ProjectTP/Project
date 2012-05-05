@@ -142,6 +142,10 @@
 		// reseting the canvas width and height
 		function reset()
 		{
+			$("#my_canvas").animate({
+		    	width:  450,
+		    	height: 450 
+		    },"slow");
 			width 		  = 450;
 			canvas.width  = width;
 			height 		  = 450;
@@ -154,6 +158,7 @@
  			}
  			document.getElementById('width1').value  = "";
 			document.getElementById('height1').value = "";
+			resetpos();
 		}
 
 		function resetpos()

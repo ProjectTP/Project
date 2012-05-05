@@ -63,25 +63,25 @@ footer
 button 
 {
 	font: 12px/20px Cutive,Junge,Georgia;
-	background: rgba(200,0,0,0.1);
+	background: rgba(50,50,50,0.5);
     color: rgba(255,255,255,0.8);
     font-size: 12px;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
     -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
     -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
     box-shadow: 0 1px 3px rgba(0,0,0,0.6);
     text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
-    border-bottom: 1px solid rgba(0,0,0,0.25);
-    -moz-border-bottom: 1px solid rgba(0,0,0,0.25);
-    -webkit-border-bottom: 1px solid rgba(0,0,0,0.25);
+    border: 2px solid rgba(255,255,255,0.3);
     position: relative;
     cursor: pointer;
+    font-family: 'Just Me Again Down Here', cursive;
+    font-size: 15px;
 
-    -webkit-transition: background 0.7s, -webkit-box-shadow 0.5s ease-out;
-    -moz-transition: background 0.7s, -moz-box-shadow 0.5s ease-out;
-    -o-transition: background 0.7s, box-shadow 0.5s ease-out;
+    -webkit-transition: background 0.7s, -webkit-box-shadow 0.5s ease-out, color 0.5s;
+    -moz-transition: background 0.7s, -moz-box-shadow 0.5s ease-out, color 0.5s;
+    -o-transition: background 0.7s, box-shadow 0.5s ease-out, color 0.5s;
 }
 
 button:disabled 
@@ -91,9 +91,11 @@ button:disabled
     cursor: default;
 }
 
+
 button:hover
 {
-    background: rgba(100,100,100,0.1);
+    background: rgba(255,255,255,0.3);
+    color: rgba(0,0,0,0.5);
     -webkit-box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
     -moz-box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
     box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
@@ -101,13 +103,14 @@ button:hover
 
 button:disabled:hover
 {
-    background: rgba(200,0,0,0.1);
+    background: rgba(50,50,50,0.5);
     -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.6);
 }
 
 button:active
 {
-    background: rgba(100,100,100,0.5);
+    background: rgba(255,255,255,0.1);
+    -webkit-box-shadow:0 0px 10px rgba(0,0,0,1);   
 }
 
 button.switch
@@ -124,20 +127,21 @@ button.switch
     font-family: 'Just Me Again Down Here', cursive;
     text-shadow:  1px 1px rgba(0,0,0,0.8);
     font-size: 15px;
-    -webkit-transition: -webkit-box-shadow 0.5s ease-out;;
-    -moz-transition: -moz-box-shadow 0.5s ease-out;
-    -o-transition: box-shadow 0.5s ease-out;
+    -webkit-transition: -webkit-box-shadow 0.5s ease-out, color 0.5s, border 0.5s ease-out;
+    -moz-transition: -moz-box-shadow 0.5s ease-out, color 0.5s, border 0.5s ease-out;
+    -o-transition: box-shadow 0.5s ease-out, color 0.5s, border 0.5s ease-out;
 
 }
 
 button.switch:hover
 {
+    color: white;
     border: 5px solid rgba(255,255,255,0.6);
     border-right:none;
     border-top:none;
-    -moz-box-shadow: 0px 0px 20px rgba(255,255,255,0.8);
-    -webkit-box-shadow: 0px 0px 20px rgba(255,255,255,0.8);
-    box-shadow: 0px 0px 20px rgba(255,255,255,0.8);
+    -moz-box-shadow: 0px 0px 50px rgba(255,255,255,0.8);
+    -webkit-box-shadow: 0px 0px 50px rgba(255,255,255,0.8);
+    box-shadow: 0px 0px 50px rgba(255,255,255,0.8);
 }
 /* --------------------- Input Decorations --------------------- */
 
@@ -149,6 +153,8 @@ input
 	border-radius: 5px;
 	width: 120px;
 	box-shadow:  0px 0px 2px 2px rgba(255,255,255,0.6)
+    font-family: 'Just Me Again Down Here', cursive;
+
 }
 #robo_path,#robo_output,#out_path
 {
@@ -171,13 +177,15 @@ input:disabled
 
 ::-webkit-input-placeholder  
 {
-	font: 13px Junge,Georgia;
+	font: 14px Junge,Georgia;
+    font-family: 'Just Me Again Down Here', cursive;
 	color:#393954;
 	color: rgba(0,0,0,0.2);
 }
 
 input:-moz-placeholder {
 	font: 13px Junge,Georgia;
+    font-family: 'Just Me Again Down Here', cursive;
 	color:#393954;
 	color: rgba(0,0,0,0.2);
 }
@@ -353,7 +361,7 @@ button.welcome
     /*Transition*/
     -webkit-transition: -webkit-box-shadow 0.5s ease-out, -webkit-transform 0.5s ease-out, color 0.6s, text-shadow 0.5s;
     -moz-transition: -moz-box-shadow 0.5s ease-out, -moz-transform 0.5s ease-out, color 0.6s, text-shadow 0.5s;
-    -o-transition: box-shadow 0.5s ease-out, transform 0.5s ease-out, color 0.6s, text-shadow 0.5s;
+    -o-transition: box-shadow 0.5s ease-out, -o-transform 0.5s ease-out, color 0.6s, text-shadow 0.5s;
 }
 button.welcome:hover
 {
@@ -364,7 +372,7 @@ button.welcome:hover
     text-shadow:  1px 1px rgba(0,0,0,0.8);
     -webkit-transform: scale(1.1);
     -moz-transform: scale(1.1);
-    transform: scale(1.1);
+    -o-transform: scale(1.1);
 }
 
 button.welcome:active
@@ -402,13 +410,13 @@ button.link
     color: black;
     box-shadow: 0px 0px;
     background: rgba(255,255,255,0.2);
-    
+    font-family: cursive;
     width:180px;
     height:28px;
     
     -webkit-transition: -webkit-box-shadow 0.5s ease-out, -webkit-transform 0.5s ease-out;
     -moz-transition: -moz-box-shadow 0.5s ease-out, -moz-transform 0.5s ease-out;
-    -o-transition: box-shadow 0.5s ease-out, transform 0.5s ease-out;
+    -o-transition: box-shadow 0.5s ease-out, -o-transform 0.5s ease-out;
 }
 #langchange img, #tests img
 {
@@ -428,7 +436,7 @@ button.link
     box-shadow: 0px 0px 25px rgba(0,0,0,0.8);
     -webkit-transform: scale(1.05);
     -moz-transform: scale(1.05);
-    transform: scale(1.05);
+    -o-transform: scale(1.05);
 }
 #langchange:hover img, #tests:hover img
 {
