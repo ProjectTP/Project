@@ -16,15 +16,13 @@
 	
 	<script>
 	    function showing(cl) {
-	    $(cl).show("slow");
+	    $(cl).show(800);
 	    };
 
 	    function hiding(cl) {
-	    $(cl).hide(1000);
+	    $(cl).hide(800);
 	    };
     </script>
-
-
 	</head>
 	
 	<body onload = "javascript:showing('h1.showw'); javascript:showing('h1.en'); javascript:showing('table.welcome'); javascript:showing('footer.en'); ">
@@ -44,11 +42,7 @@
 			</center> 
 		</h1>
 
-		<h1 class = "bul" style = "font-size: 25px; color : black; margin-bottom: 0px; text-shadow: 0px 0px; display:none"> 
-			<center>
-				Изберете път:
-			</center> 
-		</h1>
+		
 
 
 		<!-- English table -->
@@ -93,6 +87,13 @@
 
 
 		<!-- Bulgarian table -->
+
+		<h1 class = "bul" style = "font-size: 25px; color : black; margin-bottom: 0px; text-shadow: 0px 0px; display:none"> 
+			<center>
+				Изберете път:
+			</center> 
+		</h1>
+
 		<center><table class = "welcomebul" style = "width: 245px; height: 170px; border-radius: 20px; display:none; padding-bottom: 95px;">
 			<tr>
 				<th class = "wel1" style = "font-size: 16px ;border-bottom: 0px;">Разгледайте проекта</th>

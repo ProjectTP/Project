@@ -446,6 +446,13 @@ button.link
     margin-left: 15px;
 }
 
+#langchange:hover, #tests:hover
+{
+    -webkit-box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+}
+
 #langchange, #tests
 {
     border: 0px solid rgba(0,0,0,0.6);

@@ -572,3 +572,11 @@
 			stop_ 	 = true;
 			clearInterval(gameInterval);
 		}
+
+		function showing(obj) {
+	    	$(obj).show(800);
+	    };
+
+	    function hiding(obj) {
+	    	$(obj).hide(800);
+	    };
