@@ -60,11 +60,12 @@ footer
 
 /* --------------------- Button Decorations --------------------- */
 
-button 
+button, #langchange, #tests
 {
 	font: 12px/20px Cutive,Junge,Georgia;
-	background: rgba(50,50,50,0.5);
-    color: rgba(255,255,255,0.8);
+	
+    background: rgba(255,255,255,0.3);
+    color: rgba(0,0,0,0.5);
     font-size: 12px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -86,16 +87,17 @@ button
 
 button:disabled 
 {
-	border: solid 3px rgba(0,0,0,0.2);
-	color: rgba(0,0,0,0.4);
+	border: solid 2px rgba(0,0,0,0.2);
+	color: rgba(150,150,150,1);
     cursor: default;
+    background: rgba(0,0,0,0.3);
 }
 
 
 button:hover
 {
-    background: rgba(255,255,255,0.3);
-    color: rgba(0,0,0,0.5);
+    background: rgba(250,250,250,0.1);
+    color: rgba(255,255,255,0.8);
     -webkit-box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
     -moz-box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
     box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
@@ -103,7 +105,8 @@ button:hover
 
 button:disabled:hover
 {
-    background: rgba(50,50,50,0.5);
+    background: rgba(0,0,0,0.3);
+    color: rgba(150,150,150,1);
     -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.6);
 }
 
@@ -115,6 +118,7 @@ button:active
 
 button.switch
 {
+    color: rgba(255,255,255,0.8);
     margin-top: -30px;
     margin-right: -8px;
     background-color: rgba(0,0,0,0.1);
@@ -262,10 +266,10 @@ table
  
 #dialog-box
 {
-	-webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-	border: 7px solid rgba(0,0,0,0.7);
+	-webkit-box-shadow: 0px 0px 20px rgba(255,255,255,1), 0px 0px 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 0px 20px rgba(255,255,255,1), 0px 0px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 50px rgba(255,255,255,1), 0px 0px 10px rgba(0, 0, 0, 0.5);
+	border: 10px solid rgba(0,0,0,0.7);
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px;
@@ -310,23 +314,28 @@ a.button
     text-decoration: none;
     font-weight: normal;
     line-height: 1; 
-    background: rgba(149,184,245,0.8); 
+    background: rgba(149,184,245,0.7); 
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5); 
-    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.5);
     border-bottom: 1px solid rgba(0,0,0,0.25);
     -moz-border-bottom: 1px solid rgba(0,0,0,0.25);
     -webkit-border-bottom: 1px solid rgba(0,0,0,0.25);
     cursor: pointer;
+    border: 3px solid rgba(0,0,0,0.1);
+    -webkit-transition: -webkit-box-shadow 0.3s ease-out, -webkit-transform 0.3s ease-out, color 0.3s, text-shadow 0.3s, background 0.3s;
+    -moz-transition: -moz-box-shadow 0.3s ease-out, -moz-transform 0.3s ease-out, color 0.3s, text-shadow 0.3s, background 0.3s;
+    -o-transition: box-shadow 0.3s ease-out, -o-transform 0.3s ease-out, color 0.3s, text-shadow 0.3s, background 0.3s;
 }
 
 a.button:hover
 {
-    background: rgba(149,184,245,1);
+    background: rgba(0,0,200,0.7);
+    background: rgba(149,184,245,1); 
+    color: rgba(0,0,0,0.6);
+    color: white;
+    border: 3px solid rgba(0,0,0,0.1);
 }
 
 a.button:active
@@ -408,42 +417,48 @@ button.link
 #langchange, #tests
 {
     color: black;
-    box-shadow: 0px 0px;
-    background: rgba(255,255,255,0.2);
+    padding: 3px;
+    padding-left: 5px;
+    -webkit-box-shadow: 0px 0px 15px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 0px 15px rgba(0,0,0,0.4);
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.4);
     font-family: cursive;
-    width:180px;
-    height:28px;
-    
-    -webkit-transition: -webkit-box-shadow 0.5s ease-out, -webkit-transform 0.5s ease-out;
-    -moz-transition: -moz-box-shadow 0.5s ease-out, -moz-transform 0.5s ease-out;
-    -o-transition: box-shadow 0.5s ease-out, -o-transform 0.5s ease-out;
+    text-shadow: 1px 1px white;
+    -webkit-transition: -webkit-transform 0.5s ease-out, color 0.5s, text-shadow 0.5s;
+    -moz-transition: -moz-transform 0.5s ease-out, color 0.5s, text-shadow 0.5s;
+    -o-transition: -o-transform 0.5s ease-out, color 0.5s, text-shadow 0.5s;
 }
 #langchange img, #tests img
 {
-    border-radius: 5px;
+    border-radius: 2px;
     vertical-align: bottom;
     border: 1px solid rgba(255,255,255,0.1);
+    -webkit-transition: -webkit-box-shadow 0.5s ease-out, -webkit-transform 0.5s ease-out, margin 0.5s, border 0.5s;
+    -moz-transition: -moz-box-shadow 0.5s ease-out, -moz-transform 0.5s ease-out, margin 0.5s, border 0.5s;
+    -o-transition: box-shadow 0.5s ease-out, -o-transform 0.5s ease-out, margin 0.5s, border 0.5s;
 }
-#tests
-{
-    margin-top: 5px;
-}
-#langchange:hover, #tests:hover
-{
-    /*background: rgba(0,0,0,0.4);*/
-    -moz-box-shadow: 0px 0px 25px rgba(0,0,0,0.8);
-    -webkit-box-shadow: 0px 0px 25px rgba(0,0,0,0.8);
-    box-shadow: 0px 0px 25px rgba(0,0,0,0.8);
-    -webkit-transform: scale(1.05);
-    -moz-transform: scale(1.05);
-    -o-transform: scale(1.05);
-}
+
 #langchange:hover img, #tests:hover img
 {
-    border: 1px solid rgba(255,255,255,0.3);
+    -webkit-transform: scale(2);
+    -moz-transform: scale(2);
+    -o-transform: scale(2);
+    margin-left: 15px;
 }
 
 #langchange, #tests
 {
-    border: 1px solid rgba(0,0,0,0.6);
+    border: 0px solid rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0);
+}
+
+#tests .raq
+{
+    -webkit-transition: margin 0.4s ease-out;
+    -moz-transition: margin 0.4s ease-out;
+    -o-transition: margin 0.4s ease-out;
+}
+
+#tests:hover .raq {
+    margin-left: 20px;
 }

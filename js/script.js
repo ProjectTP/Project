@@ -115,9 +115,9 @@
 				height = canvas.height;
 			} 
 			if (document.getElementById('width1').value == 0 && document.getElementById('height1').value == 0) {
-				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter something!');
+				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter something!');
 			} else if (document.getElementById('width1').value < 150 && document.getElementById('height1').value < 150) {
-				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width and height higher than 150');
+				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width and height higher than 150');
 			} else if (document.getElementById('width1').value == 0 && document.getElementById('height1').value >= 150 && 
 					   document.getElementById('height1').value <= 1000) {
 				/* Do nothing */
@@ -125,15 +125,15 @@
 					   document.getElementById('width1').value <= 1000) {
 				/* Do nothing */
 			} else if (document.getElementById('width1').value > 1000 && document.getElementById('height1').value > 1000) {
-				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width and height less than 1000');
+				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width and height less than 1000');
 			} else if (document.getElementById('width1').value > 1000) {
-				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width less than 1000');
+				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width less than 1000');
 			} else if (document.getElementById('height1').value > 1000) {
-				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter height less than 1000');
+				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height less than 1000');
 			} else if (document.getElementById('width1').value < 150) {
-				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width higher than 150.');
+				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width higher than 150.');
 			} else if (document.getElementById('height1').value < 150) {
-				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter height higher than 150.');
+				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height higher than 150.');
 			}
 			roboX = width/2;
 			roboY = height/2;
@@ -187,14 +187,14 @@
 					roboHeight = document.getElementById('height_r').value;
 				}
 				if (document.getElementById('height_r').value > 100 && document.getElementById('width_r').value > 100) {
-					popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter height and width for the robot less than 100');
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height and width for the robot less than 100');
 				} else if (document.getElementById('height_r').value > 100) {
-					popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter height for the robot less than 100');
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height for the robot less than 100');
 				} else if (document.getElementById('width_r').value > 100) {
-					popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot less than 100');
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot less than 100');
 				}
 			} else if (start == false) {
-				popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width/height for the robot higher than 1');
+				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width/height for the robot higher than 1');
 			}
 			robo_data_reset()
 		}
@@ -234,14 +234,14 @@
 					rWheelHeight = document.getElementById('height_w').value;
 				}
 				if (document.getElementById('width_w').value > 35) {
-					popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot wheels less than 35');
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot wheels less than 35');
 				}
 				if (document.getElementById('height_w').value > 100 && document.getElementById('width_w').value > 35) {
 					if (document.getElementById('height_w').value > 100) {
-						popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter height for the robot less than 100');
+						popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height for the robot less than 100');
 					}
 					if (document.getElementById('width_w').value > 35) {
-						popup('<img src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot wheels less than 35');
+						popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot wheels less than 35');
 					}
 				}
 			roboX = width/2;
