@@ -2,7 +2,7 @@
 
 <html>  	
 	<head>
-		<link rel="shortcut icon" href="http://clasma.net/common/res/warning.gif">
+		<link rel="shortcut icon" href="http://www.overcode.bg/images/fb/smiles/robot.gif">
 		<title>WebSim Project</title>
 		<meta charset="utf-8">
 		<script type="text/javascript" src="js/script.js"></script>
@@ -28,7 +28,7 @@
 			$(document).ready(function () {
 			
 
-				$('a.button').click(function () {		
+				$('a.button, #dialog-overlay').click(function () {		
 					$('#dialog-overlay, #dialog-box').hide();
 					$("#dialog-box").animate({
 			    		width:  0,
@@ -62,7 +62,7 @@
 				$("#dialog-box").animate({
 			    	height: 180,
 			    	width:  500
-			    },350);
+			    },100);
 
 				$('#dialog-message').html(message);	
 			}
