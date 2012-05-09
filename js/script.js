@@ -79,14 +79,61 @@
 			gameInterval 	 = setInterval(draw, 20);
 		}
 
+
+function popup(message) {
+					  
+				var maskHeight = $(document).height();  
+				var maskWidth = $(window).width();
+
+				var dialogTop =  (maskHeight/3); 
+				var dialogLeft = (maskWidth/2) - 250; 
+				
+				$('#dialog-overlay').css({height:maskHeight, width:maskWidth}).show();
+				$('#dialog-box').css({top:dialogTop, left:dialogLeft}).show();
+				$("#dialog-box").animate({
+			    	height: 0,
+			    	width:  0
+			    },0);
+				$("#dialog-box").animate({
+			    	height: 180,
+			    	width:  500
+			    },100);
+
+				$('#dialog-message').html(message);	
+			}
+
+function popupbg(message) {
+					  
+				var maskHeight = $(document).height();  
+				var maskWidth = $(window).width();
+
+				var dialogTop =  (maskHeight/3); 
+				var dialogLeft = (maskWidth/2) - 250; 
+				
+				$('#dialog-overlay-bg').css({height:maskHeight, width:maskWidth}).show();
+				$('#dialog-box-bg').css({top:dialogTop, left:dialogLeft}).show();
+				$("#dialog-box-bg").animate({
+			    	height: 0,
+			    	width:  0
+			    },0);
+				$("#dialog-box-bg").animate({
+			    	height: 180,
+			    	width:  500
+			    },100);
+
+				$('#dialog-message-bg').html(message);	
+			}
+
+
+
 		// resizing the canvas width and height
-		function resize()
+		function resize(lang)
 		{
  			if (start) {
  				init(6);
  				resize();
  			}
-			
+			if (lang == 'e') {
  			if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000 && 
  				document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
  				$("#my_canvas").animate({
@@ -113,28 +160,83 @@
 			    },"slow");
 				canvas.height = document.getElementById('height1').value;
 				height = canvas.height;
-			} 
-			if (document.getElementById('width1').value == 0 && document.getElementById('height1').value == 0) {
-				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter something!');
-			} else if (document.getElementById('width1').value < 150 && document.getElementById('height1').value < 150) {
-				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width and height higher than 150');
-			} else if (document.getElementById('width1').value == 0 && document.getElementById('height1').value >= 150 && 
-					   document.getElementById('height1').value <= 1000) {
-				/* Do nothing */
-			} else if (document.getElementById('height1').value == 0 && document.getElementById('width1').value >= 150 && 
-					   document.getElementById('width1').value <= 1000) {
-				/* Do nothing */
-			} else if (document.getElementById('width1').value > 1000 && document.getElementById('height1').value > 1000) {
-				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width and height less than 1000');
-			} else if (document.getElementById('width1').value > 1000) {
-				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width less than 1000');
-			} else if (document.getElementById('height1').value > 1000) {
-				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height less than 1000');
-			} else if (document.getElementById('width1').value < 150) {
-				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width higher than 150.');
-			} else if (document.getElementById('height1').value < 150) {
-				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height higher than 150.');
 			}
+
+			
+				if (document.getElementById('width1').value == 0 && document.getElementById('height1').value == 0) {
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter something!');
+				} else if (document.getElementById('width1').value < 150 && document.getElementById('height1').value < 150) {
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width and height higher than 150');
+				} else if (document.getElementById('width1').value == 0 && document.getElementById('height1').value >= 150 && 
+						   document.getElementById('height1').value <= 1000) {
+					/* Do nothing */
+				} else if (document.getElementById('height1').value == 0 && document.getElementById('width1').value >= 150 && 
+						   document.getElementById('width1').value <= 1000) {
+					/* Do nothing */
+				} else if (document.getElementById('width1').value > 1000 && document.getElementById('height1').value > 1000) {
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width and height less than 1000');
+				} else if (document.getElementById('width1').value > 1000) {
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width less than 1000');
+				} else if (document.getElementById('height1').value > 1000) {
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height less than 1000');
+				} else if (document.getElementById('width1').value < 150) {
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width higher than 150.');
+				} else if (document.getElementById('height1').value < 150) {
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height higher than 150.');
+				}
+			} else if (lang == 'b') {
+
+				if (document.getElementById('width1-bg').value >= 150 && document.getElementById('width1-bg').value <= 1000 && 
+ 				document.getElementById('height1-bg').value >= 150 && document.getElementById('height1-bg').value <= 1000) {
+ 				$("#my_canvas").animate({
+			    	width:  document.getElementById('width1-bg').value,
+			    	height: document.getElementById('height1-bg').value 
+			    },"slow");
+ 				canvas.width  = document.getElementById('width1-bg').value;
+				width = canvas.width;
+				canvas.height = document.getElementById('height1-bg').value;
+				height = canvas.height;
+	 			}
+
+				if (document.getElementById('width1-bg').value >= 150 && document.getElementById('width1-bg').value <= 1000) {
+					$("#my_canvas").animate({
+				    	width:  document.getElementById('width1-bg').value,
+				    },"slow");
+					canvas.width  = document.getElementById('width1-bg').value;
+					width = canvas.width;
+
+				}
+				if (document.getElementById('height1-bg').value >= 150 && document.getElementById('height1-bg').value <= 1000) {
+					$("#my_canvas").animate({ 
+				    	height: document.getElementById('height1-bg').value,
+				    },"slow");
+					canvas.height = document.getElementById('height1-bg').value;
+					height = canvas.height;
+				}
+
+				if (document.getElementById('width1-bg').value == 0 && document.getElementById('height1-bg').value == 0) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете нещо!');
+				} else if (document.getElementById('width1-bg').value < 150 && document.getElementById('height1-bg').value < 150) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина и ширина по-големи от 150');
+				} else if (document.getElementById('width1-bg').value == 0 && document.getElementById('height1-bg').value >= 150 && 
+						   document.getElementById('height1-bg').value <= 1000) {
+					/* Do nothing */
+				} else if (document.getElementById('height1-bg').value == 0 && document.getElementById('width1-bg').value >= 150 && 
+						   document.getElementById('width1-bg').value <= 1000) {
+					/* Do nothing */
+				} else if (document.getElementById('width1-bg').value > 1000 && document.getElementById('height1-bg').value > 1000) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина и ширина по-малки от 1000');
+				} else if (document.getElementById('width1-bg').value > 1000) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете ширина по-малка от 1000');
+				} else if (document.getElementById('height1-bg').value > 1000) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина по-малка от 1000');
+				} else if (document.getElementById('width1-bg').value < 150) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете ширина по-висока от 150.');
+				} else if (document.getElementById('height1-bg').value < 150) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина по-висока от 150.');
+				}
+			}
+
 			roboX = width/2;
 			roboY = height/2;
 			radian=(Math.PI/180) * 0;
@@ -158,6 +260,8 @@
  			}
  			document.getElementById('width1').value  = "";
 			document.getElementById('height1').value = "";
+			document.getElementById('width1-bg').value  = "";
+			document.getElementById('height1-bg').value = "";
 			resetpos();
 		}
 
@@ -168,15 +272,16 @@
 			radian 	  	  = (Math.PI/180) * 0;
 			init(speed);
 			resetpos_ 	  = true;
-			if(crash) {  
+			if (crash) {  
 				crash 	  = false;
 				display();
 			}
 		}
 
 		// resizing the robot width and height
-		function robo_resize()
+		function robo_resize(lang)
 		{
+			if (lang == 'e') {
 			if (document.getElementById('width_r').value >= 1 || document.getElementById('height_r').value >= 1) {
 				if (document.getElementById('width_r').value >= 1 && document.getElementById('width_r').value < 100) {
 					roboWidth  = document.getElementById('width_r').value;
@@ -186,6 +291,7 @@
 				if (document.getElementById('height_r').value >= 1 && document.getElementById('height_r').value < 100) {
 					roboHeight = document.getElementById('height_r').value;
 				}
+				
 				if (document.getElementById('height_r').value > 100 && document.getElementById('width_r').value > 100) {
 					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height and width for the robot less than 100');
 				} else if (document.getElementById('height_r').value > 100) {
@@ -193,8 +299,36 @@
 				} else if (document.getElementById('width_r').value > 100) {
 					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot less than 100');
 				}
+				 
 			} else if (start == false) {
 				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width/height for the robot higher than 1');
+			}
+
+
+
+			} else if (lang == 'b') {
+				
+				if (document.getElementById('width_r-bg').value >= 1 || document.getElementById('height_r-bg').value >= 1) {
+				if (document.getElementById('width_r-bg').value >= 1 && document.getElementById('width_r-bg').value < 100) {
+					roboWidth  = document.getElementById('width_r-bg').value;
+					lWheelPosX = -roboWidth/2 - 7;
+					rWheelPosX = roboWidth/2;
+				}
+				if (document.getElementById('height_r-bg').value >= 1 && document.getElementById('height_r-bg').value < 100) {
+					roboHeight = document.getElementById('height_r-bg').value;
+				}
+
+				if (document.getElementById('height_r-bg').value > 100 && document.getElementById('width_r-bg').value > 100) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина и ширина за робота по-малки от 100');
+				} else if (document.getElementById('height_r-bg').value > 100) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина за робота по-малка от 100');
+				} else if (document.getElementById('width_r-bg').value > 100) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете ширина за робота по-малка от 100');
+				}
+
+				} else if (start == false) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина/ширина за робота по-голяма от 1');
+				}
 			}
 			robo_data_reset()
 		}
@@ -265,7 +399,7 @@
 
 		function draw()
 		{
-			if(!pause_ && !stop_) {
+			if (!pause_ && !stop_) {
 				display();
 				check_rect_angles();
 
@@ -299,7 +433,7 @@
 					crash = true;	
 				}	
 			} 
-			if( (pause_ || stop_ )&& resetpos_) {
+			if ( (pause_ || stop_ )&& resetpos_) {
 				resetpos_ = false;
 				display();
 			}				
@@ -308,20 +442,22 @@
 		// recalculate distance
 		function recalc_distance()
 		{
-			if(distance>speed) {
+			if (distance > speed) {
 				distance -= speed;
-			}else{
-				distance = 0;							
+			} else {
+				distance = 0;
 			}
 		}
 
 		// check if any angle of the robo is out of the table
 		function check_rect_angles()
 		{
-			if (roboX+check_angleX(1) > width || roboX+check_angleX(2) > width || roboX+check_angleX(3) > width || roboX+check_angleX(4) > width || 
-				roboX+check_angleX(1) < 0 || roboX+check_angleX(2) < 0 || roboX+check_angleX(3) < 0 || roboX+check_angleX(4) < 0 ||
-				roboY+check_angleY(1) > height || roboY+check_angleY(2) > height || roboY+check_angleY(3) > height || roboY+check_angleY(4) > height ||
-				roboY+check_angleY(1) < 0 || roboY+check_angleY(2) < 0 || roboY+check_angleY(3) < 0 || roboY+check_angleY(4) < 0 ) {
+			if (roboX + check_angleX(1) > width  || roboX + check_angleX(2) > width  || roboX + check_angleX(3) > width  || 
+				roboX + check_angleX(4) > width  || roboX + check_angleX(1) < 0 	 || roboX + check_angleX(2) < 0 	 || 
+				roboX + check_angleX(3) < 0 	 || roboX + check_angleX(4) < 0 	 ||	roboY + check_angleY(1) > height || 
+				roboY + check_angleY(2) > height || roboY + check_angleY(3) > height || roboY + check_angleY(4) > height || 
+				roboY + check_angleY(1) < 0 	 || roboY + check_angleY(2) < 0 	 || roboY + check_angleY(3) < 0 	 || 
+				roboY + check_angleY(4) < 0 ) {
 				crash = true;
 			} else {
 				crash = false;	
@@ -425,11 +561,11 @@
 			temp_input="";
 			temp=document.getElementById('robo_path').value;
 			for(var k=0;k<temp.length;k++){
-				if( temp[k]!=' ' && temp[k]!='\n' ){
+				if ( temp[k]!=' ' && temp[k]!='\n' ){
 					temp_input+=temp[k];
 				}
-				if(temp[k]==' ' || temp[k]=='\n'){
-					if(temp[k-1]!=' ' && temp[k-1]!='\n' ){
+				if (temp[k]==' ' || temp[k]=='\n'){
+					if (temp[k-1]!=' ' && temp[k-1]!='\n' ){
 						temp_input+=temp[k];
 					}     
 				}
@@ -440,14 +576,16 @@
 		// generate new path
 		function generate_path()
 		{
-			document.getElementById('out_path').value = "";
-			check_inpath();		
-			document.getElementById('path').disabled  		 = true;	
-			document.getElementById('replace_path').disabled = true;	
-			document.getElementById('out_path').style.color  = "green";
-			get_path = true;	
-			start 	 = true;
-			init(speed);	
+				document.getElementById('out_path').value = "";
+				document.getElementById('out_path-bg').value = "";
+				check_inpath();		
+				document.getElementById('path').disabled  		 = true;	
+				document.getElementById('replace_path').disabled = true;	
+				document.getElementById('out_path').style.color  = "green";				
+				document.getElementById('out_path-bg').style.color  = "green";
+				get_path = true;		
+				start 	 = true;
+				init(speed);
 		}
 
 		function calc_distacne()
@@ -457,14 +595,14 @@
 
 		function get_new_step()
 		{
-			if(steps[last_step + 1] * 1 > 0) { // check if there is more steps
+			if (steps[last_step + 1] * 1 > 0) { // check if there are more steps
 				motorA = false;
 				motorB = false;
-				if(steps[last_step] == "A") {
+				if (steps[last_step] == "A") {
 					motorA = true;
-				}else if(steps[last_step] == "B") {
+				}else if (steps[last_step] == "B") {
 					motorB = true;
-				}else if(steps[last_step] == "AB") {
+				}else if (steps[last_step] == "AB") {
 					motorA = true;
 					motorB = true;
 				}
@@ -472,9 +610,10 @@
 				distance = steps[last_step + 1] * 1;	
 				w = 3;
 				calc_distacne();		
-				document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';							
+				document.getElementById('out_path').value 	 += steps[last_step] + ' ' + steps[last_step+1] + '\n';
+				document.getElementById('out_path-bg').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';							
 				last_step += 2;
-			}else {
+			} else {
 				stop_simulation();
 			}	
 		}
@@ -495,7 +634,7 @@
 			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth, roboHeight);
 			ctx.font = "bold 19pt Calibri,Times New Roman";
 
-			if(get_path && distance == 0) {
+			if (get_path && distance == 0) {
 				get_new_step();
 			}		
 			w = -w;
@@ -529,34 +668,49 @@
 
 		function replace_path()
 		{
-			document.getElementById('robo_path').value = document.getElementById('out_path').value;	
+			document.getElementById('robo_path').value 	  = document.getElementById('out_path').value;
+			document.getElementById('robo_path-bg').value = document.getElementById('out_path-bg').value;	
 		}
 
-		function crash_mess()
+		function crash_mess(lang)
 		{
 			ctx.fillStyle = "white";	
-			if (width < 200) {
-				ctx.font = "bold 30pt Calibri,Times New Roman";
-				ctx.fillText("CRASH!", width/2-65, height/2 + 10);
+			if (lang == 'e') {
+				if (width < 200) {
+					ctx.font = "bold 30pt Calibri,Times New Roman";
+					ctx.fillText("CRASH!", width/2-65, height/2 + 10);
+				} else {
+					ctx.font = "bold 50pt Calibri,Times New Roman";
+					ctx.fillText("CRASH!", width/2-100, height/2 + 10);				
+				}
 			} else {
-				ctx.font = "bold 50pt Calibri,Times New Roman";
-				ctx.fillText("CRASH!", width/2-100, height/2 + 10);				
+				if (width < 200) {
+					ctx.font = "bold 30pt Calibri,Times New Roman";
+					ctx.fillText("Сблъсък!", width/2-65, height/2 + 10);
+				} else {
+					ctx.font = "bold 50pt Calibri,Times New Roman";
+					ctx.fillText("Сблъсък!", width/2-100, height/2 + 10);				
+				}
 			}
+
 	
-			if(!stop_){
+			if (!stop_){
 				document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
+				document.getElementById('out_path-bg').value += "Сблъсък на ред " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
 			}
 			for (; steps[last_step + 1] * 1 > 0; last_step += 2) {
-				document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';	
+				document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';
+				document.getElementById('out_path-bg').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';		
 			}
 			stop_simulation();
 		}
 
 		function stop()
 		{
-			document.getElementById('out_path').value += '\n' + "Stoped!";			
+			document.getElementById('out_path').value 	 += '\n' + "Stoped!";			
+			document.getElementById('out_path-bg').value += '\n' + "Спряно!";			
 			stop_simulation();
-		}
+		}		
 
 		function stop_simulation()
 		{
@@ -566,6 +720,9 @@
 			document.getElementById('play').disabled 		 = true;	
 			document.getElementById('pause').disabled 		 = true;	
 			document.getElementById('stop').disabled 		 = true;
+			document.getElementById('play-bg').disabled 	 = true;	
+			document.getElementById('pause-bg').disabled 	 = true;	
+			document.getElementById('stop-bg').disabled 	 = true;
 			get_path = false;
 			distance = 0;
 			pause_ 	 = false;
@@ -574,9 +731,23 @@
 		}
 
 		function showing(obj) {
-	    	$(obj).show(800);
+	    	$(obj).show(500);
 	    };
-
+	    function fade(obj) {
+	    	$(obj).fadeIn(500);
+	    };
+	    function fadelogo(obj) {
+	    	$(obj).fadeIn(2000);
+	    };
+	    function fadeo(obj) {
+	    	$(obj).fadeOut(1);
+	    };
+	    function slide(obj) {
+	    	$(obj).slideDown(1000);
+	    };
+	    function slide2(obj) {	    	
+	    	$(obj).slideDown(1);
+	    };
 	    function hiding(obj) {
-	    	$(obj).hide(800);
+	    	$(obj).hide(500);
 	    };

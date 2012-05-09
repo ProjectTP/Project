@@ -7,10 +7,10 @@ body
 
 canvas 
 { 
-	border: 10px solid white;
+	border: 10px solid rgba(255,255,255,1);
+    border-top: 10px solid rgba(117,117,117,0.9);
+    border-right: 10px solid rgba(117,117,117,0.9);
 	background-color: black;
-	border-radius: 15px;
-	box-shadow: 0px 0px 15px 15px rgba(0,0,0,0.5), 0px 0px 5px 5px #400000;
 }
 
 /* --------------------- Output canvas Decorations --------------------- */
@@ -30,8 +30,8 @@ h1, a.logo
 	color: rgb(200,10,10);
 	text-decoration: none;
     text-shadow:  1px 1px rgba(255,255,255,0.8);
-	margin-bottom: 40px;
-	margin-top: 30px;
+	/*margin-bottom: 40px;
+	margin-top: 30px;*/
     -webkit-transition: color 1s ease-out;
     -moz-transition: color 1s ease-out;
     -o-transition: color 1s ease-out;
@@ -63,8 +63,7 @@ footer
 button, #langchange, #tests
 {
 	font: 12px/20px Cutive,Junge,Georgia;
-	
-    background: rgba(255,255,255,0.3);
+	background: rgba(100,100,100,0.3);
     color: rgba(0,0,0,0.5);
     font-size: 12px;
     -moz-border-radius: 5px;
@@ -79,7 +78,6 @@ button, #langchange, #tests
     cursor: pointer;
     font-family: 'Just Me Again Down Here', cursive;
     font-size: 15px;
-
     -webkit-transition: background 0.4s, -webkit-box-shadow 0.3s ease-out, color 0.3s;
     -moz-transition: background 0.4s, -moz-box-shadow 0.3s ease-out, color 0.3s;
     -o-transition: background 0.4s, box-shadow 0.3s ease-out, color 0.3s;
@@ -96,8 +94,8 @@ button:disabled
 
 button:hover
 {
-    background: rgba(250,250,250,0.1);
-    color: rgba(255,255,255,0.8);
+    background: rgba(200,200,200,0.1);
+    color: rgba(0,0,0,1);
     -webkit-box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
     -moz-box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
     box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
@@ -116,82 +114,77 @@ button:active
     -webkit-box-shadow:0 0px 10px rgba(0,0,0,1);   
 }
 
-button.switch
+a.switch
 {
-    color: rgba(255,255,255,0.8);
-    margin-top: -30px;
-    margin-right: -8px;
-    background-color: rgba(0,0,0,0.1);
+    color: rgba(255,255,255,0.5);
+    background-color: rgba(0,0,0,0);
     box-shadow: 0px 0px;
-    border-radius: 0px;
-    border-radius: 0px 0px 0px 15px;
-    border: 5px solid rgba(255,255,255,0.4);
-    border-right:none;
-    border-top:none;
-    font-family: 'Just Me Again Down Here', cursive;
-    text-shadow:  1px 1px rgba(0,0,0,0.8);
+    border: 0px;
+    border-bottom: 1px solid rgba(255,255,255,1);
+    font-family: 'Antic Didone', cursive;
     font-size: 15px;
-    -webkit-transition: -webkit-box-shadow 0.5s ease-out, color 0.5s, border 0.5s ease-out;
-    -moz-transition: -moz-box-shadow 0.5s ease-out, color 0.5s, border 0.5s ease-out;
-    -o-transition: box-shadow 0.5s ease-out, color 0.5s, border 0.5s ease-out;
-
+    font-weight: bold;
+    cursor: pointer;
+    padding: 1px 15px;
+    font-size: 15px;
+    margin-right: 5px;
+    -webkit-transition: -webkit-box-shadow 0.2s ease-out, color 0.2s, border 0.3s ease-out;
+    -moz-transition: -moz-box-shadow 0.2s ease-out, color 0.2s, border 0.3s ease-out;
+    -o-transition: box-shadow 0.2s ease-out, color 0.2s, border 0.3s ease-out;
 }
 
-button.switch:hover
+a.switch:hover
 {
-    color: white;
-    border: 5px solid rgba(255,255,255,0.6);
-    border-right:none;
-    border-top:none;
-    -moz-box-shadow: 0px 0px 50px rgba(255,255,255,0.8);
-    -webkit-box-shadow: 0px 0px 50px rgba(255,255,255,0.8);
-    box-shadow: 0px 0px 50px rgba(255,255,255,0.8);
+    color: rgba(50,50,50,0.8);
+    border-bottom: 2px solid rgba(170,10,10,1);
 }
+
+
+
 /* --------------------- Input Decorations --------------------- */
 
 input
 {
-	background-color: rgba(255,255,255,0.7);
+	background-color: rgba(255,255,255,0.9);
 	color: black;
-	font-weight: bold;
 	border-radius: 5px;
-	width: 120px;
+	width: 110px;
 	box-shadow:  0px 0px 2px 2px rgba(255,255,255,0.6)
-    font-family: 'Just Me Again Down Here', cursive;
+    font-family: 'Antic Didone', cursive;
 
 }
-#robo_path,#robo_output,#out_path
+#robo_path,#robo_output,#out_path, #out_path-bg, #robo_path-bg
 {
-    background-color: rgba(255,255,255,0.7);
+    background-color: rgba(200,200,255,0.1);
     color: black;
     font-weight: bold;
     border-radius: 5px;
     width: 250px;
     height: 200px;
-    box-shadow:  0px 0px 2px 2px rgba(255,255,255,0.6)
-}
+    box-shadow:  0px 0px 2px 2px rgba(255,255,255,0.6);
+    border: 7px solid rgba(0,0,0,0.1);
+    border-left: 0px;
+    border-right: 0px;
 
-input:disabled
-{
-	background-color: rgba(255,255,255,0.2);
-	color: gray;
-	border-radius: 5px;
-	width: 120px;
 }
-
 ::-webkit-input-placeholder  
 {
-	font: 14px Junge,Georgia;
-    font-family: 'Just Me Again Down Here', cursive;
-	color:#393954;
-	color: rgba(0,0,0,0.2);
+	font: 13px Junge,Georgia;
+    font-family: 'Antic Didone', cursive;
+	color: rgba(0,0,0,0.4);
 }
 
 input:-moz-placeholder {
 	font: 13px Junge,Georgia;
-    font-family: 'Just Me Again Down Here', cursive;
-	color:#393954;
-	color: rgba(0,0,0,0.2);
+    font-family: 'Antic Didone', cursive;
+	color: rgba(0,0,0,0.4);
+}
+
+#out_path::-webkit-input-placeholder, #out_path-bg::-webkit-input-placeholder
+{
+    font-size: 15px;
+    font-weight: bold;
+    font-style: normal;
 }
 
 /* ------------------- Table Decorations ------------------------ */
@@ -212,14 +205,16 @@ input:-moz-placeholder {
 }
 #tableform th , #tablespeed th, table th
 {
-	background: rgba(255,255,255,0.4);
+	background: rgba(255,255,255,0.2);
 	border-radius: 3px;
-	border: solid 2px rgba(0,0,0,0.1);
+	border: solid 2px rgba(0,0,0,0.2);
     -moz-border: solid 2px rgba(0,0,0,0.1);
     -webkit-border: solid 2px rgba(0,0,0,0.1);
+    border-right: 0px;
+    border-left: 0px;
 	font-family: 'Antic Didone', 'Times New Roman', Serif;
 	font-size: 16px;
-	color: rgba(0,0,0,0.6);
+	color: rgba(0,0,0,0.7);
 }
 #tableform
 {
@@ -227,9 +222,9 @@ input:-moz-placeholder {
 	right: 100px;
 	margin-top: 100px;
 }
-#tablespeed
+#tablepath
 {
-	margin-top: 20px;
+	margin-top: 30px;
 }
 table tr
 {
@@ -240,20 +235,28 @@ table tr.top
 {
     border: 1px solid white;
 }
-table
+table, #tableform
 {
     border: solid 10px rgba(0,0,0,0.1);
     border-radius: 5px;
-    background: rgba(105,60,9,0.1);
-    box-shadow: 0px 0px 15px 15px rgba(0,0,0,0.3);
+    background: rgba(255,255,255,0.4);
+    box-shadow: 0px 0px 5px 5px rgba(255,255,255,0.3);
+}
+
+#tableform input
+{
+    border-radius: 15px 0px 0px 15px;
+    border: 2px solid rgba(0,0,0,0.4);
+    font-size: 15px;
+    color: #660000;
 }
 
 /* ----------------------- Dialog Box Decorations --------------------- */
 
-#dialog-overlay /* Darken the whole window */
+#dialog-overlay, #dialog-overlay-bg /* Darken the whole window */
 {
- 	width:100%; 
-    height:100%;
+ 	width: 100%; 
+    height: 100%;
 	filter:alpha(opacity=50); 
     -moz-opacity:0.7; 
     -khtml-opacity: 0.7; 
@@ -264,7 +267,7 @@ table
  	display:none;
 }
  
-#dialog-box
+#dialog-box, #dialog-box-bg
 {
 	-webkit-box-shadow: 0px 0px 20px rgba(255,255,255,1), 0px 0px 10px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0px 0px 20px rgba(255,255,255,1), 0px 0px 10px rgba(0, 0, 0, 0.5);
@@ -280,7 +283,8 @@ table
     display:none;
 }
  
-#dialog-box .dialog-content
+#dialog-box .dialog-content, #dialog-box-bg .dialog-content-bg
+
 {
     text-align:center;
     font-weight: bold;
@@ -290,19 +294,19 @@ table
     font-size:13px;
 }
 
-#dialog-box .dialog-content p
+#dialog-box .dialog-content p, #dialog-box-bg .dialog-content-bg p
 {
     font-weight:700; margin:0;
 }
  
-#dialog-box .dialog-content ul
+#dialog-box .dialog-content ul, #dialog-box-bg .dialog-content-bg ul
 {
     margin:10px 0 10px 20px; 
     padding:0; 
     height:50px;
 }
 
-a.button
+a.button, a.button-bg
 {
     margin:10px auto 0 auto;
     text-align: middle;
@@ -329,7 +333,7 @@ a.button
     -o-transition: box-shadow 0.3s ease-out, -o-transform 0.3s ease-out, color 0.3s, text-shadow 0.3s, background 0.3s;
 }
 
-a.button:hover
+a.button:hover,a.button-bg:hover
 {
     background: rgba(0,0,200,0.7);
     background: rgba(149,184,245,1); 
@@ -338,7 +342,7 @@ a.button:hover
     border: 3px solid rgba(0,0,0,0.1);
 }
 
-a.button:active
+a.button:active, a.button-bg:active
 {
     -moz-box-shadow: 0px 0px;
     -webkit-box-shadow: 0px 0px;
@@ -410,10 +414,7 @@ center.choose
 {
     font-size: 18px;
 }
-button.link
-{
-    border: 5px solid white;
-}
+
 #langchange, #tests
 {
     color: black;
@@ -477,4 +478,41 @@ button.link
     -webkit-box-shadow: 0px 0px 15px rgba(0,0,0,0.8);
     -moz-box-shadow: 0px 0px 15px rgba(0,0,0,0.8);
     box-shadow: 0px 0px 15px rgba(0,0,0,0.8);
+}
+
+div.simulate-en button, div.simulate-bg button
+{
+    font-family: 'Antic Didone', cursive;
+}
+
+div.simulate-en button:disabled, div.simulate-bg button:disabled
+{
+    color: rgb(180,180,180);
+}
+a.logo
+{
+    cursor: pointer;
+}
+
+h1
+{
+    margin-bottom: 20px;
+}
+
+#tablespeed
+{
+    background: rgba(255,255,255,0.0);
+    box-shadow: 0px 0px;
+    border: 5px solid rgba(0,0,0,0.1);
+    box-shadow: 0px 0px 15px rgba(255,255,255,1);
+    border-top: 0px;
+    margin-top: -5px;
+    padding: 5px;
+    border-radius: 0px 0px 10px 10px;
+}
+#tablespeed th
+{
+    background: rgba(255,255,255,0.1);
+    border-right: 0px;
+    border-left: 0px;
 }
