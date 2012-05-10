@@ -354,33 +354,56 @@ function popupbg(message) {
 		}
 
 		// resizing the robot wheels
-		function wheel_resize()
+		function wheel_resize(lang)
 		{
-			if (document.getElementById('width_w').value >= 1 || document.getElementById('height_w').value >= 1) {
-				if (document.getElementById('width_w').value >= 1 && document.getElementById('width_w').value <= 35) {
-					lWheelWidth	 = document.getElementById('width_w').value;
-					lWheelPosX 	 = -roboWidth/2 - 7;
-					lWheelPosX 	-= document.getElementById('width_w').value - 7;
-					rWheelWidth	 = document.getElementById('width_w').value;
-				}
-				if (document.getElementById('height_w').value >= 1 && document.getElementById('height_w').value <= 100) {
-					lWheelHeight = document.getElementById('height_w').value;
-					rWheelHeight = document.getElementById('height_w').value;
-				}
-				if (document.getElementById('width_w').value > 35) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot wheels less than 35');
-				}
-				if (document.getElementById('height_w').value > 100 && document.getElementById('width_w').value > 35) {
-					if (document.getElementById('height_w').value > 100) {
-						popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height for the robot less than 100');
+			if (lang == 'e') {
+				if (document.getElementById('width_w').value >= 1 || document.getElementById('height_w').value >= 1) {
+					if (document.getElementById('width_w').value >= 1 && document.getElementById('width_w').value <= 35) {
+						lWheelWidth	 = document.getElementById('width_w').value;
+						lWheelPosX 	 = -roboWidth/2 - 7;
+						lWheelPosX 	-= document.getElementById('width_w').value - 7;
+						rWheelWidth	 = document.getElementById('width_w').value;
 					}
-					if (document.getElementById('width_w').value > 35) {
+					if (document.getElementById('height_w').value >= 1 && document.getElementById('height_w').value <= 100) {
+						lWheelHeight = document.getElementById('height_w').value;
+						rWheelHeight = document.getElementById('height_w').value;
+					}
+					if (document.getElementById('height_w').value > 100 && document.getElementById('width_w').value > 35) {
+						popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height less than 100 and width for the robot less than 35');
+					} else if (document.getElementById('width_w').value > 35) {
 						popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot wheels less than 35');
-					}
+					} else if (document.getElementById('height_w').value > 100) {
+							popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height for the robot less than 100');
+					}					
+				} else if (document.getElementById('width_w').value == 0 || document.getElementById('height_w').value == 0) {
+					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter something and then resize');
 				}
+			} else if (lang == 'b') {
+				if (document.getElementById('width_w-bg').value >= 1 || document.getElementById('height_w-bg').value >= 1) {
+					if (document.getElementById('width_w-bg').value >= 1 && document.getElementById('width_w-bg').value <= 35) {
+						lWheelWidth	 = document.getElementById('width_w-bg').value;
+						lWheelPosX 	 = -roboWidth/2 - 7;
+						lWheelPosX 	-= document.getElementById('width_w-bg').value - 7;
+						rWheelWidth	 = document.getElementById('width_w-bg').value;
+					}
+					if (document.getElementById('height_w-bg').value >= 1 && document.getElementById('height_w-bg').value <= 100) {
+						lWheelHeight = document.getElementById('height_w-bg').value;
+						rWheelHeight = document.getElementById('height_w-bg').value;
+					}
+					if (document.getElementById('height_w-bg').value > 100 && document.getElementById('width_w-bg').value > 35) {
+						popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете дължина по-малка от 100 и ширина  за гумите на робота по-малка от 35');
+					} else if (document.getElementById('width_w-bg').value > 35) {
+						popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете ширина за гумите на робота по-малка от 35');
+					} else if (document.getElementById('height_w-bg').value > 100) {
+						popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете дължина за гумите на робота по-малка от 100');
+					}
+				} else if (document.getElementById('width_w').value == 0 || document.getElementById('height_w').value == 0) {
+					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете нещо преди да преоразмерявате');
+				}
+			}
 			roboX = width/2;
 			roboY = height/2;
-			}
+		
 		}
 
 		// resetting the robot wheels
@@ -751,3 +774,69 @@ function popupbg(message) {
 	    function hiding(obj) {
 	    	$(obj).hide(500);
 	    };
+
+
+	    var cX = 0;
+	    var cY = 0;
+	    var rX = 0;
+	    var rY = 0;
+
+	    function UpdateCursorPosition(e)
+	    { 
+	    	cX = e.pageX; cY = e.pageY;
+	    } 
+	    function UpdateCursorPositionDocAll(e){
+	    	cX = event.clientX; cY = event.clientY;
+	    }
+	    if (document.all) {
+	    	document.onmousemove = UpdateCursorPositionDocAll;
+	    } else { 
+	    	document.onmousemove = UpdateCursorPosition;
+	    }
+	    function AssignPosition(d) 
+	    { 
+	    	if (self.pageYOffset) { 
+	    		rX = self.pageXOffset; 
+	    		rY = self.pageYOffset; 
+	    	} 
+	    	else if (document.documentElement && document.documentElement.scrollTop) { 
+	    		rX = document.documentElement.scrollLeft; 
+	    		rY = document.documentElement.scrollTop; 
+	    	} 
+	    	else if (document.body) { 
+	    		rX = document.body.scrollLeft; 
+	    		rY = document.body.scrollTop; 
+	    	} 
+	    	if (document.all) { 
+	    		cX += rX; 
+	    		cY += rY; 
+	    	} 
+	    	d.style.left = (cX+10) + "px"; 
+	    	d.style.top  = (cY+10) + "px"; 
+	    } 
+	    function HideText(d) { 
+	    	if (d.length < 1) {
+	    		return;
+	    	}
+	    	document.getElementById(d).style.display = "none"; 
+	    } 
+	    function ShowText(d) { 
+	    	if (d.length < 1) {
+	    		return;
+	    	}
+	    	var dd = document.getElementById(d); 
+	    	AssignPosition(dd); 
+	    	dd.style.display = "block"; 
+	    } 
+		function ReverseContentDisplay(d) { 
+			if (d.length < 1) { 
+				return;
+			} 
+			var dd = document.getElementById(d); 
+			AssignPosition(dd); 
+			if (dd.style.display == "none") {
+				dd.style.display = "block";
+			} else {
+				dd.style.display = "none";
+			} 
+		} 

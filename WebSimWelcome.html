@@ -66,11 +66,45 @@
 				
 				
 			});
-			
 
+
+		// Function that prevents user from typing letters in input forms
+		$(document).ready(function() {
+		    $('input').keydown(function(event) {
+		        // Allow: backspace, delete, tab, escape, and enter
+		        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || 
+		             // Allow: Ctrl+A
+		            (event.keyCode == 65 && event.ctrlKey === true) || 
+		             // Allow: home, end, left, right
+		            (event.keyCode >= 35 && event.keyCode <= 39)) {
+		                 // let it happen, don't do anything
+		                 return;
+		        }
+		        else {
+		            // If it's not number stop the keypress
+		            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+		                event.preventDefault(); 
+		            }   
+		        }
+		    });
+		});
+		function showinfo(tag) {
+			if (document.getElementById(tag)) {
+				if (document.getElementById(tag).style.display != 'none') {
+					document.getElementById(tag).style.display = 'none';
+					document.getElementById('forus').innerHTML = 'For us &raquo;';
+					document.getElementById('forus-bg').innerHTML = 'За нас &raquo;';
+				}
+				else {
+					document.getElementById(tag).style.display = 'block';
+					document.getElementById('forus').innerHTML = 'For us &laquo;';
+					document.getElementById('forus-bg').innerHTML = 'За нас &laquo;';
+				}
+			}
+		}
 
 		</script>
-
+ 
 	</head>
 	
 	<body onload = "javascript:fade('body'); javascript:slide2('table.welcome'); javascript:fadeo('div.logo'); javascript:fadelogo('div.logo-en'); start=true; init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=true; resolution(); loadanime(); " style = "display:none;">
@@ -99,9 +133,6 @@
 						Choose your way:
 					</center> 
 				</h1>
-		
-				
-		
 		
 				
 				<center><table class = "welcome" style = "width: 245px; height: 170px; border-radius: 20px;">
@@ -134,15 +165,24 @@
 							</a>
 							<br/>
 							<br/>
-							<a id = "tests" href = "Tests.html">
+							<a id = "tests" href = "Tests.html" onmouseover="ShowText('tests-info'); return true;" 
+								onmouseout="HideText('tests-info'); return true;">
 								To the tests <span class = "raq">&raquo;</span>
 		
 							</a>
+							<br/>
+							<br/>
+							<a href = "#" id = "forus" onclick = "HideText('forus-info'); showinfo('info'); return false; " onmouseover="ShowText('forus-info'); return true;" onmouseout="HideText('forus-info'); return true;" >
+								For us <span class = "raq">&raquo;</span></a>
+							<br/><br/>
+
+							<div id = "info" style = "display:none"> Facebook: ... <br/> Skype: ... </div>
+							
 						</th>
 					</tr>
 					
 				</table></center>
-
+			
 				<footer class = "en" style = "padding-top: 20px;">
 		  			<center>&copy; 2012 WebSim Project. Designed and coded by Konstantin Todorov and Anton Dudov. All rights reserved.</center>
 		  		</footer>
@@ -201,9 +241,14 @@
 							</a>
 							<br/>
 							<br/>
-							<a id = "tests" href = "Tests.html">
+							<a id = "tests" href = "Tests.html" onmouseover="ShowText('tests-info-bg'); return true;" 
+								onmouseout="HideText('tests-info-bg'); return true;">
 								Към тестовете <span class = "raq">&raquo;</span>
-							</a>
+							</a><br/><br/>
+							<a href = "#" id = "forus-bg" onclick = "HideText('forus-info-bg'); showinfo('info-bg'); return false;" onmouseover="ShowText('forus-info-bg'); return true;" onmouseout="HideText('forus-info-bg'); return true;">
+								За нас <span class = "raq">&raquo;</span></a>
+							<br/><br/>
+							<div id = "info-bg" style = "display:none"> Фейсбук: ... <br/> Скайп: ... </div>
 						</th>
 					</tr>
 				</table></center>
@@ -219,16 +264,17 @@
 
 <!-- ###################################################    ENGLISH SIMULATE PAGE   ##################################################  -->
 
-		<h1 class = "webslogo" style = "display:none"> 
-			<center>
-				<a class = "logo" onclick = "javascript:hiding('div.simulate-en'); javascript:hiding('div.simulate-bg'); javascript:hiding('div.canvass'); javascript:showing('div.welcome-en'); javascript:hiding('h1.webslogo');" >WebSim Project</a>
-			</center> 
-		</h1>
+		
 
 
 		  	<div class = "simulate-en" style = "display:none">
 
-				
+		<h1 class = "webslogo"> 
+			<center>
+				<a class = "logo" onclick = "javascript:hiding('div.simulate-en');javascript:hiding('div.canvass'); javascript:showing('div.welcome-en');" >WebSim Project</a>
+			</center> 
+		</h1>
+
 		<center>
 			<a class = "switch" onclick = "window.location.href='WebSimPlay.html'" style = "width: 180px;">Go to Play Page</a>
 
@@ -263,7 +309,7 @@
 			</tr>
 			<tr>
 				<td><button  onclick ="robo_resize('e')"> Resize! </button></td>
-				<td><button  onclick ="wheel_resize()" > Resize! </button></td>
+				<td><button  onclick ="wheel_resize('e')" > Resize! </button></td>
 			</tr>
 			<tr>
 				<td><button  onclick ="robo_reset()"> Reset! </button></td>
@@ -277,7 +323,11 @@
 
 <div class = "simulate-bg" style = "display:none;">
 		
-	
+			<h1 class = "webslogo-bg"> 
+				<center>
+					<a class = "logo" onclick = "javascript:hiding('div.simulate-bg'); javascript:hiding('div.canvass'); javascript:showing('div.welcome-bg');" >WebSim Project</a>
+				</center> 
+			</h1>
 			
 	
 			<center>
@@ -306,15 +356,15 @@
 				</tr>
 				<tr>
 					<td><input type="number" id="width_r-bg" min="1" max = "100" step = "1" placeholder = "Robo Width"/></td>
-					<td><input type="number" id="width_w" min="1" max = "35" step = "1" placeholder = "Wheel Width"/></td>
+					<td><input type="number" id="width_w-bg" min="1" max = "35" step = "1" placeholder = "Wheel Width"/></td>
 				</tr>
 				<tr>
 					<td><input type="number" id="height_r-bg" min="1" max = "100" step = "1" placeholder = "Robo Height"/></td>
-					<td><input type="number" id="height_w" min="1" max = "100" step = "1" placeholder = "Wheel Height"/></td>
+					<td><input type="number" id="height_w-bg" min="1" max = "100" step = "1" placeholder = "Wheel Height"/></td>
 				</tr>
 				<tr>
 					<td><button  onclick ="robo_resize('b')"> Преоразмери! </button></td>
-					<td><button  onclick ="wheel_resize()" > Преоразмери! </button></td>
+					<td><button  onclick ="wheel_resize('b')" > Преоразмери! </button></td>
 				</tr>
 				<tr>
 					<td><button  onclick ="robo_reset()"> Възстанови! </button></td>
@@ -498,6 +548,13 @@ AB 12
 					<a href="#" class="button-bg">Затвори</a>
 				</div>
 			</div></div>
+
+		<!-- All the infos that appear on mouse over event -->
+
+		<div id = "forus-info" style = "display:none"> You can see how to contact us here.</div>
+		<div id = "tests-info" style = "display:none"> You can see our tests here.</div>
+		<div id = "forus-info-bg" style = "display:none"> Тук може да разберете как да се свържете с нас.</div>
+		<div id = "tests-info-bg" style = "display:none"> Тук може да видите нашите тестове.</div>
 
   	</body>
 </html>
