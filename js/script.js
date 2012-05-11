@@ -85,7 +85,6 @@
 			gameInterval 	 = setInterval(draw, 20);
 		}
 
-
 function popup(message) {
 					  
 				var maskHeight = $(document).height();  
@@ -129,8 +128,6 @@ function popupbg(message) {
 
 				$('#dialog-message-bg').html(message);	
 			}
-
-
 
 		// resizing the canvas width and height
 		function resize(lang)
@@ -244,6 +241,7 @@ function popupbg(message) {
 			radian=(Math.PI/180) * 0;
 			resetpos();
 		}
+
 		// reseting the canvas width and height
 		function reset()
 		{
@@ -348,6 +346,10 @@ function popupbg(message) {
 			lWheelPosX 	= -roboWidth/2 - 7;
 			lWheelPosX -= lWheelWidth -7;
 			rWheelPosX 	= roboWidth/2;
+			lWheelX  	 = roboX;
+				lWheelY 	 = roboY;
+				rWheelX 	 = roboX;
+				rWheelY 	 = roboY;
 			start=false;
 			display();
 		}
@@ -598,21 +600,20 @@ function popupbg(message) {
 			return val;
 		}
 
- 		function check_inpath()
+ 		function check_inpath_free_space()
 		{
 			temp_input="";
 			temp=document.getElementById('robo_path').value;
 			for(var k=0;k<temp.length;k++){
 				if ( temp[k]!=' ' && temp[k]!='\n' ){
 					temp_input+=temp[k];
-				}
-				if (temp[k]==' ' || temp[k]=='\n'){
+				}else if ((temp[k]==' ' || temp[k]=='\n') && k!=0){
 					if (temp[k-1]!=' ' && temp[k-1]!='\n' ){
 						temp_input+=temp[k];
 					}     
 				}
 			}
-			steps=temp_input.split(/\r\n|\r|\n|\s/);
+			steps=temp_input.split(/\r\n|\r|\n|\s/);						
 		}
 
 		// generate new path
@@ -620,7 +621,7 @@ function popupbg(message) {
 		{
 				document.getElementById('out_path').value = "";
 				document.getElementById('out_path-bg').value = "";
-				check_inpath();		
+				check_inpath_free_space();		
 				document.getElementById('path').disabled  		 = true;	
 				document.getElementById('replace_path').disabled = true;	
 				document.getElementById('out_path').style.color  = "green";				
@@ -633,7 +634,7 @@ function popupbg(message) {
 
 		function calc_distacne()
 		{
-			distance = (360/(rWheelHeight * 3.14)) * distance;
+			distance = ((rWheelHeight * 3.14)/360) * distance;
 		}
 
 		function get_new_step()
