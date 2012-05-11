@@ -27,6 +27,7 @@
 		var get_path     	 = false;
 		var pause_ 		 	 = false;
 		var resetpos_		 = false;
+		var resize_			 = false;
 		var stop_   		 = false;
 		var w = 0
 		
@@ -70,6 +71,7 @@
 				pause_	 	 = false;
 				resetpos_	 = false;
 				stop_ 		 = false;
+				resize_ 	 = false;
 				document.getElementById('play').disabled  = true;	
 				document.getElementById('pause').disabled = true;	
 				document.getElementById('stop').disabled  = true;
@@ -129,10 +131,12 @@ function popupbg(message) {
 		// resizing the canvas width and height
 		function resize(lang)
 		{
+			
  			if (start) {
  				init(6);
  				resize();
  			}
+ 			resize_ =true;
 			if (lang == 'e') {
  			if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000 && 
  				document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
@@ -244,6 +248,7 @@ function popupbg(message) {
 		// reseting the canvas width and height
 		function reset()
 		{
+			resize_ =true;
 			$("#my_canvas").animate({
 		    	width:  450,
 		    	height: 450 
@@ -281,6 +286,7 @@ function popupbg(message) {
 		// resizing the robot width and height
 		function robo_resize(lang)
 		{
+			resize_ =true;
 			if (lang == 'e') {
 			if (document.getElementById('width_r').value >= 1 || document.getElementById('height_r').value >= 1) {
 				if (document.getElementById('width_r').value >= 1 && document.getElementById('width_r').value < 100) {
@@ -346,6 +352,7 @@ function popupbg(message) {
 		// resetting the robot width and height
 		function robo_reset()
 		{
+			resize_ =true;
 			roboWidth 	= 50;
 			roboHeight 	= 53;
 			robo_data_reset();
@@ -356,6 +363,7 @@ function popupbg(message) {
 		// resizing the robot wheels
 		function wheel_resize(lang)
 		{
+			resize_ =true;
 			if (lang == 'e') {
 				if (document.getElementById('width_w').value >= 1 || document.getElementById('height_w').value >= 1) {
 					if (document.getElementById('width_w').value >= 1 && document.getElementById('width_w').value <= 35) {
@@ -409,6 +417,7 @@ function popupbg(message) {
 		// resetting the robot wheels
 		function wheel_reset()
 		{
+			resize_ =true;
 			lWheelWidth  = 7;
 			lWheelHeight = 40;
 			rWheelWidth  = 7;
@@ -460,6 +469,10 @@ function popupbg(message) {
 				resetpos_ = false;
 				display();
 			}				
+			if(resize_){
+				resize_=false;
+				display();
+			}
 		}
 
 		// recalculate distance
