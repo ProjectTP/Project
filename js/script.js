@@ -131,12 +131,6 @@ function popupbg(message) {
 		// resizing the canvas width and height
 		function resize(lang)
 		{
-			
- 			if (start) {
- 				init(6);
- 				resize();
- 			}
- 			resize_ =true;
 			if (lang == 'e') {
  			if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000 && 
  				document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
@@ -240,10 +234,11 @@ function popupbg(message) {
 					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина по-висока от 150.');
 				}
 			}
-
+			resize_ =true;		
 			roboX = width/2;
 			roboY = height/2;
 			radian=(Math.PI/180) * 0;
+			resetpos();
 		}
 		// reseting the canvas width and height
 		function reset()
@@ -336,17 +331,21 @@ function popupbg(message) {
 					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина/ширина за робота по-голяма от 1');
 				}
 			}
-			robo_data_reset()
+			robo_data_reset();
 		}
 
 		function robo_data_reset()
 		{
+			if(!pause_ && !stop){
+				roboX 		= width/2;
+				roboY 		= height/2;
+				radian 		= (Math.PI/180) * 0;
+			}			
 			lWheelPosX 	= -roboWidth/2 - 7;
 			lWheelPosX -= lWheelWidth -7;
 			rWheelPosX 	= roboWidth/2;
-			roboX 		= width/2;
-			roboY 		= height/2;
-			radian 		= (Math.PI/180) * 0;
+			start=false;
+			display();
 		}
 
 		// resetting the robot width and height
@@ -409,9 +408,11 @@ function popupbg(message) {
 					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете нещо преди да преоразмерявате');
 				}
 			}
-			roboX = width/2;
-			roboY = height/2;
-		
+			if(!pause_ && !stop){
+				roboX = width/2;
+				roboY = height/2;
+			}		
+			display();
 		}
 
 		// resetting the robot wheels
@@ -421,12 +422,13 @@ function popupbg(message) {
 			lWheelWidth  = 7;
 			lWheelHeight = 40;
 			rWheelWidth  = 7;
-			rWheelHeight = 40;
+			rWheelHeight = 40;			
 			lWheelPosX 	 = -roboWidth/2 - 7;
 			lWheelPosX 	-= lWheelWidth -7;
 			rWheelPosX   = roboWidth/2;
 			document.getElementById('width_w').value  = "";
 			document.getElementById('height_w').value = "";
+			display();
 		}
 
 		function draw()
