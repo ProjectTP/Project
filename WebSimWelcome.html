@@ -165,14 +165,13 @@
 							</a>
 							<br/>
 							<br/>
-							<a id = "tests" href = "Tests.html" onmouseover="ShowText('tests-info'); return true;" 
-								onmouseout="HideText('tests-info'); return true;">
+							<a id = "tests" href = "Tests.html">
 								To the tests <span class = "raq">&raquo;</span>
 		
 							</a>
 							<br/>
 							<br/>
-							<a href = "#" id = "forus" onclick = "HideText('forus-info'); showinfo('info'); return false; " onmouseover="ShowText('forus-info'); return true;" onmouseout="HideText('forus-info'); return true;" >
+							<a href = "#" id = "forus" onclick = "showinfo('info'); return false; ">
 								For us <span class = "raq">&raquo;</span></a>
 							<br/><br/>
 
@@ -241,11 +240,10 @@
 							</a>
 							<br/>
 							<br/>
-							<a id = "tests" href = "Tests.html" onmouseover="ShowText('tests-info-bg'); return true;" 
-								onmouseout="HideText('tests-info-bg'); return true;">
+							<a id = "tests" href = "Tests.html">
 								Към тестовете <span class = "raq">&raquo;</span>
 							</a><br/><br/>
-							<a href = "#" id = "forus-bg" onclick = "HideText('forus-info-bg'); showinfo('info-bg'); return false;" onmouseover="ShowText('forus-info-bg'); return true;" onmouseout="HideText('forus-info-bg'); return true;">
+							<a href = "#" id = "forus-bg" onclick = "showinfo('info-bg'); return false;">
 								За нас <span class = "raq">&raquo;</span></a>
 							<br/><br/>
 							<div id = "info-bg" style = "display:none"> Фейсбук: ... <br/> Скайп: ... </div>
@@ -288,8 +286,12 @@
 		    	<th colspan="2">Canvas</th>
 		  	</tr>
 			<tr>
-			    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Canvas Width"/></td>
-			    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Canvas Height"/></td>
+			    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"
+			    	onclick = "HideText('width-info'); return true;" onmouseover="ShowText('width-info'); return true;" 
+			    	onmouseout="HideText('width-info'); return true;"/></td>
+			    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"
+			    	onclick = "HideText('height-info'); return true;" onmouseover="ShowText('height-info'); return true;" 
+			    	onmouseout="HideText('height-info'); return true;"/></td>
 			</tr>
 			<tr>
 			    <td><button  onclick ="resize('e')"> Resize! </button></td>
@@ -300,12 +302,20 @@
 				<th>Wheels</th>
 			</tr>
 			<tr>
-				<td><input type="number" id="width_r" min="1" max = "100" step = "1" placeholder = "Robo Width"/></td>
-				<td><input type="number" id="width_w" min="1" max = "35" step = "1" placeholder = "Wheel Width"/></td>
+				<td><input type="number" id="width_r" min="1" max = "100" step = "1" placeholder = "Width"
+					onclick = "HideText('widthr-info'); return true;" onmouseover="ShowText('widthr-info'); return true;" 
+			    	onmouseout="HideText('widthr-info'); return true;"/></td>
+				<td><input type="number" id="width_w" min="1" max = "35" step = "1" placeholder = "Width"
+					onclick = "HideText('widthw-info'); return true;" onmouseover="ShowText('widthw-info'); return true;" 
+			    	onmouseout="HideText('widthw-info'); return true;"/></td>
 			</tr>
 			<tr>
-				<td><input type="number" id="height_r" min="1" max = "100" step = "1" placeholder = "Robo Height"/></td>
-				<td><input type="number" id="height_w" min="1" max = "100" step = "1" placeholder = "Wheel Height"/></td>
+				<td><input type="number" id="height_r" min="1" max = "100" step = "1" placeholder = "Height"
+					onclick = "HideText('heightr-info'); return true;" onmouseover="ShowText('heightr-info'); return true;" 
+			    	onmouseout="HideText('heightr-info'); return true;"/></td>
+				<td><input type="number" id="height_w" min="1" max = "100" step = "1" placeholder = "Height"
+					onclick = "HideText('heightw-info'); return true;" onmouseover="ShowText('heightw-info'); return true;" 
+			    	onmouseout="HideText('heightw-info'); return true;"/></td>
 			</tr>
 			<tr>
 				<td><button  onclick ="robo_resize('e')"> Resize! </button></td>
@@ -343,8 +353,12 @@
 			    	<th colspan="2">Поле</th>
 			  	</tr>
 				<tr>
-				    <td><input type="number" id="width1-bg" min="150" max = "1000" step = "25" placeholder = "Canvas Width"/></td>
-				    <td><input type="number" id="height1-bg" min="150" max = "1000" step = "25" placeholder = "Canvas Height"/></td>
+				    <td><input type="number" id="width1-bg" min="150" max = "1000" step = "25" placeholder = "Ширина"
+				    	onclick = "HideText('width-info-bg'); return true;" onmouseover="ShowText('width-info-bg'); return true;" 
+			    		onmouseout="HideText('width-info-bg'); return true;"/></td>
+				    <td><input type="number" id="height1-bg" min="150" max = "1000" step = "25" placeholder = "Дължина"
+				    	onclick = "HideText('height-info-bg'); return true;" onmouseover="ShowText('height-info-bg'); return true;" 
+			    		onmouseout="HideText('height-info-bg'); return true;"/></td>
 				</tr>
 				<tr>
 				    <td><button  onclick ="resize('b')"> Преоразмери! </button></td>
@@ -355,12 +369,20 @@
 					<th>Колела</th>
 				</tr>
 				<tr>
-					<td><input type="number" id="width_r-bg" min="1" max = "100" step = "1" placeholder = "Robo Width"/></td>
-					<td><input type="number" id="width_w-bg" min="1" max = "35" step = "1" placeholder = "Wheel Width"/></td>
+					<td><input type="number" id="width_r-bg" min="1" max = "100" step = "1" placeholder = "Ширина"
+						onclick = "HideText('widthr-info-bg'); return true;" onmouseover="ShowText('widthr-info-bg'); return true;" 
+			    		onmouseout="HideText('widthr-info-bg'); return true;"/></td>
+					<td><input type="number" id="width_w-bg" min="1" max = "35" step = "1" placeholder = "Ширина"
+						onclick = "HideText('widthw-info-bg'); return true;" onmouseover="ShowText('widthw-info-bg'); return true;" 
+			    		onmouseout="HideText('widthw-info-bg'); return true;"/></td>
 				</tr>
 				<tr>
-					<td><input type="number" id="height_r-bg" min="1" max = "100" step = "1" placeholder = "Robo Height"/></td>
-					<td><input type="number" id="height_w-bg" min="1" max = "100" step = "1" placeholder = "Wheel Height"/></td>
+					<td><input type="number" id="height_r-bg" min="1" max = "100" step = "1" placeholder = "Дължина"
+						onclick = "HideText('heightr-info-bg'); return true;" onmouseover="ShowText('heightr-info-bg'); return true;" 
+			    		onmouseout="HideText('heightr-info-bg'); return true;"/></td>
+					<td><input type="number" id="height_w-bg" min="1" max = "100" step = "1" placeholder = "Дължина"
+						onclick = "HideText('heightw-info-bg'); return true;" onmouseover="ShowText('heightw-info-bg'); return true;" 
+			    		onmouseout="HideText('heightw-info-bg'); return true;"/></td>
 				</tr>
 				<tr>
 					<td><button  onclick ="robo_resize('b')"> Преоразмери! </button></td>
@@ -551,10 +573,23 @@ AB 12
 
 		<!-- All the infos that appear on mouse over event -->
 
-		<div id = "forus-info" style = "display:none"> You can see how to contact us here.</div>
-		<div id = "tests-info" style = "display:none"> You can see our tests here.</div>
-		<div id = "forus-info-bg" style = "display:none"> Тук може да разберете как да се свържете с нас.</div>
-		<div id = "tests-info-bg" style = "display:none"> Тук може да видите нашите тестове.</div>
+		<div id = "forus-info" class = "box" style = "display:none">You can see how to contact us here.</div>
+		<div id = "tests-info" class = "box" style = "display:none">You can see our tests here.</div>
+		<div id = "width-info" class = "box" style = "display:none">Width to resize the canvas table.</div>
+		<div id = "height-info" class = "box" style = "display:none">Height to resize the canvas table.</div>
+		<div id = "widthr-info" class = "box" style = "display:none">Width to resize the robot.</div>
+		<div id = "heightr-info" class = "box" style = "display:none">Height to resize the robot.</div>
+		<div id = "widthw-info" class = "box" style = "display:none">Width to resize the wheels.</div>
+		<div id = "heightw-info" class = "box" style = "display:none">Height to resize the wheels.</div>
+		<div id = "forus-info-bg" class = "box" style = "display:none">Тук може да разберете как да се свържете с нас.</div>
+		<div id = "tests-info-bg" class = "box" style = "display:none">Тук може да видите нашите тестове.</div>
+		<div id = "width-info-bg" class = "box" style = "display:none">Ширина за преоразмеряване на масата.</div>
+		<div id = "height-info-bg" class = "box" style = "display:none">Височина за преоразмеряване на масата.</div>
+		<div id = "widthr-info-bg" class = "box" style = "display:none">Ширина за преоразмеряване на робота.</div>
+		<div id = "heightr-info-bg" class = "box" style = "display:none">Височина за преоразмеряване на робота.</div>
+		<div id = "widthw-info-bg" class = "box" style = "display:none">Ширина за преоразмеряване на робота.</div>
+		<div id = "heightw-info-bg" class = "box" style = "display:none">Височина за преоразмеряване на робота.</div>
+
 
   	</body>
 </html>

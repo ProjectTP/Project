@@ -247,6 +247,7 @@ table, #tableform
     border: 2px solid rgba(0,0,0,0.4);
     font-size: 15px;
     color: #660000;
+    font-weight: bold;
 }
 
 /* ----------------------- Dialog Box Decorations --------------------- */
@@ -518,17 +519,26 @@ h1
     -o-transition: margin 0.4s ease-out, color 0.5s, text-shadow 0.5s, font-size 0.5s, display 0.5s;
 }
 
-#forus-info, #tests-info, #forus-info-bg, #tests-info-bg { 
-    background-color: rgba(200,200,200,0.8); 
-    border: 3px solid rgba(255,255,255,0.7); 
+.box
+{ 
+    background-color: #B4C9D6; 
+    border: 5px solid rgba(0,0,0,0.5); 
     height: 50px; 
     width: 200px; 
     padding: 5px; 
     display:none; 
     position:absolute; 
-    border-radius: 10px;
+    border-radius: 0px 10px 10px 10px;
     font-family: 'Antic Didone', cursive;
     font-size: 13px;
     font-weight: bold;
     color: black;
 } 
+.boxl
+{
+    background-color: rgba(0,0,0,0); 
+    border-radius: 50px;
+    height: 55px; 
+    width: 55px;
+    display:none; 
+}
