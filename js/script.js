@@ -29,6 +29,7 @@
 		var resetpos_		 = false;
 		var resize_			 = false;
 		var stop_   		 = false;
+		var submit_			 = false;
 		var w = 0
 		
 		function loadanime() {
@@ -41,28 +42,31 @@
 		function init(speed_)
 		{
 			if (start) {
+				if(!submit_){					
+					roboWidth 	 = 50;
+					roboHeight 	 = 53;
+					lWheelWidth  = 7;
+					lWheelHeight = 40;
+					rWheelWidth  = 7;
+					rWheelHeight = 40;					
+				}
 				canvas 		 = document.getElementById('my_canvas');
 				ctx 		 = canvas.getContext("2d");
 				width 		 = canvas.width;
 				height 	 	 = canvas.height;
-				roboWidth 	 = 50;
-				roboHeight 	 = 53;
-				lWheelWidth  = 7;
-				lWheelHeight = 40;
-				rWheelWidth  = 7;
-				rWheelHeight = 40;
+				submit_ 	 = false;
 				roboX 		 = width/2;
 				roboY 	   	 = height/2;
+				lWheelPosX 	 = -roboWidth/2 - 7;
+				lWheelPosY 	 = -roboHeight/2 + roboHeight/8;
+				rWheelPosX 	 = roboWidth/2;
+				rWheelPosY 	 = -roboHeight/2 + roboHeight/8;
 				lWheelX  	 = roboX;
 				lWheelY 	 = roboY;
 				rWheelX 	 = roboX;
 				rWheelY 	 = roboY;
 				radian 		 = (Math.PI/180) * 0;
-				start 		 = false;
-				lWheelPosX 	 = -roboWidth/2 - 7;
-				lWheelPosY 	 = -roboHeight/2 + roboHeight/8;
-				rWheelPosX 	 = roboWidth/2;
-				rWheelPosY 	 = -roboHeight/2 + roboHeight/8;
+				start 		 = false;				
 				motorA		 = false;
 				motorB		 = false;
 				last_step	 = 0;
@@ -622,7 +626,8 @@ function popupbg(message) {
 				document.getElementById('out_path').style.color  = "green";				
 				document.getElementById('out_path-bg').style.color  = "green";
 				get_path = true;		
-				start 	 = true;
+				start = true;
+				submit_=true;
 				init(speed);
 		}
 
