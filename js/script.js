@@ -68,7 +68,7 @@
 		{			
 			roboX 		 = width/2;
 			roboY 	   	 = height/2;
-			lWheelPosX 	 = -roboWidth/2 - 7;
+			lWheelPosX 	 = -roboWidth/2 - lWheelWidth;
 			lWheelPosY 	 = -roboHeight/2 + roboHeight/8;
 			rWheelPosX 	 = roboWidth/2;
 			rWheelPosY 	 = -roboHeight/2 + roboHeight/8;
@@ -599,10 +599,17 @@
 			return val;
 		}
 
- 		function check_inpath_free_space()
+ 		function check_inpath_free_space(lang)
 		{
 			temp_input="";
-			temp=document.getElementById('robo_path').value;
+			if (lang == 'e') {
+				temp = document.getElementById('robo_path').value;
+			} else if (lang == 'b') {
+				temp = document.getElementById('robo_path-bg').value;
+			} else {
+				alert('Something went wrong. Please refresh the page and try again.');
+				return;
+			}
 			for(var k=0;k<temp.length;k++){
 				if ( temp[k]!=' ' && temp[k]!='\n' ){
 					temp_input+=temp[k];
@@ -616,11 +623,11 @@
 		}
 
 		// generate new path
-		function generate_path()
+		function generate_path(lang)
 		{
 				document.getElementById('out_path').value = "";
 				document.getElementById('out_path-bg').value = "";
-				check_inpath_free_space();		
+				check_inpath_free_space(lang);		
 				document.getElementById('path').disabled  		 = true;	
 				document.getElementById('replace_path').disabled = true;	
 				document.getElementById('out_path').style.color  = "green";				
@@ -668,7 +675,7 @@
 			clear();	
 
 			if (crash) {		
-				crash_mess();
+				crash_mess('e');
 			}
 			ctx.fillStyle	= objectColor;
 			ctx.save();		
@@ -682,7 +689,7 @@
 			}		
 			w = -w;			
 
-			display_robo_and_weels();	
+			display_robo_and_wheels();	
 
 			ctx.font 		= "bold 30pt Calibri";
 			ctx.restore();
@@ -693,17 +700,25 @@
     		ctx.stroke(); 
 		}
 
-		function display_robo_and_weels()
+		function display_robo_and_wheels()
 		{
 			ctx.rect(lWheelPosX, lWheelPosY, lWheelWidth, lWheelHeight);
 			ctx.rect(rWheelPosX, rWheelPosY, rWheelWidth, rWheelHeight);
 			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth, 10);
 			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth/2, 10);
+
 			/* Wheel Animation */
-			ctx.rect(lWheelPosX, lWheelPosY 	 - w, lWheelWidth, 10);
-			ctx.rect(rWheelPosX, rWheelPosY 	 - w, rWheelWidth, 10);	
-			ctx.rect(lWheelPosX, lWheelPosY + 20 - w, lWheelWidth, 10);
-			ctx.rect(rWheelPosX, rWheelPosY + 20 - w, rWheelWidth, 10);		
+			for (i = 10; i <= 90; i+=10) {
+				drawWheelLines(i);
+			} 			
+		}
+
+		function drawWheelLines(hei)
+		{
+			ctx.moveTo(rWheelPosX, rWheelPosY + hei - w);
+ 			ctx.lineTo(rWheelPosX + 35, rWheelPosY + hei - w);
+ 			ctx.moveTo(-roboWidth/2, lWheelPosY + hei - w);
+ 			ctx.lineTo(lWheelPosX - 35, lWheelPosY + hei - w);
 		}
 
 		function clear()
@@ -731,7 +746,7 @@
 					ctx.font = "bold 50pt Calibri,Times New Roman";
 					ctx.fillText("CRASH!", width/2-100, height/2 + 10);				
 				}
-			} else {
+			} else if (lang == 'b') {
 				if (width < 200) {
 					ctx.font = "bold 30pt Calibri,Times New Roman";
 					ctx.fillText("Сблъсък!", width/2-65, height/2 + 10);
