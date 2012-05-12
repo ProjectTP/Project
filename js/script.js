@@ -54,28 +54,7 @@
 				ctx 		 = canvas.getContext("2d");
 				width 		 = canvas.width;
 				height 	 	 = canvas.height;
-				submit_ 	 = false;
-				roboX 		 = width/2;
-				roboY 	   	 = height/2;
-				lWheelPosX 	 = -roboWidth/2 - 7;
-				lWheelPosY 	 = -roboHeight/2 + roboHeight/8;
-				rWheelPosX 	 = roboWidth/2;
-				rWheelPosY 	 = -roboHeight/2 + roboHeight/8;
-				lWheelX  	 = roboX;
-				lWheelY 	 = roboY;
-				rWheelX 	 = roboX;
-				rWheelY 	 = roboY;
-				radian 		 = (Math.PI/180) * 0;
-				start 		 = false;				
-				motorA		 = false;
-				motorB		 = false;
-				last_step	 = 0;
-				distance 	 = 0;
-				crash 	 	 = false;
-				pause_	 	 = false;
-				resetpos_	 = false;
-				stop_ 		 = false;
-				resize_ 	 = false;
+				reset_data();
 				document.getElementById('play').disabled  = true;	
 				document.getElementById('pause').disabled = true;	
 				document.getElementById('stop').disabled  = true;
@@ -85,8 +64,34 @@
 			gameInterval 	 = setInterval(draw, 20);
 		}
 
-function popup(message) {
-					  
+		function reset_data()
+		{			
+			roboX 		 = width/2;
+			roboY 	   	 = height/2;
+			lWheelPosX 	 = -roboWidth/2 - 7;
+			lWheelPosY 	 = -roboHeight/2 + roboHeight/8;
+			rWheelPosX 	 = roboWidth/2;
+			rWheelPosY 	 = -roboHeight/2 + roboHeight/8;
+			lWheelX  	 = roboX;
+			lWheelY 	 = roboY;
+			rWheelX 	 = roboX;
+			rWheelY 	 = roboY;
+			radian 		 = (Math.PI/180) * 0;
+			submit_ 	 = false;
+			start 		 = false;				
+			motorA		 = false;
+			motorB		 = false;			
+			crash 	 	 = false;
+			pause_	 	 = false;
+			resetpos_	 = false;
+			stop_ 		 = false;
+			resize_ 	 = false;
+			last_step	 = 0;
+			distance 	 = 0;
+		}
+
+		function popup(message) 
+		{					  
 				var maskHeight = $(document).height();  
 				var maskWidth = $(window).width();
 
@@ -107,8 +112,8 @@ function popup(message) {
 				$('#dialog-message').html(message);	
 			}
 
-function popupbg(message) {
-					  
+		function popupbg(message) 
+		{					  
 				var maskHeight = $(document).height();  
 				var maskWidth = $(window).width();
 
@@ -133,34 +138,33 @@ function popupbg(message) {
 		function resize(lang)
 		{
 			if (lang == 'e') {
- 			if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000 && 
- 				document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
- 				$("#my_canvas").animate({
-			    	width:  document.getElementById('width1').value,
-			    	height: document.getElementById('height1').value 
-			    },"slow");
- 				canvas.width  = document.getElementById('width1').value;
-				width = canvas.width;
-				canvas.height = document.getElementById('height1').value;
-				height = canvas.height;
- 			}
+ 				if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000 && 
+	 				document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
+	 				$("#my_canvas").animate({
+				    	width:  document.getElementById('width1').value,
+				    	height: document.getElementById('height1').value 
+				    },"slow");
+	 				canvas.width  = document.getElementById('width1').value;
+					width = canvas.width;
+					canvas.height = document.getElementById('height1').value;
+					height = canvas.height;
+	 			}
 
-			if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000) {
-				$("#my_canvas").animate({
-			    	width:  document.getElementById('width1').value,
-			    },"slow");
-				canvas.width  = document.getElementById('width1').value;
-				width = canvas.width;
+				if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000) {
+					$("#my_canvas").animate({
+				    	width:  document.getElementById('width1').value,
+				    },"slow");
+					canvas.width  = document.getElementById('width1').value;
+					width = canvas.width;
 
-			}
-			if (document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
-				$("#my_canvas").animate({ 
-			    	height: document.getElementById('height1').value,
-			    },"slow");
-				canvas.height = document.getElementById('height1').value;
-				height = canvas.height;
-			}
-
+				}
+				if (document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
+					$("#my_canvas").animate({ 
+				    	height: document.getElementById('height1').value,
+				    },"slow");
+					canvas.height = document.getElementById('height1').value;
+					height = canvas.height;
+				}
 			
 				if (document.getElementById('width1').value == 0 && document.getElementById('height1').value == 0) {
 					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter something!');
@@ -307,8 +311,6 @@ function popupbg(message) {
 				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width/height for the robot higher than 1');
 			}
 
-
-
 			} else if (lang == 'b') {
 				
 				if (document.getElementById('width_r-bg').value >= 1 || document.getElementById('height_r-bg').value >= 1) {
@@ -342,14 +344,8 @@ function popupbg(message) {
 				roboX 		= width/2;
 				roboY 		= height/2;
 				radian 		= (Math.PI/180) * 0;
-			}			
-			lWheelPosX 	= -roboWidth/2 - 7;
-			lWheelPosX -= lWheelWidth -7;
-			rWheelPosX 	= roboWidth/2;
-			lWheelX  	 = roboX;
-				lWheelY 	 = roboY;
-				rWheelX 	 = roboX;
-				rWheelY 	 = roboY;
+			}
+					
 			start=false;
 			display();
 		}
@@ -442,37 +438,8 @@ function popupbg(message) {
 			if (!pause_ && !stop_) {
 				display();
 				check_rect_angles();
-
-				if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
-					if (motorA && !motorB && distance > 0) {						
-						radian += (Math.PI/180) * speed;
-						recalc_distance();
-					} else if (!motorA && motorB && distance > 0) {	
-						radian -= (Math.PI/180) * speed;
-						recalc_distance();						
-					}			
-				}
-
-				if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
-					if (motorA && motorB && distance>0) {
-						recalc_distance();
-						calc_coord();	
-						if (roboX + roboWidth/2 > width) {
-							crash = true;		
-						}
-						if (roboX < roboWidth/2) {
-							crash = true;
-						}
-					} 
-				} else if (roboHeight/2 + roboY < height) {
-					crash = true;					
-				} else if (roboHeight/2 + roboY > height + rWheelHeight) {
-					ctx.font = "bold 50pt Calibri,Times New Roman";
-					ctx.fillText("TESTING", width/2-100, height/2 + 10);	
-				} else {			 	
-					crash = true;	
-				}	
-			} 
+				calc_new_coords_for_draw();
+			}	
 			if ( (pause_ || stop_ )&& resetpos_) {
 				resetpos_ = false;
 				display();
@@ -481,6 +448,38 @@ function popupbg(message) {
 				resize_=false;
 				display();
 			}
+		}
+
+		function calc_new_coords_for_draw()
+		{
+			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
+				if (motorA && !motorB && distance > 0) {						
+					radian += (Math.PI/180) * speed;
+					recalc_distance();
+				} else if (!motorA && motorB && distance > 0) {	
+					radian -= (Math.PI/180) * speed;
+					recalc_distance();						
+				}			
+			}
+			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
+				if (motorA && motorB && distance>0) {
+					recalc_distance();
+					calc_coord();	
+					if (roboX + roboWidth/2 > width) {
+						crash = true;		
+					}
+					if (roboX < roboWidth/2) {
+						crash = true;
+					}
+				} 
+			} else if (roboHeight/2 + roboY < height) {
+				crash = true;					
+			} else if (roboHeight/2 + roboY > height + rWheelHeight) {
+				ctx.font = "bold 50pt Calibri,Times New Roman";
+				ctx.fillText("TESTING", width/2-100, height/2 + 10);	
+			} else {			 	
+				crash = true;	
+			}				 	
 		}
 
 		// recalculate distance
@@ -665,23 +664,37 @@ function popupbg(message) {
 		function display()
 		{						
 			ctx.beginPath();
-			ctx.fillStyle = bgColor;						
-			clear();					
-			
+			ctx.fillStyle 	= bgColor;						
+			clear();	
+
 			if (crash) {		
 				crash_mess();
 			}
-			ctx.fillStyle = objectColor;
+			ctx.fillStyle	= objectColor;
 			ctx.save();		
 			ctx.translate(roboX, roboY);
 			ctx.rotate(radian);			
 			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth, roboHeight);
-			ctx.font = "bold 19pt Calibri,Times New Roman";
+			ctx.font 		= "bold 19pt Calibri,Times New Roman";
 
 			if (get_path && distance == 0) {
 				get_new_step();
 			}		
-			w = -w;
+			w = -w;			
+
+			display_robo_and_weels();	
+
+			ctx.font 		= "bold 30pt Calibri";
+			ctx.restore();
+			ctx.fillStyle 	= "white";
+    		ctx.fill();
+    		ctx.lineWidth 	= 3;
+    		ctx.strokeStyle = "black";
+    		ctx.stroke(); 
+		}
+
+		function display_robo_and_weels()
+		{
 			ctx.rect(lWheelPosX, lWheelPosY, lWheelWidth, lWheelHeight);
 			ctx.rect(rWheelPosX, rWheelPosY, rWheelWidth, rWheelHeight);
 			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth, 10);
@@ -690,16 +703,7 @@ function popupbg(message) {
 			ctx.rect(lWheelPosX, lWheelPosY 	 - w, lWheelWidth, 10);
 			ctx.rect(rWheelPosX, rWheelPosY 	 - w, rWheelWidth, 10);	
 			ctx.rect(lWheelPosX, lWheelPosY + 20 - w, lWheelWidth, 10);
-			ctx.rect(rWheelPosX, rWheelPosY + 20 - w, rWheelWidth, 10);	
-
-			ctx.font 		= "bold 30pt Calibri";
-			//ctx.fillText("*", -roboWidth/6, -roboHeight/3);	
-			ctx.restore();
-			ctx.fillStyle 	= "white";
-    		ctx.fill();
-    		ctx.lineWidth 	= 3;
-    		ctx.strokeStyle = "black";
-    		ctx.stroke(); 
+			ctx.rect(rWheelPosX, rWheelPosY + 20 - w, rWheelWidth, 10);		
 		}
 
 		function clear()
@@ -736,7 +740,6 @@ function popupbg(message) {
 					ctx.fillText("Сблъсък!", width/2-100, height/2 + 10);				
 				}
 			}
-
 	
 			if (!stop_){
 				document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
@@ -774,28 +777,40 @@ function popupbg(message) {
 			clearInterval(gameInterval);
 		}
 
-		function showing(obj) {
+		function showing(obj)
+		{
 	    	$(obj).show(500);
 	    };
-	    function fade(obj) {
+
+	    function fade(obj) 
+	    {
 	    	$(obj).fadeIn(500);
 	    };
-	    function fadelogo(obj) {
+
+	    function fadelogo(obj) 
+	    {
 	    	$(obj).fadeIn(2000);
 	    };
-	    function fadeo(obj) {
+
+	    function fadeo(obj)
+	    {
 	    	$(obj).fadeOut(1);
 	    };
-	    function slide(obj) {
+
+	    function slide(obj) 
+	    {
 	    	$(obj).slideDown(1000);
 	    };
-	    function slide2(obj) {	    	
+
+	    function slide2(obj) 
+	    {	    	
 	    	$(obj).slideDown(1);
 	    };
-	    function hiding(obj) {
+
+	    function hiding(obj) 
+	    {
 	    	$(obj).hide(500);
 	    };
-
 
 	    var cX = 0;
 	    var cY = 0;
@@ -806,14 +821,18 @@ function popupbg(message) {
 	    { 
 	    	cX = e.pageX; cY = e.pageY;
 	    } 
-	    function UpdateCursorPositionDocAll(e){
+
+	    function UpdateCursorPositionDocAll(e)
+	    {
 	    	cX = event.clientX; cY = event.clientY;
 	    }
+
 	    if (document.all) {
 	    	document.onmousemove = UpdateCursorPositionDocAll;
 	    } else { 
 	    	document.onmousemove = UpdateCursorPosition;
 	    }
+
 	    function AssignPosition(d) 
 	    { 
 	    	if (self.pageYOffset) { 
@@ -835,13 +854,17 @@ function popupbg(message) {
 	    	d.style.left = (cX+10) + "px"; 
 	    	d.style.top  = (cY+10) + "px"; 
 	    } 
-	    function HideText(d) { 
+
+	    function HideText(d) 
+	    { 
 	    	if (d.length < 1) {
 	    		return;
 	    	}
 	    	document.getElementById(d).style.display = "none"; 
 	    } 
-	    function ShowText(d) { 
+
+	    function ShowText(d)
+	    { 
 	    	if (d.length < 1) {
 	    		return;
 	    	}
@@ -849,7 +872,9 @@ function popupbg(message) {
 	    	AssignPosition(dd); 
 	    	dd.style.display = "block"; 
 	    } 
-		function ReverseContentDisplay(d) { 
+
+		function ReverseContentDisplay(d)
+		{ 
 			if (d.length < 1) { 
 				return;
 			} 
