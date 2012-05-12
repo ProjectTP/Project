@@ -24,20 +24,20 @@ canvas
 
 /* --------------------- Header Decorations --------------------- */
 
-h1, a.logo
+h1.showw, a.logo, h1.en
 { 
 	font: 65px/75px Ruthie,Georgia, serif;
 	color: rgb(200,10,10);
 	text-decoration: none;
     text-shadow:  1px 1px rgba(255,255,255,0.8);
-    -webkit-transition: color 1s ease-out;
-    -moz-transition: color 1s ease-out;
-    -o-transition: color 1s ease-out;
+    -webkit-transition: color 1s ease-out, -webkit-box-shadow 1s;
+    -moz-transition: color 1s ease-out, -moz-box-shadow 1s;
+    -o-transition: color 1s ease-out, box-shadow 1s;
 }
 
 a.logo:hover
 {
-    color: rgba(0,0,0,0.9);
+    color: rgba(250,10,10,0.5);
 }
 
 h3
@@ -141,7 +141,7 @@ a.switch:hover
 
 /* --------------------- Input Decorations --------------------- */
 
-input
+input[type=number]
 {
 	background-color: rgba(255,255,255,0.9);
 	color: black;
@@ -187,7 +187,7 @@ input:-moz-placeholder {
 
 /* ------------------- Table Decorations ------------------------ */
 
-#tableform , #tablespeed, table
+#tableform , #tablespeed, #tablepath
 {
 	border: solid 5px rgba(0,0,0,0.1);
     -moz-border: solid 5px rgba(0,0,0,0.1);
@@ -197,11 +197,11 @@ input:-moz-placeholder {
 	box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.3);
 }
 
-#tableform td, #tablespeed td, table td
+#tableform td, #tablespeed td, #tablepath td
 {
 	text-align: center;
 }
-#tableform th , #tablespeed th, table th
+#tableform th , #tablespeed th, #tablepath th
 {
 	background: rgba(255,255,255,0.2);
 	border-radius: 3px;
@@ -224,16 +224,17 @@ input:-moz-placeholder {
 {
 	margin-top: 30px;
 }
-table tr
+
+#tablepath tr, table.welcome tr
 {
     border: 1px solid rgba(255,255,255,0.3);
     border-radius: 5px;
 }
-table tr.top
+#tablepath tr.top, table.welcome tr.top
 {
     border: 1px solid white;
 }
-table, #tableform
+#tablepath, #tableform, table.welcome
 {
     border: solid 10px rgba(0,0,0,0.1);
     border-radius: 5px;
