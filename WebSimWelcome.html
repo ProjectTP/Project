@@ -7,17 +7,18 @@
 		<link rel="shortcut icon" href="http://www.overcode.bg/images/fb/smiles/robot.gif">
 		<script type="text/javascript" src="js/script.js"></script>
 		<script type="text/javascript" src="js/jquery.js"></script>
+ 	 	<script type="text/javascript" src="js/tests.js"></script>
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
   		<script src="http://www.bitstorm.org/jquery/color-animation/jquery.animate-colors.js"></script>
 		<link rel="stylesheet" type="text/css" media="all" href="css/decorations.css" />
+		<link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css"/>
 		<link href='http://fonts.googleapis.com/css?family=Just+Me+Again+Down+Here' rel='stylesheet' type='text/css'/>
 		<link href='http://fonts.googleapis.com/css?family=Ruthie' rel='stylesheet' type='text/css'/>
 		<link href='http://fonts.googleapis.com/css?family=Junge' rel='stylesheet' type='text/css'/>
 		<link href='http://fonts.googleapis.com/css?family=Cutive' rel='stylesheet' type='text/css'/>
 		<link href='http://fonts.googleapis.com/css?family=Antic+Didone' rel='stylesheet' type='text/css'/>
-<link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
-  <script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
-  <script type="text/javascript" src="js/tests.js"></script>
+  
 		<script type="text/javascript">
 			// Check if the resolution width is less than 1300 then the right table should move to the right.
 			function resolution() {
@@ -460,7 +461,7 @@ AB 120
 								document.getElementById('pause').disabled=false;document.getElementById('stop').disabled=false;"> Play </button>
 								<button  id="pause" onclick ="pause_=true;	document.getElementById('play').disabled=false;	
 								document.getElementById('pause').disabled=true;	document.getElementById('stop').disabled=false;"> Pause </button>
-								<button  id="stop" onclick ="stop();"> Stop </button>
+								<button  id="stop" onclick ="stopgen();"> Stop </button>
 							</td>
 						</tr>
 						<tr>
@@ -545,7 +546,7 @@ AB 12
 									document.getElementById('pause-bg').disabled=true;	document.getElementById('stop-bg').disabled=false;
 									document.getElementById('play').disabled=false; document.getElementById('pause').disabled=true;
 									document.getElementById('stop').disabled=false;"> Пауза </button>
-									<button disabled id="stop-bg" onclick ="stop();"> Стоп </button>
+									<button disabled id="stop-bg" onclick ="stopgen();"> Стоп </button>
 								</td>
 							</tr>
 							<tr>

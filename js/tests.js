@@ -119,9 +119,6 @@ function runTests() {
     ok(checkBool(resize_), 'resize value is Ok.');
   })
 
-  test('stop', function() {
-    ok(checkBool(stop_), 'stop value is Ok.');
-  })
 
   test('submit', function() {
     ok(checkBool(submit_), 'submit value is Ok.');
@@ -134,10 +131,7 @@ function runTests() {
   test('Canvas Value', function () {
     equal(canvas, document.getElementById('my_canvas'), 'Canvas value is OK');
   })
-
-  test('Canvas Value', function () {
-    equal(init(3), init(3), 'Canvas value is OK');
-  })
+  
   test('Robot Width', function () {
     ok(rWidth(roboWidth), 'Robo Width value is OK');
   })

@@ -772,7 +772,7 @@
 			stop_simulation();
 		}
 
-		function stop()
+		function stopgen()
 		{
 			document.getElementById('out_path').value 	 += '\n' + "Stoped!";			
 			document.getElementById('out_path-bg').value += '\n' + "Спряно!";			
