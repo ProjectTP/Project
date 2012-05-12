@@ -68,7 +68,7 @@
 		{			
 			roboX 		 = width/2;
 			roboY 	   	 = height/2;
-			lWheelPosX 	 = -roboWidth/2 - 7;
+			lWheelPosX 	 = -roboWidth/2 - lWheelWidth;
 			lWheelPosY 	 = -roboHeight/2 + roboHeight/8;
 			rWheelPosX 	 = roboWidth/2;
 			rWheelPosY 	 = -roboHeight/2 + roboHeight/8;
