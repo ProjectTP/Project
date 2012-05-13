@@ -343,7 +343,7 @@
 
 		function robo_data_reset()
 		{
-			if(!pause_ && !stop){
+			if(!pause_ && !stop_){
 				roboX 		= width/2;
 				roboY 		= height/2;
 				radian 		= (Math.PI/180) * 0;
@@ -415,7 +415,7 @@
 					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете ширина за гумите по-висока от 5 и дължина, по-висока от 10');
 				}
 			}
-			if(!pause_ && !stop){
+			if(!pause_ && !stop_){
 				roboX = width/2;
 				roboY = height/2;
 			}		
