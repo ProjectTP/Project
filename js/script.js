@@ -5,20 +5,20 @@
 		var height 		 	 = 450; 				
 		var bgColor 	 	 = "black";	
 		var objectColor  	 = "white";	
-		var roboX;
-		var roboY; 					
-		var roboWidth;				
-		var roboHeight;				
+		var roboX			 = 0;
+		var roboY			 = 0; 					
+		var roboWidth		 = 0;				
+		var roboHeight		 = 0;				
 		var roboColor 	 	 = "red";	
 		var radian 			 = (Math.PI/180) * 0;		
-		var degrees;
-		var speed;
+		var degrees 		 = 0;
+		var speed			 = 0;
 		var start		 	 = true;
 		var crash		 	 = false;
-		var lWheelPosX;
-		var lWheelPosY;
-		var rWheelPosX;
-		var rWheelPosY;
+		var lWheelPosX		 = 0;
+		var lWheelPosY		 = 0;
+		var rWheelPosX		 = 0;
+		var rWheelPosY		 = 0;
 		var distance     	 = 0;
 		var motorA		 	 = false;
 		var motorB		 	 = false;
@@ -30,9 +30,15 @@
 		var resize_			 = false;
 		var stop_   		 = false;
 		var submit_			 = false;
-		var w 				 = 0
+		var play_page		 = false;
+		var rightDown 		 = false;
+		var leftDown 		 = false;
+		var upDown 			 = false;
+		var downDown 		 = false;
+		var w 				 = 0;
 		
-		function loadanime() {
+		function loadanime() 
+		{
 			$("#my_canvas").animate({
 				    	width:  450,
 				    	height: 450 
@@ -61,7 +67,11 @@
 			}			
 			speed 			 = speed_;
 			clearInterval(gameInterval);
-			gameInterval 	 = setInterval(draw, 20);
+			if(play_page){
+				gameInterval = setInterval(draw_PlayPage, 20);
+			}else{
+				gameInterval = setInterval(draw, 20);
+			}			
 		}
 
 		function reset_data()
@@ -86,6 +96,14 @@
 			distance 	 = 0;
 		}
 
+		function change_page()
+		{	
+			reset_data();
+			steps = 0;
+			document.getElementById('out_path').value 	 = "";
+			document.getElementById('out_path-bg').value = "";	
+			resetpos();
+		}
 
 		function popup(message) 
 		{					  
@@ -455,6 +473,54 @@
 			}
 		}
 
+		function draw_PlayPage()
+		{
+			display();
+			check_rect_angles();
+			check_LeftRight_key();
+			check_UpDown_key();
+		}
+
+		function check_LeftRight_key()
+		{
+			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
+				if (rightDown) {						
+					radian+=(Math.PI/180)*speed;							
+				} else if (leftDown) {					
+					radian-=(Math.PI/180)*speed;					
+				}			
+			}	
+		}
+
+		function check_UpDown_key()
+		{
+			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
+				if (upDown) {
+					calc_coord_play_page();
+					if (roboX + roboWidth/2 > width) {
+						crash=true;
+						roboX-=speed+1;			
+					}
+					if (roboX < roboWidth/2) {
+						crash=true;
+						roboX+=speed+1;
+					}
+				} else if (downDown) {
+					calc_coord_play_page();
+					if (roboX + roboWidth/2 > width)
+						roboX-=speed+1;			
+					if (roboX < roboWidth/2)
+						roboX+=speed+1;
+				}
+			} else if (roboHeight/2 + roboY < height) {
+				roboY += speed + 1;
+				crash=true;					
+			} else {
+				roboY -= speed + 1;   	
+				crash=true;		
+			}	
+		}
+
 		function calc_new_coords_for_draw()
 		{
 			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
@@ -479,9 +545,6 @@
 				} 
 			} else if (roboHeight/2 + roboY < height) {
 				crash = true;					
-			} else if (roboHeight/2 + roboY > height + rWheelHeight) {
-				ctx.font = "bold 50pt Calibri,Times New Roman";
-				ctx.fillText("TESTING", width/2-100, height/2 + 10);	
 			} else {			 	
 				crash = true;	
 			}				 	
@@ -500,12 +563,14 @@
 		// check if any angle of the robo is out of the table
 		function check_rect_angles()
 		{
-			if (roboX + check_angleX(1) > width  || roboX + check_angleX(2) > width  || roboX + check_angleX(3) > width  || 
-				roboX + check_angleX(4) > width  || roboX + check_angleX(1) < 0 	 || roboX + check_angleX(2) < 0 	 || 
-				roboX + check_angleX(3) < 0 	 || roboX + check_angleX(4) < 0 	 ||	roboY + check_angleY(1) > height || 
-				roboY + check_angleY(2) > height || roboY + check_angleY(3) > height || roboY + check_angleY(4) > height || 
-				roboY + check_angleY(1) < 0 	 || roboY + check_angleY(2) < 0 	 || roboY + check_angleY(3) < 0 	 || 
-				roboY + check_angleY(4) < 0 ) {
+			if (roboX + check_angleX(1) > width  || roboX + check_angleX(2) > width  || 
+				roboX + check_angleX(3) > width  || roboX + check_angleX(4) > width  || 
+				roboX + check_angleX(1) < 0 	 || roboX + check_angleX(2) < 0 	 || 
+				roboX + check_angleX(3) < 0 	 || roboX + check_angleX(4) < 0 	 ||	
+				roboY + check_angleY(1) > height || roboY + check_angleY(2) > height || 
+				roboY + check_angleY(3) > height || roboY + check_angleY(4) > height || 
+				roboY + check_angleY(1) < 0 	 || roboY + check_angleY(2) < 0 	 || 
+				roboY + check_angleY(3) < 0 	 || roboY + check_angleY(4) < 0 ) {
 				crash = true;
 			} else {
 				crash = false;	
@@ -577,6 +642,45 @@
 					roboY -= calc_distance_cos(360);
 				}
 			}			
+		}
+
+		function calc_coord_play_page()
+		{
+			degrees=make_degrees();
+
+			if (degrees >= 0 && degrees <= 90) {
+				if (upDown) {
+					roboX+=calc_distance_cos(90);
+					roboY-=calc_distance_sin(90);
+				} else if (downDown) {
+					roboX-=calc_distance_cos(90);
+					roboY+=calc_distance_sin(90);
+				}			
+			} else if (degrees > 90 && degrees <= 180) {
+				if (upDown) {
+					roboX+=calc_distance_sin(180);
+					roboY+=calc_distance_cos(180);
+				} else if (downDown) {
+					roboX-=calc_distance_sin(180);
+					roboY-=calc_distance_cos(180);
+				}
+			} else if (degrees > 180 && degrees <= 270) {
+				if (upDown) {
+					roboX-=calc_distance_cos(270);
+					roboY+=calc_distance_sin(270);
+				} else if (downDown) {
+					roboX+=calc_distance_cos(270);
+					roboY-=calc_distance_sin(270);
+				}
+			} else if (degrees > 270 && degrees <= 360) {
+				if (upDown) {
+					roboX-=calc_distance_sin(360);
+					roboY-=calc_distance_cos(360);
+				} else if (downDown) {
+					roboX+=calc_distance_sin(360);
+					roboY+=calc_distance_cos(360);
+				}
+			}				
 		}
 
 		function calc_distance_sin(val)
@@ -669,8 +773,10 @@
 				distance   = steps[last_step + 1] * 1;	
 				w = 3;
 				calc_distance();		
-				document.getElementById('out_path').value 	 += steps[last_step] + ' ' + steps[last_step+1] + '\n';
-				document.getElementById('out_path-bg').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';							
+				document.getElementById('out_path').value 	 += steps[last_step] + 
+				' ' + steps[last_step+1] + '\n';
+				document.getElementById('out_path-bg').value += steps[last_step] + 
+				' ' + steps[last_step+1] + '\n';							
 				last_step += 2;
 			} else {
 				stop_simulation();
@@ -693,7 +799,7 @@
 			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth, roboHeight);
 			ctx.font 		= "bold 19pt Calibri,Times New Roman";
 
-			if (get_path && distance == 0) {
+			if (get_path && distance == 0 && !play_page) {
 				get_new_step();
 			}		
 			w = -w;			
@@ -763,8 +869,7 @@
 					ctx.font = "bold 50pt Calibri,Times New Roman";
 					ctx.fillText("Сблъсък!", width/2-100, height/2 + 10);				
 				}
-			}
-	
+			}	
 			if (!stop_){
 				document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
 				document.getElementById('out_path-bg').value += "Сблъсък на ред " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
@@ -773,7 +878,8 @@
 				document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';
 				document.getElementById('out_path-bg').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';		
 			}
-			stop_simulation();
+			if(!play_page)
+				stop_simulation();
 		}
 
 		function stopgen()
@@ -912,3 +1018,44 @@
 				dd.style.display = "none";
 			} 
 		}
+
+		function onKeyDown(evt) 
+		{
+			if (evt.keyCode == 39)
+				rightDown = true;
+			else if (evt.keyCode == 37)
+				leftDown = true;
+			else if (evt.keyCode == 38)
+				upDown = true;
+			else if (evt.keyCode == 40)
+				downDown = true;
+		}
+
+		function onKeyUp(evt) 
+		{
+			if (evt.keyCode == 39)
+				rightDown = false;
+			else if (evt.keyCode == 37)
+				leftDown = false;
+			else if (evt.keyCode == 38)
+				upDown = false;
+			else if (evt.keyCode == 40)
+				downDown = false;
+		}
+
+		document.addEventListener('keydown',onKeyDown);
+		document.addEventListener('keyup',onKeyUp);
+
+		var ar=new Array(33,34,35,36,37,38,39,40);
+		// function to disable the scrolling when pressing the arrow keys.
+		
+		$(document).keydown(function(e) 
+		{
+		     var key = e.which;
+		      
+		      if($.inArray(key,ar) > -1) {
+		          e.preventDefault();
+		          return false;
+		      }
+		      return true;
+		});

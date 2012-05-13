@@ -110,15 +110,20 @@
  
 	</head>
 	
-	<body onload = "javascript:fade('body'); javascript:slide2('table.welcome'); javascript:fadeo('div.logo'); javascript:fadelogo('div.logo-en'); start=true; init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=true; resolution(); loadanime(); " style = "display:none;">
+	<body onload = "javascript:fade('body'); javascript:slide2('table.welcome'); javascript:fadeo('div.logo'); javascript:fadelogo('div.logo-en'); start=true; init(6); 
+	javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; 
+	javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but1').disabled=false; 
+	javascript:document.getElementById('but2').disabled=true;	javascript:document.getElementById('but3').disabled=false;
+	javascript:document.getElementById('but1-play').disabled=false; javascript:document.getElementById('but2-play').disabled=true; 
+	javascript:document.getElementById('but3-play').disabled=false; javascript:document.getElementById('but1-play-bg').disabled=false; 
+	javascript:document.getElementById('but2-play-bg').disabled=true;javascript:document.getElementById('but3-play-bg').disabled=false; 
+	loadanime(); " style = "display:none;">
 
-
-<!-- ###################################################    WELCOME PAGE   ##################################################  -->
+	<!-- ###################################################    WELCOME PAGE   ##################################################  -->
 
 	<!-- English welcome -->
 
 		<div class = "welcome-en">
-
 
 				<h1 class = "showw" style = "font-size: 150px; margin-top: 100px;"> 
 					<center style = "padding-bottom: 70px; font-size: 100px; color: black;">
@@ -135,8 +140,7 @@
 					<center>
 						Choose your way:
 					</center> 
-				</h1>
-		
+				</h1>		
 				
 				<center><table class = "welcome" style = "width: 245px; height: 170px; border-radius: 20px;">
 					<tr>
@@ -144,7 +148,7 @@
 					</tr>
 					<tr>
 						<td class="link">
-							<button onclick = "javascript:hiding('div.welcome-en'); javascript:showing('div.canvass'); javascript:showing('h1.webslogo'); javascript:showing('div.play-en');" class = "welcome">
+							<button onclick = "javascript:hiding('div.welcome-en'); javascript:showing('div.canvass'); javascript:showing('h1.webslogo'); javascript:showing('div.play-en'); play_page=true;change_page();" class = "welcome">
 								Play
 							</button>
 						</td>
@@ -154,7 +158,7 @@
 					</tr>
 					<tr>
 						<td class="link">
-							<button onclick = "javascript:hiding('div.welcome-en'); javascript:showing('div.canvass'); javascript:showing('h1.webslogo'); javascript:showing('div.simulate-en');" class = "welcome">
+							<button onclick = "javascript:hiding('div.welcome-en'); javascript:showing('div.canvass'); javascript:showing('h1.webslogo'); javascript:showing('div.simulate-en'); play_page=false; change_page();" class = "welcome">
 								Simulate
 							</button>
 						</td>
@@ -220,7 +224,7 @@
 					</tr>
 					<tr>
 						<td class="link">
-							<button onclick = "javascript:hiding('div.welcome-bg'); javascript:showing('div.canvass'); javascript:showing('h1.webslogo'); javascript:showing('div.play-bg');" class = "welcome" style = "font-size: 20px;">
+							<button onclick = "javascript:hiding('div.welcome-bg'); javascript:showing('div.canvass'); javascript:showing('h1.webslogo'); javascript:showing('div.play-bg'); play_page=true; change_page();" class = "welcome" style = "font-size: 20px;">
 								Разгледай
 							</button>
 						</td>
@@ -230,7 +234,7 @@
 					</tr>
 					<tr>
 						<td class="link">
-							<button onclick = "javascript:hiding('div.welcome-bg'); javascript:showing('div.canvass'); javascript:showing('h1.webslogo'); javascript:showing('div.simulate-bg');" class = "welcome" style = "font-size: 20px">
+							<button onclick = "javascript:hiding('div.welcome-bg'); javascript:showing('div.canvass'); javascript:showing('h1.webslogo'); javascript:showing('div.simulate-bg'); play_page=false; change_page();" class = "welcome" style = "font-size: 20px">
 								Симулирай
 							</button>
 						</td>
@@ -262,11 +266,9 @@
 
 		  	</div>
 
+			<!-- ###################################################   SIMULATE PAGE   ##################################################  -->
 
-<!-- ###################################################    ENGLISH SIMULATE PAGE   ##################################################  -->
-
-		
-
+			<!-- English simulate page-->
 
 		  	<div class = "simulate-en" style = "display:none">
 
@@ -277,7 +279,7 @@
 			</h1>
 
 			<center>
-				<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.play-en');" style = "width: 180px;">Go to Play Page</a>
+				<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.play-en'); play_page=true; change_page();" style = "width: 180px;">Go to Play Page</a>
 
 				<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.simulate-bg');" style = "width: 180px;">Change language</a>
 			</center>
@@ -331,8 +333,7 @@
 			</table>
 		</div>
 
-
-
+		<!-- Bulgarian simulate page-->
 
 		<div class = "simulate-bg" style = "display:none;">
 				
@@ -344,7 +345,7 @@
 			
 	
 			<center>
-				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.play-bg');" style = "width: 180px;">Страница за игра</a>
+				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.play-bg'); play_page=true; change_page();" style = "width: 180px;">Страница за игра</a>
 
 				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.simulate-en'); " style = "width: 180px;">Смени езика</a>
 			</center>
@@ -398,11 +399,12 @@
 			</table>
 		</div>
 
+		<!-- ###################################################   PLAY PAGE   ##################################################  -->
 
 		<!-- English play page -->
 
-
 		<div class = "play-en" style = "display:none">
+
 			<h1 class = "webslogo"> 
 				<center>
 					<a class = "logo" onclick = "javascript:hiding('div.play-en');javascript:hiding('div.canvass'); javascript:showing('div.welcome-en');" >WebSim Project</a>
@@ -410,132 +412,34 @@
 			</h1>
 
 			<center>
-				<a class = "switch" onclick = "javascript:hiding('div.play-en'); javascript:showing('div.simulate-en');" style = "width: 180px;">Go to Simulation Page</a>
+				<a class = "switch" onclick = "javascript:hiding('div.play-en'); javascript:showing('div.simulate-en'); play_page=false; change_page();" style = "width: 180px;">Go to Simulation Page</a>
 
 				<a class = "switch" onclick = "javascript:hiding('div.play-en'); javascript:showing('div.play-bg');" style = "width: 180px;">Change language</a>
 			</center>
 
 			<br/>
-
-
-			<table id = "tableform">
-			  	<tr>
-			    	<th colspan="2">Canvas</th>
-			  	</tr>
-				<tr>
-				    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"
-				    	onclick = "HideText('width-info'); return true;" onmouseover="ShowText('width-info'); return true;" 
-				    	onmouseout="HideText('width-info'); return true;"/></td>
-				    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"
-				    	onclick = "HideText('height-info'); return true;" onmouseover="ShowText('height-info'); return true;" 
-				    	onmouseout="HideText('height-info'); return true;"/></td>
-				</tr>
-				<tr>
-				    <td><button  onclick ="resize('e')"> Resize! </button></td>
-					<td><button  onclick ="reset()"> Reset! </button></td>
-				</tr>
-				<tr>
-					<th>Robot</th>
-					<th>Wheels</th>
-				</tr>
-				<tr>
-					<td><input type="number" id="width_r" min="20" max = "100" step = "1" placeholder = "Width"
-						onclick = "HideText('widthr-info'); return true;" onmouseover="ShowText('widthr-info'); return true;" 
-				    	onmouseout="HideText('widthr-info'); return true;"/></td>
-					<td><input type="number" id="width_w" min="5" max = "15" step = "1" placeholder = "Width"
-						onclick = "HideText('widthw-info'); return true;" onmouseover="ShowText('widthw-info'); return true;" 
-				    	onmouseout="HideText('widthw-info'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><input type="number" id="height_r" min="20" max = "150" step = "1" placeholder = "Height"
-						onclick = "HideText('heightr-info'); return true;" onmouseover="ShowText('heightr-info'); return true;" 
-				    	onmouseout="HideText('heightr-info'); return true;"/></td>
-					<td><input type="number" id="height_w" min="10" max = "100" step = "1" placeholder = "Height"
-						onclick = "HideText('heightw-info'); return true;" onmouseover="ShowText('heightw-info'); return true;" 
-				    	onmouseout="HideText('heightw-info'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_resize('e')"> Resize! </button></td>
-					<td><button  onclick ="wheel_resize('e')" > Resize! </button></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_reset()"> Reset! </button></td>
-					<td><button  onclick ="wheel_reset()" > Reset! </button></td>
-				</tr>
-			</table>
 		</div>
 
+		<!-- Bulgarian play page -->
+
 		<div class = "play-bg" style = "display:none">
+
 			<h1 class = "webslogo"> 
 				<center>
 					<a class = "logo" onclick = "javascript:hiding('div.play-bg'); javascript:hiding('div.canvass'); javascript:showing('div.welcome-bg');" >WebSim Project</a>
 				</center> 
-			</h1>
-			
+			</h1>			
 	
 			<center>
-				<a class = "switch" onclick = "javascript:hiding('div.play-bg'); javascript:showing('div.simulate-bg');" style = "width: 180px;">Страница за симулация</a>
+				<a class = "switch" onclick = "javascript:hiding('div.play-bg'); javascript:showing('div.simulate-bg'); play_page=false; change_page();" style = "width: 180px;">Страница за симулация</a>
 
 				<a class = "switch" onclick = "javascript:hiding('div.play-bg'); javascript:showing('div.play-en'); " style = "width: 180px;">Смени езика</a>
 			</center>
 
-			<br/>
-
-			<table id = "tableform">
-			  	<tr>
-			    	<th colspan="2">Поле</th>
-			  	</tr>
-				<tr>
-				    <td><input type="number" id="width1-bg" min="150" max = "1000" step = "25" placeholder = "Ширина"
-				    	onclick = "HideText('width-info-bg'); return true;" onmouseover="ShowText('width-info-bg'); return true;" 
-			    		onmouseout="HideText('width-info-bg'); return true;"/></td>
-				    <td><input type="number" id="height1-bg" min="150" max = "1000" step = "25" placeholder = "Дължина"
-				    	onclick = "HideText('height-info-bg'); return true;" onmouseover="ShowText('height-info-bg'); return true;" 
-			    		onmouseout="HideText('height-info-bg'); return true;"/></td>
-				</tr>
-				<tr>
-				    <td><button  onclick ="resize('b')"> Преоразмери! </button></td>
-					<td><button  onclick ="reset()"> Възстанови! </button></td>
-				</tr>
-				<tr>
-					<th>Робот</th>
-					<th>Колела</th>
-				</tr>
-				<tr>
-					<td><input type="number" id="width_r-bg" min="20" max = "100" step = "1" placeholder = "Ширина"
-						onclick = "HideText('widthr-info-bg'); return true;" onmouseover="ShowText('widthr-info-bg'); return true;" 
-			    		onmouseout="HideText('widthr-info-bg'); return true;"/></td>
-					<td><input type="number" id="width_w-bg" min="5" max = "15" step = "1" placeholder = "Ширина"
-						onclick = "HideText('widthw-info-bg'); return true;" onmouseover="ShowText('widthw-info-bg'); return true;" 
-			    		onmouseout="HideText('widthw-info-bg'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><input type="number" id="height_r-bg" min="20" max = "150" step = "1" placeholder = "Дължина"
-						onclick = "HideText('heightr-info-bg'); return true;" onmouseover="ShowText('heightr-info-bg'); return true;" 
-			    		onmouseout="HideText('heightr-info-bg'); return true;"/></td>
-					<td><input type="number" id="height_w-bg" min="10" max = "100" step = "1" placeholder = "Дължина"
-						onclick = "HideText('heightw-info-bg'); return true;" onmouseover="ShowText('heightw-info-bg'); return true;" 
-			    		onmouseout="HideText('heightw-info-bg'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_resize('b')"> Преоразмери! </button></td>
-					<td><button  onclick ="wheel_resize('b')" > Преоразмери! </button></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_reset()"> Възстанови! </button></td>
-					<td><button  onclick ="wheel_reset()" > Възстанови! </button></td>
-				</tr>
-			</table>
+			<br/>			
 		</div>
 
-
-
-
-
-
-		<!--  $$$$$$$$$$$$$$$$$$$$ CANVAS $$$$$$$$$$$$$$$$$$$$$$$-->
-
-
+		<!-- ###################################################   CANVAS   ##################################################  -->
 
 		<div class = "canvass" style = "display:none">
 			<center>
@@ -543,9 +447,9 @@
 			</center>
 		</div>
 
+		<!-- ###################################################   SIMULATE PAGE   ##################################################  -->
 
-
-
+		<!-- English simulate page-->
 
 		<div class = "simulate-en" style = "display:none">
 
@@ -560,15 +464,27 @@
 					</tr>
 					<tr>
 						<td>
-							<button id="but1" onclick="init(3); javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false;">Slow
+							<button id="but1" onclick="init(3); javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but2-bg').disabled=false; 
+							javascript:document.getElementById('but3-bg').disabled=false;  javascript:document.getElementById('but1').disabled=true; 
+							javascript:document.getElementById('but2').disabled=false;	javascript:document.getElementById('but3').disabled=false;
+							javascript:document.getElementById('but1-play').disabled=true; javascript:document.getElementById('but2-play').disabled=false; javascript:document.getElementById('but3-play').disabled=false; javascript:document.getElementById('but1-play-bg').disabled=true; javascript:document.getElementById('but2-play-bg').disabled=false;
+							javascript:document.getElementById('but3-play-bg').disabled=false;">Slow
 							</button>
 						</td>
 						<td>
-							<button id="but2" onclick="init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false;">Normal
+							<button id="but2" onclick="init(6); javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; 
+							javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but1').disabled=false; 
+							javascript:document.getElementById('but2').disabled=true;	javascript:document.getElementById('but3').disabled=false;
+							javascript:document.getElementById('but1-play').disabled=false; javascript:document.getElementById('but2-play').disabled=true; javascript:document.getElementById('but3-play').disabled=false; javascript:document.getElementById('but1-play-bg').disabled=false; javascript:document.getElementById('but2-play-bg').disabled=true;
+							javascript:document.getElementById('but3-play-bg').disabled=false;">Normal
 							</button>
 						</td>
 						<td>
-							<button id="but3" onclick="init(9); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; javascript:document.getElementById('but3-bg').disabled=true;">Fast
+							<button id="but3" onclick="init(9); javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; 
+							javascript:document.getElementById('but3-bg').disabled=true;  javascript:document.getElementById('but1').disabled=false; 
+							javascript:document.getElementById('but2').disabled=false;	javascript:document.getElementById('but3').disabled=true;
+							javascript:document.getElementById('but1-play').disabled=false; javascript:document.getElementById('but2-play').disabled=false; javascript:document.getElementById('but3-play').disabled=true; javascript:document.getElementById('but1-play-bg').disabled=false; javascript:document.getElementById('but2-play-bg').disabled=false;
+							javascript:document.getElementById('but3-play-bg').disabled=true;">Fast
 							</button>
 						</td>
 					</tr>
@@ -615,8 +531,7 @@ AB 120
 							</td>
 						</tr>
 					</tr>
-				</table>
-				
+				</table>				
 				
 	  		</center>
 	  		<br/>
@@ -635,6 +550,8 @@ AB 120
 
 		</div>
 
+		<!-- Bulgarian simulate page-->
+
 		<div class = "simulate-bg" style = "display:none">
 			<center>
 				<table id = "tablespeed">
@@ -646,15 +563,30 @@ AB 120
 					</tr>
 					<tr>
 						<td>
-							<button id="but1-bg" onclick="init(3); javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false;">Бавно
+							<button id="but1-bg" onclick="init(3); 
+							javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but2-bg').disabled=false; 
+							javascript:document.getElementById('but3-bg').disabled=false;  javascript:document.getElementById('but1').disabled=true; 
+							javascript:document.getElementById('but2').disabled=false;	javascript:document.getElementById('but3').disabled=false;
+							javascript:document.getElementById('but1-play').disabled=true; javascript:document.getElementById('but2-play').disabled=false; javascript:document.getElementById('but3-play').disabled=false; javascript:document.getElementById('but1-play-bg').disabled=true; javascript:document.getElementById('but2-play-bg').disabled=false;
+							javascript:document.getElementById('but3-play-bg').disabled=false;">Бавно
 							</button>
 						</td>
 						<td>
-							<button id="but2-bg" disabled onclick="init(6); javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;">Нормално
+							<button id="but2-bg" disabled onclick="init(6); 
+							javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; 
+							javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but1').disabled=false; 
+							javascript:document.getElementById('but2').disabled=true;	javascript:document.getElementById('but3').disabled=false;
+							javascript:document.getElementById('but1-play').disabled=false; javascript:document.getElementById('but2-play').disabled=true; javascript:document.getElementById('but3-play').disabled=false; javascript:document.getElementById('but1-play-bg').disabled=false; javascript:document.getElementById('but2-play-bg').disabled=true;
+							javascript:document.getElementById('but3-play-bg').disabled=false;">Нормално
 							</button>
 						</td>
 						<td>
-							<button id="but3-bg" onclick="init(9); javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; javascript:document.getElementById('but3-bg').disabled=true; javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;">Бързо
+							<button id="but3-bg" onclick="init(9); 
+							javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; 
+							javascript:document.getElementById('but3-bg').disabled=true;  javascript:document.getElementById('but1').disabled=false; 
+							javascript:document.getElementById('but2').disabled=false;	javascript:document.getElementById('but3').disabled=true;
+							javascript:document.getElementById('but1-play').disabled=false; javascript:document.getElementById('but2-play').disabled=false; javascript:document.getElementById('but3-play').disabled=true; javascript:document.getElementById('but1-play-bg').disabled=false; javascript:document.getElementById('but2-play-bg').disabled=false;
+							javascript:document.getElementById('but3-play-bg').disabled=true;">Бързо
 							</button>
 
 						</td>
@@ -702,8 +634,7 @@ AB 120
 								</td>
 							</tr>
 						</tr>
-					</table>
-					
+					</table>			
 					
 	  		</center>
 	  		<br/>
@@ -719,11 +650,12 @@ AB 120
 					<a href="#" class="button-bg">Затвори</a>
 				</div>
 			</div>
-		</div>
-			
-		<!-- ###################################################    ENGLISH PLAY PAGE   ##################################################  -->
+		</div>		
 
-		
+		<!-- ###################################################   PLAY PAGE   ##################################################  -->
+
+		<!-- English play page -->
+
 		<div class = "play-en" style = "display:none">
 
 			<center>
@@ -736,15 +668,27 @@ AB 120
 					</tr>
 					<tr>
 						<td>
-							<button id="but1" onclick="init(3); javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false;">Slow
+							<button id="but1-play" onclick="init(3); javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but2-bg').disabled=false; 
+							javascript:document.getElementById('but3-bg').disabled=false;  javascript:document.getElementById('but1').disabled=true; 
+							javascript:document.getElementById('but2').disabled=false;	javascript:document.getElementById('but3').disabled=false;
+							javascript:document.getElementById('but1-play').disabled=true; javascript:document.getElementById('but2-play').disabled=false; javascript:document.getElementById('but3-play').disabled=false; javascript:document.getElementById('but1-play-bg').disabled=true; javascript:document.getElementById('but2-play-bg').disabled=false;
+							javascript:document.getElementById('but3-play-bg').disabled=false;">Slow
 							</button>
 						</td>
 						<td>
-							<button id="but2" onclick="init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false;">Normal
+							<button id="but2-play" onclick="init(6); javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; 
+							javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but1').disabled=false; 
+							javascript:document.getElementById('but2').disabled=true;	javascript:document.getElementById('but3').disabled=false;
+							javascript:document.getElementById('but1-play').disabled=false; javascript:document.getElementById('but2-play').disabled=true; javascript:document.getElementById('but3-play').disabled=false; javascript:document.getElementById('but1-play-bg').disabled=false; javascript:document.getElementById('but2-play-bg').disabled=true;
+							javascript:document.getElementById('but3-play-bg').disabled=false;">Normal
 							</button>
 						</td>
 						<td>
-							<button id="but3" onclick="init(9); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; javascript:document.getElementById('but3-bg').disabled=true;">Fast
+							<button id="but3-play" onclick="init(9); javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; 
+							javascript:document.getElementById('but3-bg').disabled=true;  javascript:document.getElementById('but1').disabled=false; 
+							javascript:document.getElementById('but2').disabled=false;	javascript:document.getElementById('but3').disabled=true;
+							javascript:document.getElementById('but1-play').disabled=false; javascript:document.getElementById('but2-play').disabled=false; javascript:document.getElementById('but3-play').disabled=true; javascript:document.getElementById('but1-play-bg').disabled=false; javascript:document.getElementById('but2-play-bg').disabled=false;
+							javascript:document.getElementById('but3-play-bg').disabled=true;">Fast
 							</button>
 						</td>
 					</tr>
@@ -767,8 +711,7 @@ AB 120
 
 		</div>
 
-
-
+		<!-- Bulgarian play page -->
 
 		<div class = "play-bg" style = "display:none">
 
@@ -782,15 +725,30 @@ AB 120
 					</tr>
 					<tr>
 						<td>
-							<button id="but1-bg" onclick="init(3); javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false;">Бавно
+							<button id="but1-play-bg" onclick="init(3); 
+							javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but2-bg').disabled=false; 
+							javascript:document.getElementById('but3-bg').disabled=false;  javascript:document.getElementById('but1').disabled=true; 
+							javascript:document.getElementById('but2').disabled=false;	javascript:document.getElementById('but3').disabled=false;
+							javascript:document.getElementById('but1-play').disabled=true; javascript:document.getElementById('but2-play').disabled=false; javascript:document.getElementById('but3-play').disabled=false; javascript:document.getElementById('but1-play-bg').disabled=true; javascript:document.getElementById('but2-play-bg').disabled=false;
+							javascript:document.getElementById('but3-play-bg').disabled=false;">Бавно
 							</button>
 						</td>
 						<td>
-							<button id="but2-bg" disabled onclick="init(6); javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;">Нормално
+							<button id="but2-play-bg" disabled onclick="init(6); 
+							javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; 
+							javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but1').disabled=false; 
+							javascript:document.getElementById('but2').disabled=true;	javascript:document.getElementById('but3').disabled=false;
+							javascript:document.getElementById('but1-play').disabled=false; javascript:document.getElementById('but2-play').disabled=true; javascript:document.getElementById('but3-play').disabled=false; javascript:document.getElementById('but1-play-bg').disabled=false; javascript:document.getElementById('but2-play-bg').disabled=true;
+							javascript:document.getElementById('but3-play-bg').disabled=false;">Нормално
 							</button>
 						</td>
 						<td>
-							<button id="but3-bg" onclick="init(9); javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; javascript:document.getElementById('but3-bg').disabled=true; javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;">Бързо
+							<button id="but3-play-bg" onclick="init(9); 
+							javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; 
+							javascript:document.getElementById('but3-bg').disabled=true;  javascript:document.getElementById('but1').disabled=false; 
+							javascript:document.getElementById('but2').disabled=false;	javascript:document.getElementById('but3').disabled=true;
+							javascript:document.getElementById('but1-play').disabled=false; javascript:document.getElementById('but2-play').disabled=false; javascript:document.getElementById('but3-play').disabled=true; javascript:document.getElementById('but1-play-bg').disabled=false; javascript:document.getElementById('but2-play-bg').disabled=false;
+							javascript:document.getElementById('but3-play-bg').disabled=true;">Бързо
 							</button>
 
 						</td>
@@ -817,17 +775,6 @@ AB 120
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 		<div class = "tests" style = "display: none">
 			<h1 class = "webslogo"> 
 				<center>
@@ -841,11 +788,6 @@ AB 120
 			<ol id="qunit-tests"></ol>
 			<div id="qunit-fixture">test markup, will be hidden</div>
 		</div>
-
-
-
-
-
 
 		<!-- All the infos that appear on mouse over event -->
 
@@ -861,7 +803,6 @@ AB 120
 		<div id = "heightr-info-bg" class = "box" style = "display:none">Височина за преоразмеряване на робота.<br/> (20 - 150)</div>
 		<div id = "widthw-info-bg" class = "box" style = "display:none">Ширина за преоразмеряване на гумите на робота.<br/> (5 - 15)</div>
 		<div id = "heightw-info-bg" class = "box" style = "display:none">Височина за преоразмеряване на гумите на робота.<br/> (10 - 100)</div>
-
 
   	</body>
 </html>
