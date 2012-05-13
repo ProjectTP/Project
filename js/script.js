@@ -34,8 +34,8 @@
 		var rightDown 		 = false;
 		var leftDown 		 = false;
 		var upDown 			 = false;
-		var downDown 		 = false;
 		var w 				 = 0;
+		var lang			 = 'e';
 		
 		function loadanime() 
 		{
@@ -156,7 +156,7 @@
 			}
 
 		// resizing the canvas width and height
-		function resize(lang)
+		function resize()
 		{
 			if (lang == 'e') {
  				if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000 && 
@@ -306,7 +306,7 @@
 		}
 
 		// resizing the robot width and height
-		function robo_resize(lang)
+		function robo_resize()
 		{
 			resize_ = true;
 			if (lang == 'e') {
@@ -383,7 +383,7 @@
 		}
 
 		// resizing the robot wheels
-		function wheel_resize(lang)
+		function wheel_resize()
 		{
 			resize_ = true;
 			if (lang == 'e') {
@@ -478,7 +478,7 @@
 			display();
 			check_rect_angles();
 			check_LeftRight_key();
-			check_UpDown_key();
+			check_Up_key();
 		}
 
 		function check_LeftRight_key()
@@ -492,7 +492,7 @@
 			}	
 		}
 
-		function check_UpDown_key()
+		function check_Up_key()
 		{
 			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
 				if (upDown) {
@@ -505,13 +505,7 @@
 						crash=true;
 						roboX+=speed+1;
 					}
-				} else if (downDown) {
-					calc_coord_play_page();
-					if (roboX + roboWidth/2 > width)
-						roboX-=speed+1;			
-					if (roboX < roboWidth/2)
-						roboX+=speed+1;
-				}
+				} 
 			} else if (roboHeight/2 + roboY < height) {
 				roboY += speed + 1;
 				crash=true;					
@@ -651,36 +645,24 @@
 			if (degrees >= 0 && degrees <= 90) {
 				if (upDown) {
 					roboX+=calc_distance_cos(90);
-					roboY-=calc_distance_sin(90);
-				} else if (downDown) {
-					roboX-=calc_distance_cos(90);
-					roboY+=calc_distance_sin(90);
-				}			
+					roboY-=calc_distance_sin(90);	
+				}
 			} else if (degrees > 90 && degrees <= 180) {
 				if (upDown) {
 					roboX+=calc_distance_sin(180);
-					roboY+=calc_distance_cos(180);
-				} else if (downDown) {
-					roboX-=calc_distance_sin(180);
-					roboY-=calc_distance_cos(180);
-				}
+					roboY+=calc_distance_cos(180);	
+				}			
 			} else if (degrees > 180 && degrees <= 270) {
 				if (upDown) {
 					roboX-=calc_distance_cos(270);
-					roboY+=calc_distance_sin(270);
-				} else if (downDown) {
-					roboX+=calc_distance_cos(270);
-					roboY-=calc_distance_sin(270);
-				}
+					roboY+=calc_distance_sin(270);	
+				}				
 			} else if (degrees > 270 && degrees <= 360) {
 				if (upDown) {
 					roboX-=calc_distance_sin(360);
 					roboY-=calc_distance_cos(360);
-				} else if (downDown) {
-					roboX+=calc_distance_sin(360);
-					roboY+=calc_distance_cos(360);
 				}
-			}				
+			}							
 		}
 
 		function calc_distance_sin(val)
@@ -708,7 +690,7 @@
 			return val;
 		}
 
- 		function check_inpath_free_space(lang)
+ 		function check_inpath_free_space()
 		{
 			temp_input = "";
 			if (lang == 'e') {
@@ -734,11 +716,11 @@
 		}
 
 		// generate new path
-		function generate_path(lang)
+		function generate_path()
 		{
 				document.getElementById('out_path').value 			= "";
 				document.getElementById('out_path-bg').value 		= "";
-				check_inpath_free_space(lang);		
+				check_inpath_free_space();		
 				document.getElementById('path').disabled  		 	= true;	
 				document.getElementById('replace_path').disabled 	= true;	
 				document.getElementById('path-bg').disabled 		= true;	
@@ -790,7 +772,7 @@
 			clear();	
 
 			if (crash) {		
-				crash_mess('e');
+				crash_mess();
 			}
 			ctx.fillStyle	= objectColor;
 			ctx.save();		
@@ -823,9 +805,11 @@
 			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth/2, 10);
 
 			/* Wheel Animation */
+			
 			for (i = 10; i <= 90; i+=10) {
 				drawWheelLines(i);
 			} 			
+
 		}
 
 		function drawWheelLines(hei)
@@ -850,7 +834,7 @@
 			document.getElementById('robo_path-bg').value = document.getElementById('out_path-bg').value;	
 		}
 
-		function crash_mess(lang)
+		function crash_mess()
 		{
 			ctx.fillStyle = "white";	
 			if (lang == 'e') {
@@ -1027,8 +1011,6 @@
 				leftDown = true;
 			else if (evt.keyCode == 38)
 				upDown = true;
-			else if (evt.keyCode == 40)
-				downDown = true;
 		}
 
 		function onKeyUp(evt) 
@@ -1038,9 +1020,7 @@
 			else if (evt.keyCode == 37)
 				leftDown = false;
 			else if (evt.keyCode == 38)
-				upDown = false;
-			else if (evt.keyCode == 40)
-				downDown = false;
+				upDown = false;			
 		}
 
 		document.addEventListener('keydown',onKeyDown);
@@ -1048,7 +1028,7 @@
 
 		var ar=new Array(33,34,35,36,37,38,39,40);
 		// function to disable the scrolling when pressing the arrow keys.
-		
+
 		$(document).keydown(function(e) 
 		{
 		     var key = e.which;

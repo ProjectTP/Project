@@ -166,7 +166,7 @@
 
 					<tr>
 						<th  class = "wel" style = "border-radius: 0px 0px 10px 10px; border-top : 0px; padding: 10px;">
-							<a id = "langchange" onclick = "javascript:hiding('div.welcome-en'); javascript:showing('div.welcome-bg');">
+							<a id = "langchange" onclick = "javascript:hiding('div.welcome-en'); javascript:showing('div.welcome-bg'); lang='b';">
 								Българска версия
 								<img src = "img/bg.png" width = 35 height = 35 align = "top"/>
 							</a>
@@ -241,7 +241,7 @@
 					</tr>
 					<tr>
 						<th  class = "wel" style = "border-top: 0px; padding: 10px; border-radius: 0px 0px 10px 10px;">
-							<a id = "langchange" onclick = "javascript:showing('div.welcome-en'); javascript:hiding('div.welcome-bg');">
+							<a id = "langchange" onclick = "javascript:showing('div.welcome-en'); javascript:hiding('div.welcome-bg'); lang='e';">
 								English version
 								<img src = "img/en.png" width = 35 height = 35/>
 							</a>
@@ -281,7 +281,7 @@
 			<center>
 				<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.play-en'); play_page=true; change_page();" style = "width: 180px;">Go to Play Page</a>
 
-				<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.simulate-bg');" style = "width: 180px;">Change language</a>
+				<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.simulate-bg'); lang='b';" style = "width: 180px;">Change language</a>
 			</center>
 
 			<br/>
@@ -299,7 +299,7 @@
 				    	onmouseout="HideText('height-info'); return true;"/></td>
 				</tr>
 				<tr>
-				    <td><button  onclick ="resize('e')"> Resize! </button></td>
+				    <td><button  onclick ="resize()"> Resize! </button></td>
 					<td><button  onclick ="reset()"> Reset! </button></td>
 				</tr>
 				<tr>
@@ -323,8 +323,8 @@
 				    	onmouseout="HideText('heightw-info'); return true;"/></td>
 				</tr>
 				<tr>
-					<td><button  onclick ="robo_resize('e')"> Resize! </button></td>
-					<td><button  onclick ="wheel_resize('e')" > Resize! </button></td>
+					<td><button  onclick ="robo_resize()"> Resize! </button></td>
+					<td><button  onclick ="wheel_resize()" > Resize! </button></td>
 				</tr>
 				<tr>
 					<td><button  onclick ="robo_reset()"> Reset! </button></td>
@@ -347,7 +347,7 @@
 			<center>
 				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.play-bg'); play_page=true; change_page();" style = "width: 180px;">Страница за игра</a>
 
-				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.simulate-en'); " style = "width: 180px;">Смени езика</a>
+				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.simulate-en'); lang='e'; " style = "width: 180px;">Смени езика</a>
 			</center>
 
 			<br/>
@@ -365,7 +365,7 @@
 			    		onmouseout="HideText('height-info-bg'); return true;"/></td>
 				</tr>
 				<tr>
-				    <td><button  onclick ="resize('b')"> Преоразмери! </button></td>
+				    <td><button  onclick ="resize()"> Преоразмери! </button></td>
 					<td><button  onclick ="reset()"> Възстанови! </button></td>
 				</tr>
 				<tr>
@@ -389,8 +389,8 @@
 			    		onmouseout="HideText('heightw-info-bg'); return true;"/></td>
 				</tr>
 				<tr>
-					<td><button  onclick ="robo_resize('b')"> Преоразмери! </button></td>
-					<td><button  onclick ="wheel_resize('b')" > Преоразмери! </button></td>
+					<td><button  onclick ="robo_resize()"> Преоразмери! </button></td>
+					<td><button  onclick ="wheel_resize()" > Преоразмери! </button></td>
 				</tr>
 				<tr>
 					<td><button  onclick ="robo_reset()"> Възстанови! </button></td>
@@ -414,7 +414,7 @@
 			<center>
 				<a class = "switch" onclick = "javascript:hiding('div.play-en'); javascript:showing('div.simulate-en'); play_page=false; change_page();" style = "width: 180px;">Go to Simulation Page</a>
 
-				<a class = "switch" onclick = "javascript:hiding('div.play-en'); javascript:showing('div.play-bg');" style = "width: 180px;">Change language</a>
+				<a class = "switch" onclick = "javascript:hiding('div.play-en'); javascript:showing('div.play-bg'); lang='b';" style = "width: 180px;">Change language</a>
 			</center>
 
 			<br/>
@@ -433,7 +433,7 @@
 			<center>
 				<a class = "switch" onclick = "javascript:hiding('div.play-bg'); javascript:showing('div.simulate-bg'); play_page=false; change_page();" style = "width: 180px;">Страница за симулация</a>
 
-				<a class = "switch" onclick = "javascript:hiding('div.play-bg'); javascript:showing('div.play-en'); " style = "width: 180px;">Смени езика</a>
+				<a class = "switch" onclick = "javascript:hiding('div.play-bg'); javascript:showing('div.play-en');lang='e'; " style = "width: 180px;">Смени езика</a>
 			</center>
 
 			<br/>			
@@ -524,7 +524,7 @@ AB 120
 						</tr>
 						<tr>
 							<td>
-								<button  id="path" onclick ="generate_path('e'); get_new_step(); 
+								<button  id="path" onclick ="generate_path(); get_new_step(); 
 								javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;
 								javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;"> Submit </button>
 								<button  id="replace_path" onclick ="replace_path()"> Replace in input </button>
@@ -627,7 +627,7 @@ AB 120
 							</tr>
 							<tr>
 								<td>
-									<button  id="path-bg" onclick ="generate_path('b'); get_new_step(); 
+									<button  id="path-bg" onclick ="generate_path(); get_new_step(); 
 									javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;
 									javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;"> Генерирай </button>
 									<button  id="replace_path-bg" onclick ="replace_path('b')"> Замести в полето </button>
