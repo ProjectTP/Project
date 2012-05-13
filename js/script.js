@@ -609,8 +609,10 @@
 			temp_input = "";
 			if (lang == 'e') {
 				temp = document.getElementById('robo_path').value;
+				document.getElementById('robo_path-bg').value   = document.getElementById('robo_path').value;
 			} else if (lang == 'b') {
 				temp = document.getElementById('robo_path-bg').value;
+				document.getElementById('robo_path').value   = document.getElementById('robo_path-bg').value;
 			} else {
 				alert('Something went wrong. Please refresh the page and try again.');
 				return;
@@ -630,12 +632,14 @@
 		// generate new path
 		function generate_path(lang)
 		{
-				document.getElementById('out_path').value = "";
-				document.getElementById('out_path-bg').value = "";
+				document.getElementById('out_path').value 			= "";
+				document.getElementById('out_path-bg').value 		= "";
 				check_inpath_free_space(lang);		
-				document.getElementById('path').disabled  		 = true;	
-				document.getElementById('replace_path').disabled = true;	
-				document.getElementById('out_path').style.color  = "green";				
+				document.getElementById('path').disabled  		 	= true;	
+				document.getElementById('replace_path').disabled 	= true;	
+				document.getElementById('path-bg').disabled 		= true;	
+				document.getElementById('replace_path-bg').disabled = true;
+				document.getElementById('out_path').style.color  	= "green";				
 				document.getElementById('out_path-bg').style.color  = "green";
 				get_path = true;		
 				start 	 = true;
@@ -777,19 +781,21 @@
 			document.getElementById('out_path').value 	 += '\n' + "Stoped!";			
 			document.getElementById('out_path-bg').value += '\n' + "Спряно!";			
 			stop_simulation();
-		}		
+		}
 
 		function stop_simulation()
 		{
 			w = 0;
-			document.getElementById('path').disabled 		 = false;	
-			document.getElementById('replace_path').disabled = false;
-			document.getElementById('play').disabled 		 = true;	
-			document.getElementById('pause').disabled 		 = true;	
-			document.getElementById('stop').disabled 		 = true;
-			document.getElementById('play-bg').disabled 	 = true;	
-			document.getElementById('pause-bg').disabled 	 = true;	
-			document.getElementById('stop-bg').disabled 	 = true;
+			document.getElementById('path').disabled 			 = false;	
+			document.getElementById('replace_path').disabled	 = false;
+			document.getElementById('path-bg').disabled 		 = false;	
+			document.getElementById('replace_path-bg').disabled  = false;
+			document.getElementById('play').disabled 			 = true;	
+			document.getElementById('pause').disabled 			 = true;	
+			document.getElementById('stop').disabled 			 = true;
+			document.getElementById('play-bg').disabled 		 = true;	
+			document.getElementById('pause-bg').disabled 		 = true;	
+			document.getElementById('stop-bg').disabled 		 = true;
 			get_path = false;
 			distance = 0;
 			pause_ 	 = false;

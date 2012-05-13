@@ -279,7 +279,7 @@
 		<center>
 			<a class = "switch" onclick = "window.location.href='WebSimPlay.html'" style = "width: 180px;">Go to Play Page</a>
 
-			<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.simulate-bg'); " style = "width: 180px;">Change language</a>
+			<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.simulate-bg');" style = "width: 180px;">Change language</a>
 		</center>
 
 		<br/>
@@ -346,7 +346,7 @@
 			<center>
 				<a class = "switch" onclick = "window.location.href='WebSimPlay.html'" style = "width: 180px;">Страница за игра</a>
 
-				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.simulate-en');" style = "width: 180px;">Смени езика</a>
+				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.simulate-en'); " style = "width: 180px;">Смени езика</a>
 			</center>
 
 			<br/>
@@ -442,7 +442,7 @@
 						<tr>
 							<td>
 
-								<textarea  id="robo_path"  placeholder="In path" >AB 30
+								<textarea  id="robo_path"  placeholder="Robo path" >AB 300
 A 300
 B 600
 AB 120
@@ -458,15 +458,21 @@ AB 120
 						<tr>
 							<td>
 								<button  id="play" onclick ="pause_=false;	document.getElementById('play').disabled=true;	
-								document.getElementById('pause').disabled=false;document.getElementById('stop').disabled=false;"> Play </button>
+								document.getElementById('pause').disabled=false;document.getElementById('stop').disabled=false;
+								document.getElementById('play-bg').disabled=true; document.getElementById('pause-bg').disabled=false;
+								document.getElementById('stop-bg').disabled=false;"> Play </button>
 								<button  id="pause" onclick ="pause_=true;	document.getElementById('play').disabled=false;	
-								document.getElementById('pause').disabled=true;	document.getElementById('stop').disabled=false;"> Pause </button>
+								document.getElementById('pause').disabled=true;	document.getElementById('stop').disabled=false;
+								document.getElementById('play-bg').disabled=false;	document.getElementById('pause-bg').disabled=true;
+								document.getElementById('stop-bg').disabled=false;"> Pause </button>
 								<button  id="stop" onclick ="stopgen();"> Stop </button>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<button  id="path" onclick ="generate_path('e'); get_new_step(); javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;"> Submit </button>
+								<button  id="path" onclick ="generate_path('e'); get_new_step(); 
+								javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;
+								javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;"> Submit </button>
 								<button  id="replace_path" onclick ="replace_path()"> Replace in input </button>
 							</td>
 						</tr>
@@ -523,14 +529,14 @@ AB 120
 							<tr>
 								<td>
 	
-									<textarea  id="robo_path-bg"  placeholder="In path" >AB 30
-A 30
-B 60
-AB 12
-AB 30
-A 30
-B 60
-AB 12
+									<textarea  id="robo_path-bg"  placeholder="Път на робота" >AB 300
+A 300
+B 600
+AB 120
+AB 300
+A 300
+B 600
+AB 120
 									</textarea>
 									<textarea  id="out_path-bg" placeholder="Път - стъпка по стъпка" rows="12"></textarea>
 	
@@ -551,8 +557,10 @@ AB 12
 							</tr>
 							<tr>
 								<td>
-									<button  id="path" onclick ="generate_path('b'); get_new_step(); javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;"> Генерирай </button>
-									<button  id="replace_path" onclick ="replace_path('b')"> Замести в полето </button>
+									<button  id="path-bg" onclick ="generate_path('b'); get_new_step(); 
+									javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;
+									javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;"> Генерирай </button>
+									<button  id="replace_path-bg" onclick ="replace_path('b')"> Замести в полето </button>
 								</td>
 							</tr>
 						</tr>
