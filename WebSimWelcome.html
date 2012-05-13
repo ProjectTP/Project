@@ -144,7 +144,7 @@
 					</tr>
 					<tr>
 						<td class="link">
-							<button onclick = "window.location.href='WebSimPlay.html'" class = "welcome">
+							<button onclick = "javascript:hiding('div.welcome-en'); javascript:showing('div.canvass'); javascript:showing('h1.webslogo'); javascript:showing('div.play-en');" class = "welcome">
 								Play
 							</button>
 						</td>
@@ -220,7 +220,7 @@
 					</tr>
 					<tr>
 						<td class="link">
-							<button onclick = "window.location.href='WebSimPlay.html'" class = "welcome" style = "font-size: 20px;">
+							<button onclick = "javascript:hiding('div.welcome-bg'); javascript:showing('div.canvass'); javascript:showing('h1.webslogo'); javascript:showing('div.play-bg');" class = "welcome" style = "font-size: 20px;">
 								Разгледай
 							</button>
 						</td>
@@ -270,72 +270,72 @@
 
 		  	<div class = "simulate-en" style = "display:none">
 
-		<h1 class = "webslogo"> 
+			<h1 class = "webslogo"> 
+				<center>
+					<a class = "logo" onclick = "javascript:hiding('div.simulate-en');javascript:hiding('div.canvass'); javascript:showing('div.welcome-en');" >WebSim Project</a>
+				</center> 
+			</h1>
+
 			<center>
-				<a class = "logo" onclick = "javascript:hiding('div.simulate-en');javascript:hiding('div.canvass'); javascript:showing('div.welcome-en');" >WebSim Project</a>
-			</center> 
-		</h1>
+				<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.play-en');" style = "width: 180px;">Go to Play Page</a>
 
-		<center>
-			<a class = "switch" onclick = "window.location.href='WebSimPlay.html'" style = "width: 180px;">Go to Play Page</a>
+				<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.simulate-bg');" style = "width: 180px;">Change language</a>
+			</center>
 
-			<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.simulate-bg');" style = "width: 180px;">Change language</a>
-		</center>
+			<br/>
 
-		<br/>
-
-		<table id = "tableform">
-		  	<tr>
-		    	<th colspan="2">Canvas</th>
-		  	</tr>
-			<tr>
-			    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"
-			    	onclick = "HideText('width-info'); return true;" onmouseover="ShowText('width-info'); return true;" 
-			    	onmouseout="HideText('width-info'); return true;"/></td>
-			    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"
-			    	onclick = "HideText('height-info'); return true;" onmouseover="ShowText('height-info'); return true;" 
-			    	onmouseout="HideText('height-info'); return true;"/></td>
-			</tr>
-			<tr>
-			    <td><button  onclick ="resize('e')"> Resize! </button></td>
-				<td><button  onclick ="reset()"> Reset! </button></td>
-			</tr>
-			<tr>
-				<th>Robot</th>
-				<th>Wheels</th>
-			</tr>
-			<tr>
-				<td><input type="number" id="width_r" min="20" max = "100" step = "1" placeholder = "Width"
-					onclick = "HideText('widthr-info'); return true;" onmouseover="ShowText('widthr-info'); return true;" 
-			    	onmouseout="HideText('widthr-info'); return true;"/></td>
-				<td><input type="number" id="width_w" min="5" max = "15" step = "1" placeholder = "Width"
-					onclick = "HideText('widthw-info'); return true;" onmouseover="ShowText('widthw-info'); return true;" 
-			    	onmouseout="HideText('widthw-info'); return true;"/></td>
-			</tr>
-			<tr>
-				<td><input type="number" id="height_r" min="20" max = "150" step = "1" placeholder = "Height"
-					onclick = "HideText('heightr-info'); return true;" onmouseover="ShowText('heightr-info'); return true;" 
-			    	onmouseout="HideText('heightr-info'); return true;"/></td>
-				<td><input type="number" id="height_w" min="10" max = "100" step = "1" placeholder = "Height"
-					onclick = "HideText('heightw-info'); return true;" onmouseover="ShowText('heightw-info'); return true;" 
-			    	onmouseout="HideText('heightw-info'); return true;"/></td>
-			</tr>
-			<tr>
-				<td><button  onclick ="robo_resize('e')"> Resize! </button></td>
-				<td><button  onclick ="wheel_resize('e')" > Resize! </button></td>
-			</tr>
-			<tr>
-				<td><button  onclick ="robo_reset()"> Reset! </button></td>
-				<td><button  onclick ="wheel_reset()" > Reset! </button></td>
-			</tr>
-		</table>
-	</div>
+			<table id = "tableform">
+			  	<tr>
+			    	<th colspan="2">Canvas</th>
+			  	</tr>
+				<tr>
+				    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"
+				    	onclick = "HideText('width-info'); return true;" onmouseover="ShowText('width-info'); return true;" 
+				    	onmouseout="HideText('width-info'); return true;"/></td>
+				    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"
+				    	onclick = "HideText('height-info'); return true;" onmouseover="ShowText('height-info'); return true;" 
+				    	onmouseout="HideText('height-info'); return true;"/></td>
+				</tr>
+				<tr>
+				    <td><button  onclick ="resize('e')"> Resize! </button></td>
+					<td><button  onclick ="reset()"> Reset! </button></td>
+				</tr>
+				<tr>
+					<th>Robot</th>
+					<th>Wheels</th>
+				</tr>
+				<tr>
+					<td><input type="number" id="width_r" min="20" max = "100" step = "1" placeholder = "Width"
+						onclick = "HideText('widthr-info'); return true;" onmouseover="ShowText('widthr-info'); return true;" 
+				    	onmouseout="HideText('widthr-info'); return true;"/></td>
+					<td><input type="number" id="width_w" min="5" max = "15" step = "1" placeholder = "Width"
+						onclick = "HideText('widthw-info'); return true;" onmouseover="ShowText('widthw-info'); return true;" 
+				    	onmouseout="HideText('widthw-info'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><input type="number" id="height_r" min="20" max = "150" step = "1" placeholder = "Height"
+						onclick = "HideText('heightr-info'); return true;" onmouseover="ShowText('heightr-info'); return true;" 
+				    	onmouseout="HideText('heightr-info'); return true;"/></td>
+					<td><input type="number" id="height_w" min="10" max = "100" step = "1" placeholder = "Height"
+						onclick = "HideText('heightw-info'); return true;" onmouseover="ShowText('heightw-info'); return true;" 
+				    	onmouseout="HideText('heightw-info'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_resize('e')"> Resize! </button></td>
+					<td><button  onclick ="wheel_resize('e')" > Resize! </button></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_reset()"> Reset! </button></td>
+					<td><button  onclick ="wheel_reset()" > Reset! </button></td>
+				</tr>
+			</table>
+		</div>
 
 
 
 
-<div class = "simulate-bg" style = "display:none;">
-		
+		<div class = "simulate-bg" style = "display:none;">
+				
 			<h1 class = "webslogo-bg"> 
 				<center>
 					<a class = "logo" onclick = "javascript:hiding('div.simulate-bg'); javascript:hiding('div.canvass'); javascript:showing('div.welcome-bg');" >WebSim Project</a>
@@ -344,9 +344,139 @@
 			
 	
 			<center>
-				<a class = "switch" onclick = "window.location.href='WebSimPlay.html'" style = "width: 180px;">Страница за игра</a>
+				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.play-bg');" style = "width: 180px;">Страница за игра</a>
 
 				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.simulate-en'); " style = "width: 180px;">Смени езика</a>
+			</center>
+
+			<br/>
+
+			<table id = "tableform">
+			  	<tr>
+			    	<th colspan="2">Поле</th>
+			  	</tr>
+				<tr>
+				    <td><input type="number" id="width1-bg" min="150" max = "1000" step = "25" placeholder = "Ширина"
+				    	onclick = "HideText('width-info-bg'); return true;" onmouseover="ShowText('width-info-bg'); return true;" 
+			    		onmouseout="HideText('width-info-bg'); return true;"/></td>
+				    <td><input type="number" id="height1-bg" min="150" max = "1000" step = "25" placeholder = "Дължина"
+				    	onclick = "HideText('height-info-bg'); return true;" onmouseover="ShowText('height-info-bg'); return true;" 
+			    		onmouseout="HideText('height-info-bg'); return true;"/></td>
+				</tr>
+				<tr>
+				    <td><button  onclick ="resize('b')"> Преоразмери! </button></td>
+					<td><button  onclick ="reset()"> Възстанови! </button></td>
+				</tr>
+				<tr>
+					<th>Робот</th>
+					<th>Колела</th>
+				</tr>
+				<tr>
+					<td><input type="number" id="width_r-bg" min="20" max = "100" step = "1" placeholder = "Ширина"
+						onclick = "HideText('widthr-info-bg'); return true;" onmouseover="ShowText('widthr-info-bg'); return true;" 
+			    		onmouseout="HideText('widthr-info-bg'); return true;"/></td>
+					<td><input type="number" id="width_w-bg" min="5" max = "15" step = "1" placeholder = "Ширина"
+						onclick = "HideText('widthw-info-bg'); return true;" onmouseover="ShowText('widthw-info-bg'); return true;" 
+			    		onmouseout="HideText('widthw-info-bg'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><input type="number" id="height_r-bg" min="20" max = "150" step = "1" placeholder = "Дължина"
+						onclick = "HideText('heightr-info-bg'); return true;" onmouseover="ShowText('heightr-info-bg'); return true;" 
+			    		onmouseout="HideText('heightr-info-bg'); return true;"/></td>
+					<td><input type="number" id="height_w-bg" min="10" max = "100" step = "1" placeholder = "Дължина"
+						onclick = "HideText('heightw-info-bg'); return true;" onmouseover="ShowText('heightw-info-bg'); return true;" 
+			    		onmouseout="HideText('heightw-info-bg'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_resize('b')"> Преоразмери! </button></td>
+					<td><button  onclick ="wheel_resize('b')" > Преоразмери! </button></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_reset()"> Възстанови! </button></td>
+					<td><button  onclick ="wheel_reset()" > Възстанови! </button></td>
+				</tr>
+			</table>
+		</div>
+
+
+		<!-- English play page -->
+
+
+		<div class = "play-en" style = "display:none">
+			<h1 class = "webslogo"> 
+				<center>
+					<a class = "logo" onclick = "javascript:hiding('div.play-en');javascript:hiding('div.canvass'); javascript:showing('div.welcome-en');" >WebSim Project</a>
+				</center> 
+			</h1>
+
+			<center>
+				<a class = "switch" onclick = "javascript:hiding('div.play-en'); javascript:showing('div.simulate-en');" style = "width: 180px;">Go to Simulation Page</a>
+
+				<a class = "switch" onclick = "javascript:hiding('div.play-en'); javascript:showing('div.play-bg');" style = "width: 180px;">Change language</a>
+			</center>
+
+			<br/>
+
+
+			<table id = "tableform">
+			  	<tr>
+			    	<th colspan="2">Canvas</th>
+			  	</tr>
+				<tr>
+				    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"
+				    	onclick = "HideText('width-info'); return true;" onmouseover="ShowText('width-info'); return true;" 
+				    	onmouseout="HideText('width-info'); return true;"/></td>
+				    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"
+				    	onclick = "HideText('height-info'); return true;" onmouseover="ShowText('height-info'); return true;" 
+				    	onmouseout="HideText('height-info'); return true;"/></td>
+				</tr>
+				<tr>
+				    <td><button  onclick ="resize('e')"> Resize! </button></td>
+					<td><button  onclick ="reset()"> Reset! </button></td>
+				</tr>
+				<tr>
+					<th>Robot</th>
+					<th>Wheels</th>
+				</tr>
+				<tr>
+					<td><input type="number" id="width_r" min="20" max = "100" step = "1" placeholder = "Width"
+						onclick = "HideText('widthr-info'); return true;" onmouseover="ShowText('widthr-info'); return true;" 
+				    	onmouseout="HideText('widthr-info'); return true;"/></td>
+					<td><input type="number" id="width_w" min="5" max = "15" step = "1" placeholder = "Width"
+						onclick = "HideText('widthw-info'); return true;" onmouseover="ShowText('widthw-info'); return true;" 
+				    	onmouseout="HideText('widthw-info'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><input type="number" id="height_r" min="20" max = "150" step = "1" placeholder = "Height"
+						onclick = "HideText('heightr-info'); return true;" onmouseover="ShowText('heightr-info'); return true;" 
+				    	onmouseout="HideText('heightr-info'); return true;"/></td>
+					<td><input type="number" id="height_w" min="10" max = "100" step = "1" placeholder = "Height"
+						onclick = "HideText('heightw-info'); return true;" onmouseover="ShowText('heightw-info'); return true;" 
+				    	onmouseout="HideText('heightw-info'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_resize('e')"> Resize! </button></td>
+					<td><button  onclick ="wheel_resize('e')" > Resize! </button></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_reset()"> Reset! </button></td>
+					<td><button  onclick ="wheel_reset()" > Reset! </button></td>
+				</tr>
+			</table>
+		</div>
+
+		<div class = "play-bg" style = "display:none">
+			<h1 class = "webslogo"> 
+				<center>
+					<a class = "logo" onclick = "javascript:hiding('div.play-bg'); javascript:hiding('div.canvass'); javascript:showing('div.welcome-bg');" >WebSim Project</a>
+				</center> 
+			</h1>
+			
+	
+			<center>
+				<a class = "switch" onclick = "javascript:hiding('div.play-bg'); javascript:showing('div.simulate-bg');" style = "width: 180px;">Страница за симулация</a>
+
+				<a class = "switch" onclick = "javascript:hiding('div.play-bg'); javascript:showing('div.play-en'); " style = "width: 180px;">Смени езика</a>
 			</center>
 
 			<br/>
@@ -403,46 +533,54 @@
 
 
 
+		<!--  $$$$$$$$$$$$$$$$$$$$ CANVAS $$$$$$$$$$$$$$$$$$$$$$$-->
 
 
-	<div class = "canvass" style = "display:none">
-		<center>
-			<canvas id="my_canvas" width="450" height="450"></canvas>
-		</center>
-	</div>
 
-	<div class = "simulate-en" style = "display:none">
+		<div class = "canvass" style = "display:none">
+			<center>
+				<canvas id="my_canvas" width="450" height="450"></canvas>
+			</center>
+		</div>
 
-		<center>
-			<table id = "tablespeed">
-				<tr>
-					<td colspan = "3"><button id="startb" onclick="start=false; resetpos(); "> Reset position </button></td>
-				</tr>
-				<tr>
-					<th colspan = "3">Speed</th>
-				</tr>
-				<tr>
-					<td>
-						<button id="but1" onclick="init(3); javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false;">Slow
-						</button>
-					</td>
-					<td>
-						<button id="but2" onclick="init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false;">Normal
-						</button>
-					</td>
-					<td>
-						<button id="but3" onclick="init(9); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; javascript:document.getElementById('but3-bg').disabled=true;">Fast
-						</button>
-					</td>
-				</tr>
-				</table>				
-				<table  id = "tablepath">
+
+
+
+
+		<div class = "simulate-en" style = "display:none">
+
+			<center>
+
+				<table id = "tablespeed">
 					<tr>
-						<th colspan = "3">Path</th> 
-						<tr>
-							<td>
+						<td colspan = "3"><button id="startb" onclick="start=false; resetpos(); "> Reset position </button></td>
+					</tr>
+					<tr>
+						<th colspan = "3">Speed</th>
+					</tr>
+					<tr>
+						<td>
+							<button id="but1" onclick="init(3); javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false;">Slow
+							</button>
+						</td>
+						<td>
+							<button id="but2" onclick="init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false;">Normal
+							</button>
+						</td>
+						<td>
+							<button id="but3" onclick="init(9); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; javascript:document.getElementById('but3-bg').disabled=true;">Fast
+							</button>
+						</td>
+					</tr>
+					</table>				
 
-								<textarea  id="robo_path"  placeholder="Robo path" >AB 300
+					<table  id = "tablepath">
+						<tr>
+							<th colspan = "3">Path</th> 
+							<tr>
+								<td>
+
+									<textarea  id="robo_path"  placeholder="Robo path" >AB 300
 A 300
 B 600
 AB 120
@@ -480,24 +618,24 @@ AB 120
 				</table>
 				
 				
-  		</center>
-  		<br/>
+	  		</center>
+	  		<br/>
 
-  		<footer>
-  			<center>&copy; 2012 WebSim Project. Designed and coded by Konstantin Todorov and Anton Dudov. All rights reserved.</center>
-  		</footer>
-		
-		<div id="dialog-overlay"></div>
-		<div id="dialog-box">
-			<div class="dialog-content">
-				<div id="dialog-message"></div>
-				<a href="#" class="button">Close</a>
+	  		<footer>
+	  			<center>&copy; 2012 WebSim Project. Designed and coded by Konstantin Todorov and Anton Dudov. All rights reserved.</center>
+	  		</footer>
+			
+			<div id="dialog-overlay"></div>
+			<div id="dialog-box">
+				<div class="dialog-content">
+					<div id="dialog-message"></div>
+					<a href="#" class="button">Close</a>
+				</div>
 			</div>
+
 		</div>
 
-	</div>
-
-<div class = "simulate-bg" style = "display:none">
+		<div class = "simulate-bg" style = "display:none">
 			<center>
 				<table id = "tablespeed">
 					<tr>
@@ -581,25 +719,127 @@ AB 120
 					<a href="#" class="button-bg">Затвори</a>
 				</div>
 			</div>
-			</div>
+		</div>
 			
+		<!-- ###################################################    ENGLISH PLAY PAGE   ##################################################  -->
+
+		
+		<div class = "play-en" style = "display:none">
+
+			<center>
+				<table id = "tablespeed">
+					<tr>
+						<td colspan = "3"><button id="startb" onclick="start=false; resetpos(); "> Reset position </button></td>
+					</tr>
+					<tr>
+						<th colspan = "3">Speed</th>
+					</tr>
+					<tr>
+						<td>
+							<button id="but1" onclick="init(3); javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false;">Slow
+							</button>
+						</td>
+						<td>
+							<button id="but2" onclick="init(6); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false;">Normal
+							</button>
+						</td>
+						<td>
+							<button id="but3" onclick="init(9); javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; javascript:document.getElementById('but3-bg').disabled=true;">Fast
+							</button>
+						</td>
+					</tr>
+				</table>	
+	  		</center>
+
+	  		<br/>
+
+	  		<footer>
+	  			<center>&copy; 2012 WebSim Project. Designed and coded by Konstantin Todorov and Anton Dudov. All rights reserved.</center>
+	  		</footer>
+			
+			<div id="dialog-overlay"></div>
+			<div id="dialog-box">
+				<div class="dialog-content">
+					<div id="dialog-message"></div>
+					<a href="#" class="button">Close</a>
+				</div>
+			</div>
+
+		</div>
+
+
+
+
+		<div class = "play-bg" style = "display:none">
+
+			<center>
+				<table id = "tablespeed">
+					<tr>
+						<td colspan = "3"><button id="startb" onclick="start=false; resetpos(); "> Възстанови позиция </button></td>
+					</tr>
+					<tr>
+						<th colspan = "3">Скорост</th>
+					</tr>
+					<tr>
+						<td>
+							<button id="but1-bg" onclick="init(3); javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; javascript:document.getElementById('but1').disabled=true; javascript:document.getElementById('but3').disabled=false; javascript:document.getElementById('but2').disabled=false;">Бавно
+							</button>
+						</td>
+						<td>
+							<button id="but2-bg" disabled onclick="init(6); javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=true; javascript:document.getElementById('but3').disabled=false;">Нормално
+							</button>
+						</td>
+						<td>
+							<button id="but3-bg" onclick="init(9); javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; javascript:document.getElementById('but3-bg').disabled=true; javascript:document.getElementById('but1').disabled=false; javascript:document.getElementById('but2').disabled=false; javascript:document.getElementById('but3').disabled=true;">Бързо
+							</button>
+
+						</td>
+					</tr>
+				</table>
+	  		</center>
+
+	  		<br/>
+	
+	  		<footer>
+	  			<center>&copy; 2012 WebSim Project. Проектиран и написан от Константин Тодоров и Антон Дудов. Всички права запазени.</center>
+	  		</footer>
+
+	  		<div id="dialog-overlay-bg"></div>
+			<div id="dialog-box-bg">
+				<div class="dialog-content-bg">
+					<div id="dialog-message-bg"></div>
+					<a href="#" class="button-bg">Затвори</a>
+				</div>
+			</div>
+
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		<div class = "tests" style = "display: none">
-
 			<h1 class = "webslogo"> 
-			<center>
-				<a class = "logo" href = "WebSimWelcome.html" >WebSim Project</a>
-			</center> 
-		</h1>
-
-
-		  <h1 id="qunit-header">QUnit example</h1>
-  <h2 id="qunit-banner"></h2>
-  <div id="qunit-testrunner-toolbar"></div>
-  <h2 id="qunit-userAgent"></h2>
-  <ol id="qunit-tests"></ol>
-  <div id="qunit-fixture">test markup, will be hidden</div>
-
+				<center>
+					<a class = "logo" href = "WebSimWelcome.html" >WebSim Project</a>
+				</center> 
+			</h1>
+			<h1 id="qunit-header">QUnit example</h1>
+			<h2 id="qunit-banner"></h2>
+			<div id="qunit-testrunner-toolbar"></div>
+			<h2 id="qunit-userAgent"></h2>
+			<ol id="qunit-tests"></ol>
+			<div id="qunit-fixture">test markup, will be hidden</div>
 		</div>
 
 
