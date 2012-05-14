@@ -105,6 +105,11 @@
 			resetpos();
 		}
 
+		function change_lang(val)
+		{
+			lang=val;
+		}
+
 		function popup(message) 
 		{					  
 				var maskHeight = $(document).height();  
