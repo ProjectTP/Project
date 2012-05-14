@@ -15,7 +15,7 @@ function elemDisabled(val)
 
 function radianValue(val)
 {
-  return val == (Math.PI/180) * 0;;
+  return val == (Math.PI/180) * 0;
 }
 
 function roboXValue(val)
@@ -35,22 +35,26 @@ function isEmpty(val)
 
 function rWidth(val)
 {
-  return val < 100 && val > 20
+  return val < 100 && val > 20;
 }
 
 function rHeight(val)
 {
-  return val < 150 && val > 20
+  return val < 150 && val > 20;
 }
 
 function wWidth(val)
 {
-  return val < 15 && val > 5
+  return val < 15 && val > 5;
 }
 
 function wHeight(val)
 {
-  return val < 100 && val > 10
+  return val < 100 && val > 10;
+}
+function notNull(val)
+{
+  return val > 0;
 }
 
 
@@ -73,26 +77,6 @@ function runTests() {
 
   test('Canvas Height', function() {
     equal(height,canvas.height,  'Height is ok.');
-  })
-
-  test('roboX Value', function () {
-    equal(roboX, width/2, 'roboX value is OK');
-  })
-
-  test('Left wheel X Value', function () {
-    equal(lWheelPosX, -roboWidth/2 - lWheelWidth, 'Left wheel X value is OK');
-  })
-
-  test('Left wheel Y Value', function () {
-    equal(lWheelPosY, -roboHeight/2 + roboHeight/8, 'Left wheel Y value is OK');
-  })
-
-  test('Right Wheel X Value', function () {
-    equal(rWheelPosX, roboWidth/2, 'Right Wheel X value is OK');
-  })
-
-  test('Right Wheel Y Value', function () {
-    equal(rWheelPosY, -roboHeight/2 + roboHeight/8, 'Right Wheel Y value is OK');
   })
 
   test('Motor A', function() {
@@ -149,5 +133,82 @@ function runTests() {
     ok(wHeight(lWheelHeight), 'Left Wheel Height value is OK');
     ok(wHeight(rWheelHeight), 'Right Wheel Height value is OK');
   })
+
+  test('Window Height and Width', function () {
+    ok(notNull($(document).height()), 'Window Height is OK');
+    ok(notNull($(window).width()), 'Window Width is OK');
+  })
+
+
+  test('reset_data function', function () {
+    reset_data();
+    equal(roboX, width/2, 'RoboX is OK');
+    equal(roboY, height/2, 'RoboY is OK');
+    equal(lWheelPosX, -roboWidth/2 - lWheelWidth, 'Left wheel X value is OK');
+    equal(lWheelPosY, -roboHeight/2 + roboHeight/8, 'Left wheel Y value is OK');
+    equal(rWheelPosX, roboWidth/2, 'Right Wheel X value is OK');
+    equal(rWheelPosY, -roboHeight/2 + roboHeight/8, 'Right Wheel Y value is OK');
+    equal(radian, (Math.PI/180) * 0, 'Radian is OK');
+    equal(submit_, false, 'submit_ is OK');
+    equal(start, false, 'start is OK');
+    equal(motorA, false, 'motorA is OK');
+    equal(motorB, false, 'motorB is OK');
+    equal(crash, false, 'crash is OK');
+    equal(pause_, false, 'pause is OK');
+    equal(resetpos_, false, 'resetpos_ is OK');
+    equal(stop_, false, 'stop_ is OK');
+    equal(resize_, false, 'resize_ is OK');
+    equal(last_step, 0, 'last_step is OK');
+    equal(distance, 0, 'distance is OK');
+  })
+
+  test('reset functuon', function() {
+    reset();
+    equal(resize_, true, 'resize_ is OK');
+    equal(width, 450, 'width is OK');
+    equal(canvas.width, width, 'canvas width is OK');
+    equal(height, 450, 'height is OK');
+    equal(canvas.height, height, 'canvas height is OK');
+    equal(document.getElementById('width1').value, "", 'width1 input is OK');
+    equal(document.getElementById('height1').value, "", 'height1 input is OK');
+    equal(document.getElementById('width1-bg').value, "", 'width1-bg input is OK');
+    equal(document.getElementById('height1-bg').value, "", 'height1-bg input is OK');
+  })
+
+  test('Textareas', function() {
+    generate_path('e');
+    equal(document.getElementById('out_path').value, "",'out_path is OK');
+    equal(document.getElementById('out_path-bg').value, "", 'out_path-bg is OK');
+    equal(document.getElementById('path').disabled, true, 'Path is OK');
+    equal(document.getElementById('replace_path').disabled, true, 'replace_path is OK');
+    equal(document.getElementById('path-bg').disabled, true, 'path-bg is OK');
+    equal(document.getElementById('replace_path-bg').disabled, true, 'replace_path-bg is OK');
+    equal(document.getElementById('out_path').style.color, "green", 'out_path color is OK');
+    equal(document.getElementById('out_path-bg').style.color, "green", 'out_path-bg color is OK');
+  })
+
+  test('calc_distance function', function() {
+    calc_distance();
+    equal(distance, ((rWheelHeight * 3.14)/360) * distance, 'distance is OK');
+  })
+
+  test('stop_simulation function', function() {
+    stop_simulation();
+    equal(document.getElementById('path').disabled, false, 'Path is OK');
+    equal(document.getElementById('replace_path').disabled, false, 'replace_path is OK');
+    equal(document.getElementById('path-bg').disabled, false, 'path-bg is OK');
+    equal(document.getElementById('replace_path-bg').disabled, false, 'replace_path-bg is OK');
+    equal(document.getElementById('play').disabled, true, 'play is OK');
+    equal(document.getElementById('pause').disabled, true, 'pause is OK');
+    equal(document.getElementById('stop').disabled, true, 'stop is OK');
+    equal(document.getElementById('play-bg').disabled, true, 'play-bg is OK');
+    equal(document.getElementById('pause-bg').disabled, true, 'pause-bg is OK');
+    equal(document.getElementById('stop-bg').disabled, true, 'stop-bg is OK');
+    equal(get_path, false, 'get_path is OK');
+    equal(distance, 0, 'distance is OK');
+    equal(pause_, false, 'pause_ is OK');
+    equal(stop_, true, 'stop_ is OK');
+  })
+
 
 }
