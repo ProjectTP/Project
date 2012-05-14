@@ -91,20 +91,7 @@
 		        }
 		    });
 		});
-		function showinfo(tag) {
-			if (document.getElementById(tag)) {
-				if (document.getElementById(tag).style.display != 'none') {
-					document.getElementById(tag).style.display = 'none';
-					document.getElementById('forus').innerHTML = 'For us &raquo;';
-					document.getElementById('forus-bg').innerHTML = 'За нас &raquo;';
-				}
-				else {
-					document.getElementById(tag).style.display = 'block';
-					document.getElementById('forus').innerHTML = 'For us &laquo;';
-					document.getElementById('forus-bg').innerHTML = 'За нас &laquo;';
-				}
-			}
-		}
+		
 
 		</script>
  
@@ -176,13 +163,38 @@
 						<br/>
 
 						<br/>
-						<a href = "#" id = "forus" onclick = "showinfo('info'); return false; ">
-							For us <span class = "raq">&raquo;</span></a>
+						<a href = "#" id = "forus" onclick = "showinfo(); return false; ">
+							Contacts <span class = "raq">&raquo;</span></a>
 						<br/>
 
 						<br/>
 
-						<div id = "info" style = "display:none"> Facebook: ... <br/> Skype: ... </div>
+						<div id = "info" style = "display:none">
+						<a href = "#" id = "face" onclick = "showface(); return false; ">
+							Facebook:
+						</a>
+						<table id = "faceinfo" class = "inform" style = "display:none">
+							<td>
+								<a href = "http://www.facebook.com/kztodorov" target='_blank'>Konstantin</a>
+							</td>
+							<td>
+								<a href = "http://www.facebook.com/anton.dudov.7" style = "padding-left: 45px;" target='_blank'>Anton</a>
+							</td>
+						</table>
+						<br/>
+						<a href = "#" id = "mail" onclick = "showmail(); return false; ">
+							Mail:
+						</a>
+						<table id = "mailinfo" class = "inform" style = "display:none">
+							<td>
+								<a href="mailto:kz.todorov@gmail.com" target='_blank'>Konstantin</a>
+							</td>
+							<td>
+								<a href="mailto:antonvdudov@gmail.com" style = "padding-left: 45px;" target='_blank'>Anton</a>
+							</td>
+						</table>
+
+						</div>
 						
 					</th>
 				</tr>
@@ -257,10 +269,34 @@
 						<br/>
 
 						<br/>
-						<a href = "#" id = "forus-bg" onclick = "showinfo('info-bg'); return false;">
-							За нас <span class = "raq">&raquo;</span></a>
+						<a href = "#" id = "forus-bg" onclick = "showinfo(); return false;">
+							Контакти <span class = "raq">&raquo;</span></a>
 						<br/><br/>
-						<div id = "info-bg" style = "display:none"> Фейсбук: ... <br/> Скайп: ... </div>
+						<div id = "info-bg" style = "display:none">
+						<a href = "#" id = "face-bg" onclick = "showface(); return false; ">
+							Фейсбук:
+						</a>
+						<table id = "faceinfo-bg" class = "inform" style = "display:none">  
+							<td>
+								<a href = "http://www.facebook.com/kztodorov" target='_blank'>Константин</a>
+							</td>
+							<td>
+								<a href = "http://www.facebook.com/anton.dudov.7" style = "padding-left: 45px;" target='_blank'>Антон</a>
+							</td>
+						</table>
+						<br/>
+						<a href = "#" id = "mail-bg" onclick = "showmail(); return false; ">
+							Е-мейл:
+						</a>
+						<table id = "mailinfo-bg" class = "inform" style = "display:none">
+							<td>
+								<a href="mailto:kz.todorov@gmail.com" target='_blank'>Константин</a>
+							</td>
+							<td>
+								<a href="mailto:antonvdudov@gmail.com" style = "padding-left: 45px;" target='_blank'>Антон</a>
+							</td>
+						</table>
+						 </div>
 					</th>
 				</tr>
 			</table></center>			

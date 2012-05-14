@@ -1,1115 +1,2669 @@
- 		var gameInterval 	 = 0;
-		var canvas;
-		var ctx;
-		var width 		 	 = 450; 				
-		var height 		 	 = 450; 				
-		var bgColor 	 	 = "black";	
-		var objectColor  	 = "white";	
-		var roboX			 = 0;
-		var roboY			 = 0; 					
-		var roboWidth		 = 0;				
-		var roboHeight		 = 0;				
-		var roboColor 	 	 = "red";	
-		var radian 			 = (Math.PI/180) * 0;		
-		var degrees 		 = 0;
-		var speed			 = 0;
-		var start		 	 = true;
-		var crash		 	 = false;
-		var lWheelPosX		 = 0;
-		var lWheelPosY		 = 0;
-		var rWheelPosX		 = 0;
-		var rWheelPosY		 = 0;
-		var distance     	 = 0;
-		var motorA		 	 = false;
-		var motorB		 	 = false;
-		var last_step    	 = 0;
-		var steps         	 = new Array();
-		var get_path     	 = false;
-		var pause_ 		 	 = false;
-		var resetpos_		 = false;
-		var resize_			 = false;
-		var stop_   		 = false;
-		var submit_			 = false;
-		var play_page		 = false;
-		var rightDown 		 = false;
-		var leftDown 		 = false;
-		var upDown 			 = false;
-		var w 				 = 0;
-		var lang			 = 'e';
-		var change_lang_	 = false;
-		
-		function loadanime() 
-		{
-			$("#my_canvas").animate({
-				    	width:  450,
-				    	height: 450 
-				    }, "slow");
-		}
-		
-		function init(speed_)
-		{
-			if (start) {
-				if(!submit_){					
-					roboWidth 	 = 50;
-					roboHeight 	 = 53;
-					lWheelWidth  = 7;
-					lWheelHeight = 40;
-					rWheelWidth  = 7;
-					rWheelHeight = 40;					
-				}
-				canvas 		 = document.getElementById('my_canvas');
-				ctx 		 = canvas.getContext("2d");
-				width 		 = canvas.width;
-				height 	 	 = canvas.height;
-				reset_data();
-				document.getElementById('play').disabled  = true;	
-				document.getElementById('pause').disabled = true;	
-				document.getElementById('stop').disabled  = true;
-			}			
-			speed 			 = speed_;
-			clearInterval(gameInterval);
-			if(play_page){
-				gameInterval = setInterval(draw_PlayPage, 20);
-			} else{
-				gameInterval = setInterval(draw, 20);
-			}			
-		}
-
-		function reset_data()
-		{			
-			roboX 		 = width/2;
-			roboY 	   	 = height/2;
-			lWheelPosX 	 = -roboWidth/2 - lWheelWidth;
-			lWheelPosY 	 = -roboHeight/2 + roboHeight/8;
-			rWheelPosX 	 = roboWidth/2;
-			rWheelPosY 	 = -roboHeight/2 + roboHeight/8;
-			radian 		 = (Math.PI/180) * 0;
-			submit_ 	 = false;
-			start 		 = false;				
-			motorA		 = false;
-			motorB		 = false;			
-			crash 	 	 = false;
-			pause_	 	 = false;
-			resetpos_	 = false;
-			stop_ 		 = false;
-			resize_ 	 = false;
-			last_step	 = 0;
-			distance 	 = 0;
-		}
-
-		function change_page()
-		{	
-			reset_data();
-			steps = 0;
-			document.getElementById('out_path').value 	 = "";
-			document.getElementById('out_path-bg').value = "";	
-			resetpos();
-		}
-
-		function change_lang(val)
-		{
-			lang 		 = val;
-			change_lang_ = true;
-			display();
-			change_lang_ = false;
-		}
-
-		function popup(message) 
-		{					  
-				var maskHeight = $(document).height();  
-				var maskWidth  = $(window).width();
-
-				var dialogTop  =  (maskHeight/3); 
-				var dialogLeft = (maskWidth/2) - 250; 
-				
-				$('#dialog-overlay').css({
-					height:maskHeight,
-					width:maskWidth
-				}).show();
-				$('#dialog-box').css({
-					top:dialogTop,
-					left:dialogLeft
-				}).show();
-				$("#dialog-box").animate({
-			    	height: 0,
-			    	width:  0
-			    },0);
-				$("#dialog-box").animate({
-			    	height: 180,
-			    	width:  500
-			    },100);
-
-				$('#dialog-message').html(message);	
-			}
-
-		function popupbg(message) 
-		{					  
-				var maskHeight = $(document).height();  
-				var maskWidth  = $(window).width();
-
-				var dialogTop  = (maskHeight/3); 
-				var dialogLeft = (maskWidth/2) - 250; 
-				
-				$('#dialog-overlay-bg').css({height:maskHeight, width:maskWidth}).show();
-				$('#dialog-box-bg').css({top:dialogTop, left:dialogLeft}).show();
-				$("#dialog-box-bg").animate({
-			    	height: 0,
-			    	width:  0
-			    },0);
-				$("#dialog-box-bg").animate({
-			    	height: 180,
-			    	width:  500
-			    },100);
-
-				$('#dialog-message-bg').html(message);	
-			}
-
-		// resizing the canvas width and height
-		function resize()
-		{
-			if (lang == 'e') {
- 				if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000 && 
-	 				document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
-	 				$("#my_canvas").animate({
-				    	width:  document.getElementById('width1').value,
-				    	height: document.getElementById('height1').value 
-				    },"slow");
-	 				canvas.width  = document.getElementById('width1').value;
-					width = canvas.width;
-					canvas.height = document.getElementById('height1').value;
-					height = canvas.height;
-	 			}
-
-				if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000) {
-					$("#my_canvas").animate({
-				    	width:  document.getElementById('width1').value,
-				    },"slow");
-					canvas.width  = document.getElementById('width1').value;
-					width = canvas.width;
-
-				}
-				if (document.getElementById('height1').value >= 150 && document.getElementById('height1').value <= 1000) {
-					$("#my_canvas").animate({ 
-				    	height: document.getElementById('height1').value,
-				    },"slow");
-					canvas.height = document.getElementById('height1').value;
-					height = canvas.height;
-				}
-			
-				if (document.getElementById('width1').value == 0 && document.getElementById('height1').value == 0) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter something!');
-				} else if (document.getElementById('width1').value < 150 && document.getElementById('height1').value < 150) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width and height higher than 150');
-				} else if (document.getElementById('width1').value == 0 && document.getElementById('height1').value >= 150 && 
-						   document.getElementById('height1').value <= 1000) {
-					/* Do nothing */
-				} else if (document.getElementById('height1').value == 0 && document.getElementById('width1').value >= 150 && 
-						   document.getElementById('width1').value <= 1000) {
-					/* Do nothing */
-				} else if (document.getElementById('width1').value > 1000 && document.getElementById('height1').value > 1000) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width and height less than 1000');
-				} else if (document.getElementById('width1').value > 1000) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width less than 1000');
-				} else if (document.getElementById('height1').value > 1000) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height less than 1000');
-				} else if (document.getElementById('width1').value < 150) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width higher than 150.');
-				} else if (document.getElementById('height1').value < 150) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height higher than 150.');
-				}
-			} else if (lang == 'b') {
-
-				if (document.getElementById('width1-bg').value >= 150 && document.getElementById('width1-bg').value <= 1000 && 
- 				document.getElementById('height1-bg').value >= 150 && document.getElementById('height1-bg').value <= 1000) {
- 				$("#my_canvas").animate({
-			    	width:  document.getElementById('width1-bg').value,
-			    	height: document.getElementById('height1-bg').value 
-			    },"slow");
- 				canvas.width  = document.getElementById('width1-bg').value;
-				width = canvas.width;
-				canvas.height = document.getElementById('height1-bg').value;
-				height = canvas.height;
-	 			}
-
-				if (document.getElementById('width1-bg').value >= 150 && document.getElementById('width1-bg').value <= 1000) {
-					$("#my_canvas").animate({
-				    	width:  document.getElementById('width1-bg').value,
-				    },"slow");
-					canvas.width  = document.getElementById('width1-bg').value;
-					width = canvas.width;
-
-				}
-				if (document.getElementById('height1-bg').value >= 150 && document.getElementById('height1-bg').value <= 1000) {
-					$("#my_canvas").animate({ 
-				    	height: document.getElementById('height1-bg').value,
-				    },"slow");
-					canvas.height = document.getElementById('height1-bg').value;
-					height = canvas.height;
-				}
-
-				if (document.getElementById('width1-bg').value == 0 && document.getElementById('height1-bg').value == 0) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете нещо!');
-				} else if (document.getElementById('width1-bg').value < 150 && document.getElementById('height1-bg').value < 150) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина и ширина по-големи от 150');
-				} else if (document.getElementById('width1-bg').value == 0 && document.getElementById('height1-bg').value >= 150 && 
-						   document.getElementById('height1-bg').value <= 1000) {
-					/* Do nothing */
-				} else if (document.getElementById('height1-bg').value == 0 && document.getElementById('width1-bg').value >= 150 && 
-						   document.getElementById('width1-bg').value <= 1000) {
-					/* Do nothing */
-				} else if (document.getElementById('width1-bg').value > 1000 && document.getElementById('height1-bg').value > 1000) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина и ширина по-малки от 1000');
-				} else if (document.getElementById('width1-bg').value > 1000) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете ширина по-малка от 1000');
-				} else if (document.getElementById('height1-bg').value > 1000) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина по-малка от 1000');
-				} else if (document.getElementById('width1-bg').value < 150) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете ширина по-висока от 150.');
-				} else if (document.getElementById('height1-bg').value < 150) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина по-висока от 150.');
-				}
-			}
-			resize_ = true;		
-			roboX = width/2;
-			roboY = height/2;
-			radian=(Math.PI/180) * 0;
-			resetpos();
-		}
-
-		// reseting the canvas width and height
-		function reset()
-		{
-			resize_ =true;
-			$("#my_canvas").animate({
-		    	width:  450,
-		    	height: 450 
-		    },"slow");
-			width 		  = 450;
-			canvas.width  = width;
-			height 		  = 450;
-			canvas.height = height;
-
-			if (start) {
-				roboX 	  = width/2;
-				roboY 	  = height/2;
-				radian 	  = (Math.PI/180) * 0;
- 			}
- 			document.getElementById('width1').value  	= "";
-			document.getElementById('height1').value 	= "";
-			document.getElementById('width1-bg').value  = "";
-			document.getElementById('height1-bg').value = "";
-			resetpos();
-		}
-
-		function resetpos()
-		{
-			roboX  	  	  = width/2;
-			roboY  	  	  = height/2;
-			radian 	  	  = (Math.PI/180) * 0;
-			init(speed);
-			resetpos_ 	  = true;
-			if (crash) {  
-				crash 	  = false;
-				display();
-			}
-		}
-
-		// resizing the robot width and height
-		function robo_resize()
-		{
-			resize_ = true;
-			if (lang == 'e') {
-			if (document.getElementById('width_r').value >= 20 || document.getElementById('height_r').value >= 20) {
-				if (document.getElementById('width_r').value >= 20 && document.getElementById('width_r').value <= 100) {
-					roboWidth  = document.getElementById('width_r').value;
-					lWheelPosX = -roboWidth/2 - 7;
-					rWheelPosX = roboWidth/2;
-				}
-				if (document.getElementById('height_r').value >= 20 && document.getElementById('height_r').value <= 150) {
-					roboHeight = document.getElementById('height_r').value;
-				}
-				
-				if (document.getElementById('height_r').value > 150 && document.getElementById('width_r').value > 100) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height and width for the robot less than 100');
-				} else if (document.getElementById('height_r').value > 150) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height for the robot less than 150');
-				} else if (document.getElementById('width_r').value > 100) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot less than 100');
-				} 
-				 
-			} else if (start == false) {
-				popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width/height for the robot <br/>(higher than 20)');
-			}
-
-			} else if (lang == 'b') {
-				
-				if (document.getElementById('width_r-bg').value >= 20 || document.getElementById('height_r-bg').value >= 20) {
-				if (document.getElementById('width_r-bg').value >= 20 && document.getElementById('width_r-bg').value <= 100) {
-					roboWidth  = document.getElementById('width_r-bg').value;
-					lWheelPosX = -roboWidth/2 - 7;
-					rWheelPosX = roboWidth/2;
-				}
-				if (document.getElementById('height_r-bg').value >= 20 && document.getElementById('height_r-bg').value <= 150) {
-					roboHeight = document.getElementById('height_r-bg').value;
-				}
-
-				if (document.getElementById('height_r-bg').value > 150 && document.getElementById('width_r-bg').value > 100) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина и ширина за робота по-малки от 100');
-				} else if (document.getElementById('height_r-bg').value > 150) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина за робота по-малка от 150');
-				} else if (document.getElementById('width_r-bg').value > 100) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете ширина за робота по-малка от 100');
-				}
-
-				} else if (start == false) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете височина/ширина за робота <br/>(по-голяма от 20)');
-				}
-			}
-			robo_data_reset();
-		}
-
-		function robo_data_reset()
-		{
-			if(!pause_ && !stop_){
-				roboX 		= width/2;
-				roboY 		= height/2;
-				radian 		= (Math.PI/180) * 0;
-			}
-					
-			start = false;
-			display();
-		}
-
-		// resetting the robot width and height
-		function robo_reset()
-		{
-			resize_ 	= true;
-			roboWidth 	= 50;
-			roboHeight 	= 53;
-			robo_data_reset();
-			document.getElementById('width_r').value  = "";
-			document.getElementById('height_r').value = "";
-		}
-
-		// resizing the robot wheels
-		function wheel_resize()
-		{
-			resize_ = true;
-			if (lang == 'e') {
-				if (document.getElementById('width_w').value >= 5 || document.getElementById('height_w').value >= 10) {
-					if (document.getElementById('width_w').value >= 5 && document.getElementById('width_w').value <= 15) {
-						lWheelWidth	 = document.getElementById('width_w').value;
-						lWheelPosX 	 = -roboWidth/2 - lWheelWidth;
-						rWheelWidth	 = document.getElementById('width_w').value;
-					}
-					if (document.getElementById('height_w').value >= 10 && document.getElementById('height_w').value <= 100) {
-						lWheelHeight = document.getElementById('height_w').value;
-						rWheelHeight = document.getElementById('height_w').value;
-					}
-					if (document.getElementById('height_w').value > 100 && document.getElementById('width_w').value > 15) {
-						popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height less than 100 and width for the robot wheels less than 15');
-					} else if (document.getElementById('width_w').value > 15) {
-						popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width for the robot wheels less than 15');
-					} else if (document.getElementById('height_w').value > 100) {
-						popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter height for the robot less than 100');
-					}					
-				} else if (document.getElementById('width_w').value == 0 || document.getElementById('height_w').value == 0) {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter something and then resize');
-				} else {
-					popup('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Please enter width for the wheels higher than 5 and height, higher than 10');
-				}
-			} else if (lang == 'b') {
-				if (document.getElementById('width_w-bg').value >= 5 || document.getElementById('height_w-bg').value >= 10) {
-					if (document.getElementById('width_w-bg').value >= 5 && document.getElementById('width_w-bg').value <= 15) {
-						lWheelWidth	 = document.getElementById('width_w-bg').value;
-						lWheelPosX 	 = -roboWidth/2 - lWheelWidth;
-						rWheelWidth	 = document.getElementById('width_w-bg').value;
-					}
-					if (document.getElementById('height_w-bg').value >= 10 && document.getElementById('height_w-bg').value <= 100) {
-						lWheelHeight = document.getElementById('height_w-bg').value;
-						rWheelHeight = document.getElementById('height_w-bg').value;
-					}
-					if (document.getElementById('height_w-bg').value > 100 && document.getElementById('width_w-bg').value > 15) {
-						popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете дължина по-малка от 100 и ширина  за гумите на робота по-малка от 15');
-					} else if (document.getElementById('width_w-bg').value > 15) {
-						popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете ширина за гумите на робота по-малка от 15');
-					} else if (document.getElementById('height_w-bg').value > 100) {
-						popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете дължина за гумите на робота по-малка от 100');
-					}
-				} else if (document.getElementById('width_w').value == 0 || document.getElementById('height_w').value == 0) {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете нещо преди да преоразмерявате');
-				} else {
-					popupbg('<img class = "pop" src="img/w.png" height="60" width="60"/> <br/> Моля въведете ширина за гумите по-висока от 5 и дължина, по-висока от 10');
-				}
-			}
-			if(!pause_ && !stop_){
-				roboX = width/2;
-				roboY = height/2;
-			}		
-			display();
-		}
-
-		// resetting the robot wheels
-		function wheel_reset()
-		{
-			resize_ 	 = true;
-			lWheelWidth  = 7;
-			lWheelHeight = 40;
-			rWheelWidth  = 7;
-			rWheelHeight = 40;			
-			lWheelPosX 	 = -roboWidth/2 - 7;
-			lWheelPosX 	-= lWheelWidth -7;
-			rWheelPosX   = roboWidth/2;
-			document.getElementById('width_w').value  = "";
-			document.getElementById('height_w').value = "";
-			display();
-		}
-
-		function draw()
-		{
-			if (!pause_ && !stop_) {
-				
-				check_rect_angles();
-				calc_new_coords_for_draw();
-				display();
-			}	
-			if ( (pause_ || stop_ )&& resetpos_) {
-				resetpos_ = false;
-				display();
-			}				
-			if(resize_){
-				resize_=false;
-				display();
-			}
-		}
-
-		function draw_PlayPage()
-		{
-			display();
-			check_rect_angles();
-			check_LeftRight_key();
-			check_Up_key();
-		}
-
-		function check_LeftRight_key()
-		{
-			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
-				if (rightDown) {						
-					radian += (Math.PI/180)*speed;							
-				} else if (leftDown) {					
-					radian -= (Math.PI/180)*speed;					
-				}			
-			}	
-		}
-
-		function check_Up_key()
-		{
-			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
-				if (upDown) {
-					calc_coord_play_page();
-					if (roboX + roboWidth/2 > width) {
-						crash = true;
-						roboX -= speed + 2;			
-					}
-					if (roboX < roboWidth/2) {
-						crash = true;
-						roboX += speed + 2;
-					}
-				} 
-			} else if (roboHeight/2 + roboY < height) {
-				roboY += speed + 2;
-				crash = true;					
-			} else {
-				roboY -= speed + 2;   	
-				crash = true;		
-			}	
-		}
-
-		function calc_new_coords_for_draw()
-		{
-			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
-				if (motorA && !motorB && distance > 0) {						
-					radian += (Math.PI/180) * speed;
-					recalc_distance();
-				} else if (!motorA && motorB && distance > 0) {	
-					radian -= (Math.PI/180) * speed;
-					recalc_distance();						
-				}			
-			}
-			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
-				if (motorA && motorB && distance>0) {
-					recalc_distance();
-					calc_coord();	
-					if (roboX + roboWidth/2 > width) {
-						crash = true;		
-					}
-					if (roboX < roboWidth/2) {
-						crash = true;
-					}
-				} 
-			} else if (roboHeight/2 + roboY < height) {
-				crash = true;					
-			} else {			 	
-				crash = true;	
-			}				 	
-		}
-
-		// recalculate distance
-		function recalc_distance()
-		{
-			if (distance > speed) {
-				distance -= speed;
-			} else {
-				distance  = 0;
-			}
-		}
-
-		// check if any angle of the robo is out of the table
-		function check_rect_angles()
-		{
-			if (roboX + check_angleX(1) > width  || roboX + check_angleX(2) > width  || 
-				roboX + check_angleX(3) > width  || roboX + check_angleX(4) > width  || 
-				roboX + check_angleX(1) < 0 	 || roboX + check_angleX(2) < 0 	 || 
-				roboX + check_angleX(3) < 0 	 || roboX + check_angleX(4) < 0 	 ||	
-				roboY + check_angleY(1) > height || roboY + check_angleY(2) > height || 
-				roboY + check_angleY(3) > height || roboY + check_angleY(4) > height || 
-				roboY + check_angleY(1) < 0 	 || roboY + check_angleY(2) < 0 	 || 
-				roboY + check_angleY(3) < 0 	 || roboY + check_angleY(4) < 0 ) {
-				crash = true;
-			} else {
-				crash = false;	
-			}
-		}
-
-		function check_angleX(angle)
-		{
-			var x = 0;
-			degrees = make_degrees();
-
-			if (angle == 1) {
-				x=Math.cos((Math.PI/180) * 90 - (Math.PI/180) * degrees) * roboHeight/2;
-				return x - (Math.cos((Math.PI/180)*degrees) * roboWidth/2);
-			} else if (angle == 2) {
-				x=Math.cos((Math.PI/180) * 90 - (Math.PI/180) * degrees) * roboHeight/2;
-				return x + (Math.cos((Math.PI/180) * degrees) * roboWidth/2);
-			} else if (angle == 3) {
-				x= -Math.sin((Math.PI/180) * degrees) * roboHeight/2;
-				return x + (Math.cos((Math.PI/180) * degrees) * roboWidth/2);
-			} else if (angle == 4) {				
-				x=Math.sin((Math.PI/180) * degrees) * roboHeight/2;
-				return -(x + (Math.sin((Math.PI/180) * 90 - (Math.PI/180) * degrees) * roboWidth/2));
-			}
-		}
-
-		function check_angleY(angle)
-		{
-			var y = 0;
-			degrees = make_degrees();
-
-			if (angle == 1) {
-				y = -Math.sin((Math.PI/180) * 90 - (Math.PI/180) * degrees) * roboHeight/2;
-				return y - (Math.sin((Math.PI/180) * degrees) * roboWidth/2);
-			} else if (angle == 2) {
-				y =  -Math.sin((Math.PI/180) * 90 - (Math.PI/180) * degrees) * roboHeight/2;
-				return y + (Math.sin((Math.PI/180) * degrees) * roboWidth/2);
-			} else if (angle == 3) {
-				y = Math.cos((Math.PI/180) * degrees) * roboHeight/2;
-				return y + (Math.sin((Math.PI/180) * degrees) * roboWidth/2);
-			} else if (angle == 4) {				
-				y = -Math.cos((Math.PI/180) * degrees) * roboHeight/2;
-				return -(y + (Math.cos((Math.PI/180) * 90 - (Math.PI/180) * degrees) * roboWidth/2));
-			}
-		}
-
-		function calc_coord()
-		{			
-			degrees = make_degrees();
-
-			if (degrees >= 0 && degrees <= 90) {
-				if (motorA && motorB) {
-					roboX += calc_distance_cos(90);
-					roboY -= calc_distance_sin(90);
-				} 
-			} else if (degrees > 90 && degrees <= 180) {
-				if (motorA && motorB) {
-					roboX += calc_distance_sin(180);
-					roboY += calc_distance_cos(180);
-				}
-			} else if (degrees > 180 && degrees <= 270) {
-				if (motorA && motorB) {
-					roboX -= calc_distance_cos(270);
-					roboY += calc_distance_sin(270);
-				} 
-			} else if (degrees > 270 && degrees <= 360) {
-				if (motorA && motorB) {
-					roboX -= calc_distance_sin(360);
-					roboY -= calc_distance_cos(360);
-				}
-			}		
-		}
-
-		function calc_coord_play_page()
-		{
-			degrees = make_degrees();
-
-			if (degrees >= 0 && degrees <= 90) {
-				if (upDown) {
-					roboX+=calc_distance_cos(90);
-					roboY-=calc_distance_sin(90);	
-				}
-			} else if (degrees > 90 && degrees <= 180) {
-				if (upDown) {
-					roboX+=calc_distance_sin(180);
-					roboY+=calc_distance_cos(180);	
-				}			
-			} else if (degrees > 180 && degrees <= 270) {
-				if (upDown) {
-					roboX-=calc_distance_cos(270);
-					roboY+=calc_distance_sin(270);	
-				}				
-			} else if (degrees > 270 && degrees <= 360) {
-				if (upDown) {
-					roboX-=calc_distance_sin(360);
-					roboY-=calc_distance_cos(360);
-				}
-			}							
-		}
-
-		function calc_distance_sin(val)
-		{
-			return Math.sin(((Math.PI/180) * val) - ((Math.PI/180) * degrees) ) * speed;
-		}
-
-		function calc_distance_cos(val)
-		{
-			return Math.cos(((Math.PI/180) * val) - ((Math.PI/180) * degrees) ) * speed;
-		}
-
-		function make_degrees()
-		{
-			var val = radian/(Math.PI/180);	
-
-			while(val > 360 || val < -360) {				
-					if (val > 360)
-						val -= 360;			
-					else val += 360;
-			}
-			if (val < 0) {
-				val = 360 + val;
-			}
-			return val;
-		}
-
- 		function check_inpath_free_space()
-		{
-			temp_input = "";
-			if (lang == 'e') {
-				temp = document.getElementById('robo_path').value;
-				document.getElementById('robo_path-bg').value   = document.getElementById('robo_path').value;
-			} else if (lang == 'b') {
-				temp = document.getElementById('robo_path-bg').value;
-				document.getElementById('robo_path').value   = document.getElementById('robo_path-bg').value;
-			} else {
-				alert('Something went wrong. Please refresh the page and try again.');
-				return;
-			}
-			for(var k=0;k<temp.length;k++){
-				if ( temp[k]!=' ' && temp[k]!='\n' ){
-					temp_input+=temp[k];
-				} else if ((temp[k]==' ' || temp[k]=='\n') && k!=0){
-					if (temp[k-1]!=' ' && temp[k-1]!='\n' ){
-						temp_input+=temp[k];
-					}     
-				}
-			}
-			steps=temp_input.split(/\r\n|\r|\n|\s/);						
-		}
-
-		// generate new path
-		function generate_path()
-		{
-				document.getElementById('out_path').value 			= "";
-				document.getElementById('out_path-bg').value 		= "";
-				check_inpath_free_space();		
-				document.getElementById('path').disabled  		 	= true;	
-				document.getElementById('replace_path').disabled 	= true;	
-				document.getElementById('clear_text').disabled 		= true;	
-				document.getElementById('clear_text-bg').disabled 	= true;	
-				document.getElementById('path-bg').disabled 		= true;	
-				document.getElementById('replace_path-bg').disabled = true;
-				document.getElementById('out_path').style.color  	= "green";				
-				document.getElementById('out_path-bg').style.color  = "green";
-				get_path = true;		
-				start 	 = true;
-				submit_  = true;
-				init(speed);
-		}
-
-		function calc_distance()
-		{
-			distance = ((rWheelHeight * 3.14)/360) * distance;
-		}
-
-		function get_new_step()
-		{
-			if (steps[last_step + 1] * 1 > 0) { // check if there are more steps
-				motorA 	   = false;
-				motorB 	   = false;
-				if (steps[last_step] == "A") {
-					motorA = true;
-				} else if (steps[last_step] == "B") {
-					motorB = true;
-				} else if (steps[last_step] == "AB") {
-					motorA = true;
-					motorB = true;
-				} else {
-					document.getElementById('out_path').value 	 += 'Wrong Input - ' 
-					+ steps[last_step] + ' ' + steps[last_step+1] + '\n';
-					document.getElementById('out_path-bg').value 	 += 'Грешни данни - ' 
-					+ steps[last_step] + ' ' + steps[last_step+1] + '\n';
-					stop_simulation();
-					return;
-				}
-
-				distance   = steps[last_step + 1] * 1;	
-				w = 3;
-				calc_distance();		
-				document.getElementById('out_path').value 	 += steps[last_step] + 
-				' ' + steps[last_step+1] + '\n';
-				document.getElementById('out_path-bg').value += steps[last_step] + 
-				' ' + steps[last_step+1] + '\n';							
-				last_step += 2;
-			} else if ((isCoord(steps[last_step]) || steps[last_step] == '\n' || steps[last_step] == '' ||
-					   steps[last_step + 1] == undefined || last_step == 1 ) && steps[last_step - 1] != undefined)  {
-				stop_simulation();
-			} else {
-				if (steps[last_step + 1] != undefined && !isCoord(steps[last_step + 1])) {
-					document.getElementById('out_path').value 	 += 'Wrong Input  ' ;
-					document.getElementById('out_path-bg').value 	 += 'Грешни данни  ' ;
-					for (i = 0; steps[last_step + i] != undefined && !isCoord(steps[last_step + i]); i++) {
-						document.getElementById('out_path').value 	 += steps[last_step + i] + ' ';
-						document.getElementById('out_path-bg').value 	 += steps[last_step + i] + ' ';
-					}
-					document.getElementById('out_path').value += '\n';
-					document.getElementById('out_path-bg').value += '\n';
-				} else {
-					document.getElementById('out_path').value 	 += 'Wrong Input  ' 
-						+ steps[last_step] + '\n';
-					document.getElementById('out_path-bg').value 	 += 'Грешни данни  ' 
-						+ steps[last_step] + '\n';
-				}
-					stop_simulation();
-					return;
-			} 
-		}
-
-		function isCoord(val) {
-			return val == "A" || val == "B" || val == "AB";
-		}
-
-		function display()
-		{						
-			ctx.beginPath();
-			ctx.fillStyle 	= bgColor;						
-			clear();	
-			if (crash) {		
-				crash_mess();
-			}
-			ctx.fillStyle	= objectColor;
-			ctx.save();		
-			ctx.translate(roboX, roboY);
-			ctx.rotate(radian);			
-			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth, roboHeight);
-			ctx.font 		= "bold 19pt Calibri,Times New Roman";
-			if (get_path && distance == 0 && !play_page ) {
-				get_new_step();
-			}	
-			if(!change_lang_ && !play_page) {
-				w 			= -w;			
-			}
-			display_robo_and_wheels();	
-			ctx.font 		= "bold 30pt Calibri";
-			ctx.restore();
-			ctx.fillStyle 	= "white";
-    		ctx.fill();
-    		ctx.lineWidth 	= 3;
-    		ctx.strokeStyle = "black";
-    		ctx.stroke(); 
-		}
-
-		function display_robo_and_wheels()
-		{
-			ctx.rect(lWheelPosX, lWheelPosY, lWheelWidth, lWheelHeight);
-			ctx.rect(rWheelPosX, rWheelPosY, rWheelWidth, rWheelHeight);
-			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth, 10);
-			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth/2, 10);
-
-			/* Wheel Animation */
-			
-			for (i = 10; i <= 90; i+=10) {
-				drawWheelLines(i);
-			} 			
-
-		}
-
-		function drawWheelLines(hei)
-		{
-			ctx.moveTo(rWheelPosX, rWheelPosY + hei - w);
- 			ctx.lineTo(rWheelPosX + 35, rWheelPosY + hei - w);
- 			ctx.moveTo(-roboWidth/2, lWheelPosY + hei - w);
- 			ctx.lineTo(lWheelPosX - 35, lWheelPosY + hei - w);
-		}
-
-		function clear()
-		{ 				
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			ctx.beginPath();
-			ctx.fillRect(0, 0, width, height);
-			ctx.closePath();
-		}
-
-		function clear_textareas()
-		{
-			document.getElementById('robo_path').value 	  = "";
-			document.getElementById('robo_path-bg').value = "";
-			document.getElementById('out_path').value     = "";			
-			document.getElementById('out_path-bg').value  = "";
-		}
-
-		function replace_path()
-		{
-			document.getElementById('robo_path').value 	  = document.getElementById('out_path').value;
-			document.getElementById('robo_path-bg').value = document.getElementById('out_path-bg').value;	
-		}
-
-		function crash_mess()
-		{
-			ctx.fillStyle = "white";	
-			if (lang == 'e') {
-				if (width < 200) {
-					ctx.font = "bold 30pt Calibri,Times New Roman";
-					ctx.fillText("CRASH!", width/2-65, height/2 + 10);
-				} else {
-					ctx.font = "bold 50pt Calibri,Times New Roman";
-					ctx.fillText("CRASH!", width/2-100, height/2 + 10);				
-				}
-			} else if (lang == 'b') {
-				if (width < 200) {
-					ctx.font = "bold 30pt Calibri,Times New Roman";
-					ctx.fillText("Сблъсък!", width/2-55, height/2 + 10);
-				} else {
-					ctx.font = "bold 50pt Calibri,Times New Roman";
-					ctx.fillText("Сблъсък!", width/2-125, height/2 + 10);				
-				}
-			}	
-			if(!play_page){
-				if (!stop_){
-					document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
-					document.getElementById('out_path-bg').value += "Сблъсък на ред " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
-				}
-				for (; steps[last_step + 1] * 1 > 0; last_step += 2) {
-					document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';
-					document.getElementById('out_path-bg').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';		
-				}			
-				stop_simulation();
-			}
-		}
-
-		function stopgen()
-		{
-			document.getElementById('out_path').value 	 += '\n' + "Stoped!";			
-			document.getElementById('out_path-bg').value += '\n' + "Спряно!";			
-			stop_simulation();
-		}
-
-		function stop_simulation()
-		{
-			w = 0;
-			document.getElementById('path').disabled 			 = false;	
-			document.getElementById('path-bg').disabled 		 = false;	
-			document.getElementById('replace_path').disabled	 = false;
-			document.getElementById('replace_path-bg').disabled  = false;
-			document.getElementById('clear_text').disabled 		 = false;	
-			document.getElementById('clear_text-bg').disabled    = false;					
-			document.getElementById('play').disabled 			 = true;	
-			document.getElementById('pause').disabled 			 = true;	
-			document.getElementById('stop').disabled 			 = true;
-			document.getElementById('play-bg').disabled 		 = true;	
-			document.getElementById('pause-bg').disabled 		 = true;	
-			document.getElementById('stop-bg').disabled 		 = true;
-			get_path = false;
-			distance = 0;
-			pause_ 	 = false;
-			stop_ 	 = true;
-			clearInterval(gameInterval);
-		}
-
-		function showing(obj)
-		{
-	    	$(obj).show(500);
-	    };
-
-	    function fade(obj) 
-	    {
-	    	$(obj).fadeIn(500);
-	    };
-
-	    function fadelogo(obj) 
-	    {
-	    	$(obj).fadeIn(2000);
-	    };
-
-	    function fadeo(obj)
-	    {
-	    	$(obj).fadeOut(1);
-	    };
-
-	    function slide(obj) 
-	    {
-	    	$(obj).slideDown(1000);
-	    };
-
-	    function slide2(obj) 
-	    {	    	
-	    	$(obj).slideDown(1);
-	    };
-
-	    function hiding(obj) 
-	    {
-	    	$(obj).hide(500);
-	    };
-
-	    var cX = 0;
-	    var cY = 0;
-	    var rX = 0;
-	    var rY = 0;
-
-	    function UpdateCursorPosition(e)
-	    { 
-	    	cX = e.pageX; cY = e.pageY;
-	    } 
-
-	    function UpdateCursorPositionDocAll(e)
-	    {
-	    	cX = event.clientX; cY = event.clientY;
-	    }
-
-	    if (document.all) {
-	    	document.onmousemove = UpdateCursorPositionDocAll;
-	    } else { 
-	    	document.onmousemove = UpdateCursorPosition;
-	    }
-
-	    function AssignPosition(d) 
-	    { 
-	    	if (self.pageYOffset) { 
-	    		rX = self.pageXOffset; 
-	    		rY = self.pageYOffset; 
-	    	} 
-	    	else if (document.documentElement && document.documentElement.scrollTop) { 
-	    		rX = document.documentElement.scrollLeft; 
-	    		rY = document.documentElement.scrollTop; 
-	    	} 
-	    	else if (document.body) { 
-	    		rX = document.body.scrollLeft; 
-	    		rY = document.body.scrollTop; 
-	    	} 
-	    	if (document.all) { 
-	    		cX += rX; 
-	    		cY += rY; 
-	    	} 
-	    	d.style.left = (cX+10) + "px"; 
-	    	d.style.top  = (cY+10) + "px"; 
-	    } 
-
-	    function HideText(d) 
-	    { 
-	    	if (d.length < 1) {
-	    		return;
-	    	}
-	    	document.getElementById(d).style.display = "none"; 
-	    } 
-
-	    function ShowText(d)
-	    { 
-	    	if (d.length < 1) {
-	    		return;
-	    	}
-	    	var dd = document.getElementById(d); 
-	    	AssignPosition(dd); 
-	    	dd.style.display = "block"; 
-	    } 
-
-		function ReverseContentDisplay(d)
-		{ 
-			if (d.length < 1) { 
-				return;
-			} 
-			var dd = document.getElementById(d); 
-			AssignPosition(dd); 
-			if (dd.style.display == "none") {
-				dd.style.display = "block";
-			} else {
-				dd.style.display = "none";
-			} 
-		}
-
-		function onKeyDown(evt) 
-		{
-			if (evt.keyCode == 39)
-				rightDown = true;
-			else if (evt.keyCode == 37)
-				leftDown = true;
-			else if (evt.keyCode == 38)
-				upDown = true;
-		}
-
-		function onKeyUp(evt) 
-		{
-			if (evt.keyCode == 39)
-				rightDown = false;
-			else if (evt.keyCode == 37)
-				leftDown = false;
-			else if (evt.keyCode == 38)
-				upDown = false;			
-		}
-
-		document.addEventListener('keydown',onKeyDown);
-		document.addEventListener('keyup',onKeyUp);
-
-		var ar=new Array(33,34,35,36,37,38,39,40);
-		// function to disable the scrolling when pressing the arrow keys.
-
-		$(document).keydown(function(e) 
-		{
-		     var key = e.which;
-		      
-		      if($.inArray(key,ar) > -1) {
-		          e.preventDefault();
-		          return false;
-		      }
-		      return true;
-		});
-
-
-	function loadscript() {
-		fade('body');
-		slide2('table.welcome');
-		fadeo('div.logo');
-		fadelogo('div.logo-en');
-		start = true;
-		init(6); 
-		document.getElementById('but1-bg').disabled 	 = false;
-		document.getElementById('but2-bg').disabled 	 = true;
-		document.getElementById('but3-bg').disabled 	 = false;
-		document.getElementById('but1').disabled 		 = false;
-		document.getElementById('but2').disabled 		 = true;
-		document.getElementById('but3').disabled 		 = false;
-		document.getElementById('but1-play').disabled 	 = false;
-		document.getElementById('but2-play').disabled 	 = true;
-		document.getElementById('but3-play').disabled 	 = false;
-		document.getElementById('but1-play-bg').disabled = false;
-		document.getElementById('but2-play-bg').disabled = true;
-		document.getElementById('but3-play-bg').disabled = false;
-		loadanime(); 
-	}
+/* automatically generated by JSCoverage - do not edit */
+try {
+  if (typeof top === 'object' && top !== null && typeof top.opener === 'object' && top.opener !== null) {
+    // this is a browser window that was opened from another window
+
+    if (! top.opener._$jscoverage) {
+      top.opener._$jscoverage = {};
+    }
+  }
+}
+catch (e) {}
+
+try {
+  if (typeof top === 'object' && top !== null) {
+    // this is a browser window
+
+    try {
+      if (typeof top.opener === 'object' && top.opener !== null && top.opener._$jscoverage) {
+        top._$jscoverage = top.opener._$jscoverage;
+      }
+    }
+    catch (e) {}
+
+    if (! top._$jscoverage) {
+      top._$jscoverage = {};
+    }
+  }
+}
+catch (e) {}
+
+try {
+  if (typeof top === 'object' && top !== null && top._$jscoverage) {
+    _$jscoverage = top._$jscoverage;
+  }
+}
+catch (e) {}
+if (typeof _$jscoverage !== 'object') {
+  _$jscoverage = {};
+}
+if (! _$jscoverage['script.js']) {
+  _$jscoverage['script.js'] = [];
+  _$jscoverage['script.js'][1] = 0;
+  _$jscoverage['script.js'][2] = 0;
+  _$jscoverage['script.js'][3] = 0;
+  _$jscoverage['script.js'][4] = 0;
+  _$jscoverage['script.js'][5] = 0;
+  _$jscoverage['script.js'][6] = 0;
+  _$jscoverage['script.js'][7] = 0;
+  _$jscoverage['script.js'][8] = 0;
+  _$jscoverage['script.js'][9] = 0;
+  _$jscoverage['script.js'][10] = 0;
+  _$jscoverage['script.js'][11] = 0;
+  _$jscoverage['script.js'][12] = 0;
+  _$jscoverage['script.js'][13] = 0;
+  _$jscoverage['script.js'][14] = 0;
+  _$jscoverage['script.js'][15] = 0;
+  _$jscoverage['script.js'][16] = 0;
+  _$jscoverage['script.js'][17] = 0;
+  _$jscoverage['script.js'][18] = 0;
+  _$jscoverage['script.js'][19] = 0;
+  _$jscoverage['script.js'][20] = 0;
+  _$jscoverage['script.js'][21] = 0;
+  _$jscoverage['script.js'][22] = 0;
+  _$jscoverage['script.js'][23] = 0;
+  _$jscoverage['script.js'][24] = 0;
+  _$jscoverage['script.js'][25] = 0;
+  _$jscoverage['script.js'][26] = 0;
+  _$jscoverage['script.js'][27] = 0;
+  _$jscoverage['script.js'][28] = 0;
+  _$jscoverage['script.js'][29] = 0;
+  _$jscoverage['script.js'][30] = 0;
+  _$jscoverage['script.js'][31] = 0;
+  _$jscoverage['script.js'][32] = 0;
+  _$jscoverage['script.js'][33] = 0;
+  _$jscoverage['script.js'][34] = 0;
+  _$jscoverage['script.js'][35] = 0;
+  _$jscoverage['script.js'][36] = 0;
+  _$jscoverage['script.js'][37] = 0;
+  _$jscoverage['script.js'][38] = 0;
+  _$jscoverage['script.js'][39] = 0;
+  _$jscoverage['script.js'][41] = 0;
+  _$jscoverage['script.js'][43] = 0;
+  _$jscoverage['script.js'][49] = 0;
+  _$jscoverage['script.js'][51] = 0;
+  _$jscoverage['script.js'][52] = 0;
+  _$jscoverage['script.js'][53] = 0;
+  _$jscoverage['script.js'][54] = 0;
+  _$jscoverage['script.js'][55] = 0;
+  _$jscoverage['script.js'][56] = 0;
+  _$jscoverage['script.js'][57] = 0;
+  _$jscoverage['script.js'][58] = 0;
+  _$jscoverage['script.js'][60] = 0;
+  _$jscoverage['script.js'][61] = 0;
+  _$jscoverage['script.js'][62] = 0;
+  _$jscoverage['script.js'][63] = 0;
+  _$jscoverage['script.js'][64] = 0;
+  _$jscoverage['script.js'][66] = 0;
+  _$jscoverage['script.js'][67] = 0;
+  _$jscoverage['script.js'][68] = 0;
+  _$jscoverage['script.js'][69] = 0;
+  _$jscoverage['script.js'][71] = 0;
+  _$jscoverage['script.js'][76] = 0;
+  _$jscoverage['script.js'][78] = 0;
+  _$jscoverage['script.js'][79] = 0;
+  _$jscoverage['script.js'][80] = 0;
+  _$jscoverage['script.js'][81] = 0;
+  _$jscoverage['script.js'][82] = 0;
+  _$jscoverage['script.js'][83] = 0;
+  _$jscoverage['script.js'][84] = 0;
+  _$jscoverage['script.js'][85] = 0;
+  _$jscoverage['script.js'][86] = 0;
+  _$jscoverage['script.js'][87] = 0;
+  _$jscoverage['script.js'][88] = 0;
+  _$jscoverage['script.js'][89] = 0;
+  _$jscoverage['script.js'][90] = 0;
+  _$jscoverage['script.js'][91] = 0;
+  _$jscoverage['script.js'][92] = 0;
+  _$jscoverage['script.js'][93] = 0;
+  _$jscoverage['script.js'][94] = 0;
+  _$jscoverage['script.js'][95] = 0;
+  _$jscoverage['script.js'][99] = 0;
+  _$jscoverage['script.js'][101] = 0;
+  _$jscoverage['script.js'][102] = 0;
+  _$jscoverage['script.js'][103] = 0;
+  _$jscoverage['script.js'][104] = 0;
+  _$jscoverage['script.js'][105] = 0;
+  _$jscoverage['script.js'][109] = 0;
+  _$jscoverage['script.js'][111] = 0;
+  _$jscoverage['script.js'][112] = 0;
+  _$jscoverage['script.js'][113] = 0;
+  _$jscoverage['script.js'][114] = 0;
+  _$jscoverage['script.js'][117] = 0;
+  _$jscoverage['script.js'][119] = 0;
+  _$jscoverage['script.js'][120] = 0;
+  _$jscoverage['script.js'][122] = 0;
+  _$jscoverage['script.js'][123] = 0;
+  _$jscoverage['script.js'][125] = 0;
+  _$jscoverage['script.js'][129] = 0;
+  _$jscoverage['script.js'][133] = 0;
+  _$jscoverage['script.js'][137] = 0;
+  _$jscoverage['script.js'][142] = 0;
+  _$jscoverage['script.js'][145] = 0;
+  _$jscoverage['script.js'][147] = 0;
+  _$jscoverage['script.js'][148] = 0;
+  _$jscoverage['script.js'][150] = 0;
+  _$jscoverage['script.js'][151] = 0;
+  _$jscoverage['script.js'][153] = 0;
+  _$jscoverage['script.js'][154] = 0;
+  _$jscoverage['script.js'][155] = 0;
+  _$jscoverage['script.js'][159] = 0;
+  _$jscoverage['script.js'][164] = 0;
+  _$jscoverage['script.js'][168] = 0;
+  _$jscoverage['script.js'][170] = 0;
+  _$jscoverage['script.js'][171] = 0;
+  _$jscoverage['script.js'][173] = 0;
+  _$jscoverage['script.js'][177] = 0;
+  _$jscoverage['script.js'][178] = 0;
+  _$jscoverage['script.js'][179] = 0;
+  _$jscoverage['script.js'][180] = 0;
+  _$jscoverage['script.js'][183] = 0;
+  _$jscoverage['script.js'][184] = 0;
+  _$jscoverage['script.js'][187] = 0;
+  _$jscoverage['script.js'][188] = 0;
+  _$jscoverage['script.js'][191] = 0;
+  _$jscoverage['script.js'][192] = 0;
+  _$jscoverage['script.js'][195] = 0;
+  _$jscoverage['script.js'][196] = 0;
+  _$jscoverage['script.js'][199] = 0;
+  _$jscoverage['script.js'][200] = 0;
+  _$jscoverage['script.js'][201] = 0;
+  _$jscoverage['script.js'][202] = 0;
+  _$jscoverage['script.js'][203] = 0;
+  _$jscoverage['script.js'][206] = 0;
+  _$jscoverage['script.js'][209] = 0;
+  _$jscoverage['script.js'][210] = 0;
+  _$jscoverage['script.js'][211] = 0;
+  _$jscoverage['script.js'][212] = 0;
+  _$jscoverage['script.js'][213] = 0;
+  _$jscoverage['script.js'][214] = 0;
+  _$jscoverage['script.js'][215] = 0;
+  _$jscoverage['script.js'][216] = 0;
+  _$jscoverage['script.js'][217] = 0;
+  _$jscoverage['script.js'][218] = 0;
+  _$jscoverage['script.js'][220] = 0;
+  _$jscoverage['script.js'][222] = 0;
+  _$jscoverage['script.js'][224] = 0;
+  _$jscoverage['script.js'][228] = 0;
+  _$jscoverage['script.js'][229] = 0;
+  _$jscoverage['script.js'][230] = 0;
+  _$jscoverage['script.js'][231] = 0;
+  _$jscoverage['script.js'][234] = 0;
+  _$jscoverage['script.js'][235] = 0;
+  _$jscoverage['script.js'][238] = 0;
+  _$jscoverage['script.js'][239] = 0;
+  _$jscoverage['script.js'][242] = 0;
+  _$jscoverage['script.js'][243] = 0;
+  _$jscoverage['script.js'][246] = 0;
+  _$jscoverage['script.js'][247] = 0;
+  _$jscoverage['script.js'][250] = 0;
+  _$jscoverage['script.js'][251] = 0;
+  _$jscoverage['script.js'][252] = 0;
+  _$jscoverage['script.js'][253] = 0;
+  _$jscoverage['script.js'][254] = 0;
+  _$jscoverage['script.js'][257] = 0;
+  _$jscoverage['script.js'][260] = 0;
+  _$jscoverage['script.js'][261] = 0;
+  _$jscoverage['script.js'][262] = 0;
+  _$jscoverage['script.js'][263] = 0;
+  _$jscoverage['script.js'][264] = 0;
+  _$jscoverage['script.js'][265] = 0;
+  _$jscoverage['script.js'][266] = 0;
+  _$jscoverage['script.js'][267] = 0;
+  _$jscoverage['script.js'][268] = 0;
+  _$jscoverage['script.js'][269] = 0;
+  _$jscoverage['script.js'][272] = 0;
+  _$jscoverage['script.js'][273] = 0;
+  _$jscoverage['script.js'][274] = 0;
+  _$jscoverage['script.js'][275] = 0;
+  _$jscoverage['script.js'][276] = 0;
+  _$jscoverage['script.js'][280] = 0;
+  _$jscoverage['script.js'][282] = 0;
+  _$jscoverage['script.js'][283] = 0;
+  _$jscoverage['script.js'][287] = 0;
+  _$jscoverage['script.js'][288] = 0;
+  _$jscoverage['script.js'][289] = 0;
+  _$jscoverage['script.js'][290] = 0;
+  _$jscoverage['script.js'][292] = 0;
+  _$jscoverage['script.js'][293] = 0;
+  _$jscoverage['script.js'][294] = 0;
+  _$jscoverage['script.js'][295] = 0;
+  _$jscoverage['script.js'][297] = 0;
+  _$jscoverage['script.js'][298] = 0;
+  _$jscoverage['script.js'][299] = 0;
+  _$jscoverage['script.js'][300] = 0;
+  _$jscoverage['script.js'][301] = 0;
+  _$jscoverage['script.js'][305] = 0;
+  _$jscoverage['script.js'][307] = 0;
+  _$jscoverage['script.js'][308] = 0;
+  _$jscoverage['script.js'][309] = 0;
+  _$jscoverage['script.js'][310] = 0;
+  _$jscoverage['script.js'][311] = 0;
+  _$jscoverage['script.js'][312] = 0;
+  _$jscoverage['script.js'][313] = 0;
+  _$jscoverage['script.js'][314] = 0;
+  _$jscoverage['script.js'][319] = 0;
+  _$jscoverage['script.js'][321] = 0;
+  _$jscoverage['script.js'][322] = 0;
+  _$jscoverage['script.js'][323] = 0;
+  _$jscoverage['script.js'][324] = 0;
+  _$jscoverage['script.js'][325] = 0;
+  _$jscoverage['script.js'][326] = 0;
+  _$jscoverage['script.js'][327] = 0;
+  _$jscoverage['script.js'][329] = 0;
+  _$jscoverage['script.js'][330] = 0;
+  _$jscoverage['script.js'][333] = 0;
+  _$jscoverage['script.js'][334] = 0;
+  _$jscoverage['script.js'][335] = 0;
+  _$jscoverage['script.js'][336] = 0;
+  _$jscoverage['script.js'][337] = 0;
+  _$jscoverage['script.js'][338] = 0;
+  _$jscoverage['script.js'][341] = 0;
+  _$jscoverage['script.js'][342] = 0;
+  _$jscoverage['script.js'][345] = 0;
+  _$jscoverage['script.js'][347] = 0;
+  _$jscoverage['script.js'][348] = 0;
+  _$jscoverage['script.js'][349] = 0;
+  _$jscoverage['script.js'][350] = 0;
+  _$jscoverage['script.js'][351] = 0;
+  _$jscoverage['script.js'][353] = 0;
+  _$jscoverage['script.js'][354] = 0;
+  _$jscoverage['script.js'][357] = 0;
+  _$jscoverage['script.js'][358] = 0;
+  _$jscoverage['script.js'][359] = 0;
+  _$jscoverage['script.js'][360] = 0;
+  _$jscoverage['script.js'][361] = 0;
+  _$jscoverage['script.js'][362] = 0;
+  _$jscoverage['script.js'][365] = 0;
+  _$jscoverage['script.js'][366] = 0;
+  _$jscoverage['script.js'][369] = 0;
+  _$jscoverage['script.js'][373] = 0;
+  _$jscoverage['script.js'][375] = 0;
+  _$jscoverage['script.js'][376] = 0;
+  _$jscoverage['script.js'][377] = 0;
+  _$jscoverage['script.js'][378] = 0;
+  _$jscoverage['script.js'][381] = 0;
+  _$jscoverage['script.js'][382] = 0;
+  _$jscoverage['script.js'][386] = 0;
+  _$jscoverage['script.js'][388] = 0;
+  _$jscoverage['script.js'][389] = 0;
+  _$jscoverage['script.js'][390] = 0;
+  _$jscoverage['script.js'][391] = 0;
+  _$jscoverage['script.js'][392] = 0;
+  _$jscoverage['script.js'][393] = 0;
+  _$jscoverage['script.js'][397] = 0;
+  _$jscoverage['script.js'][399] = 0;
+  _$jscoverage['script.js'][400] = 0;
+  _$jscoverage['script.js'][401] = 0;
+  _$jscoverage['script.js'][402] = 0;
+  _$jscoverage['script.js'][403] = 0;
+  _$jscoverage['script.js'][404] = 0;
+  _$jscoverage['script.js'][405] = 0;
+  _$jscoverage['script.js'][407] = 0;
+  _$jscoverage['script.js'][408] = 0;
+  _$jscoverage['script.js'][409] = 0;
+  _$jscoverage['script.js'][411] = 0;
+  _$jscoverage['script.js'][412] = 0;
+  _$jscoverage['script.js'][413] = 0;
+  _$jscoverage['script.js'][414] = 0;
+  _$jscoverage['script.js'][415] = 0;
+  _$jscoverage['script.js'][416] = 0;
+  _$jscoverage['script.js'][418] = 0;
+  _$jscoverage['script.js'][419] = 0;
+  _$jscoverage['script.js'][421] = 0;
+  _$jscoverage['script.js'][423] = 0;
+  _$jscoverage['script.js'][424] = 0;
+  _$jscoverage['script.js'][425] = 0;
+  _$jscoverage['script.js'][426] = 0;
+  _$jscoverage['script.js'][427] = 0;
+  _$jscoverage['script.js'][428] = 0;
+  _$jscoverage['script.js'][430] = 0;
+  _$jscoverage['script.js'][431] = 0;
+  _$jscoverage['script.js'][432] = 0;
+  _$jscoverage['script.js'][434] = 0;
+  _$jscoverage['script.js'][435] = 0;
+  _$jscoverage['script.js'][436] = 0;
+  _$jscoverage['script.js'][437] = 0;
+  _$jscoverage['script.js'][438] = 0;
+  _$jscoverage['script.js'][439] = 0;
+  _$jscoverage['script.js'][441] = 0;
+  _$jscoverage['script.js'][442] = 0;
+  _$jscoverage['script.js'][444] = 0;
+  _$jscoverage['script.js'][447] = 0;
+  _$jscoverage['script.js'][448] = 0;
+  _$jscoverage['script.js'][449] = 0;
+  _$jscoverage['script.js'][451] = 0;
+  _$jscoverage['script.js'][455] = 0;
+  _$jscoverage['script.js'][457] = 0;
+  _$jscoverage['script.js'][458] = 0;
+  _$jscoverage['script.js'][459] = 0;
+  _$jscoverage['script.js'][460] = 0;
+  _$jscoverage['script.js'][461] = 0;
+  _$jscoverage['script.js'][462] = 0;
+  _$jscoverage['script.js'][463] = 0;
+  _$jscoverage['script.js'][464] = 0;
+  _$jscoverage['script.js'][465] = 0;
+  _$jscoverage['script.js'][466] = 0;
+  _$jscoverage['script.js'][467] = 0;
+  _$jscoverage['script.js'][471] = 0;
+  _$jscoverage['script.js'][473] = 0;
+  _$jscoverage['script.js'][475] = 0;
+  _$jscoverage['script.js'][476] = 0;
+  _$jscoverage['script.js'][477] = 0;
+  _$jscoverage['script.js'][479] = 0;
+  _$jscoverage['script.js'][480] = 0;
+  _$jscoverage['script.js'][481] = 0;
+  _$jscoverage['script.js'][483] = 0;
+  _$jscoverage['script.js'][484] = 0;
+  _$jscoverage['script.js'][485] = 0;
+  _$jscoverage['script.js'][490] = 0;
+  _$jscoverage['script.js'][492] = 0;
+  _$jscoverage['script.js'][493] = 0;
+  _$jscoverage['script.js'][494] = 0;
+  _$jscoverage['script.js'][495] = 0;
+  _$jscoverage['script.js'][499] = 0;
+  _$jscoverage['script.js'][501] = 0;
+  _$jscoverage['script.js'][502] = 0;
+  _$jscoverage['script.js'][503] = 0;
+  _$jscoverage['script.js'][504] = 0;
+  _$jscoverage['script.js'][505] = 0;
+  _$jscoverage['script.js'][511] = 0;
+  _$jscoverage['script.js'][513] = 0;
+  _$jscoverage['script.js'][514] = 0;
+  _$jscoverage['script.js'][515] = 0;
+  _$jscoverage['script.js'][516] = 0;
+  _$jscoverage['script.js'][517] = 0;
+  _$jscoverage['script.js'][518] = 0;
+  _$jscoverage['script.js'][520] = 0;
+  _$jscoverage['script.js'][521] = 0;
+  _$jscoverage['script.js'][522] = 0;
+  _$jscoverage['script.js'][525] = 0;
+  _$jscoverage['script.js'][526] = 0;
+  _$jscoverage['script.js'][527] = 0;
+  _$jscoverage['script.js'][529] = 0;
+  _$jscoverage['script.js'][530] = 0;
+  _$jscoverage['script.js'][535] = 0;
+  _$jscoverage['script.js'][537] = 0;
+  _$jscoverage['script.js'][538] = 0;
+  _$jscoverage['script.js'][539] = 0;
+  _$jscoverage['script.js'][540] = 0;
+  _$jscoverage['script.js'][541] = 0;
+  _$jscoverage['script.js'][542] = 0;
+  _$jscoverage['script.js'][543] = 0;
+  _$jscoverage['script.js'][546] = 0;
+  _$jscoverage['script.js'][547] = 0;
+  _$jscoverage['script.js'][548] = 0;
+  _$jscoverage['script.js'][549] = 0;
+  _$jscoverage['script.js'][550] = 0;
+  _$jscoverage['script.js'][551] = 0;
+  _$jscoverage['script.js'][553] = 0;
+  _$jscoverage['script.js'][554] = 0;
+  _$jscoverage['script.js'][557] = 0;
+  _$jscoverage['script.js'][558] = 0;
+  _$jscoverage['script.js'][560] = 0;
+  _$jscoverage['script.js'][565] = 0;
+  _$jscoverage['script.js'][567] = 0;
+  _$jscoverage['script.js'][568] = 0;
+  _$jscoverage['script.js'][570] = 0;
+  _$jscoverage['script.js'][575] = 0;
+  _$jscoverage['script.js'][577] = 0;
+  _$jscoverage['script.js'][585] = 0;
+  _$jscoverage['script.js'][587] = 0;
+  _$jscoverage['script.js'][592] = 0;
+  _$jscoverage['script.js'][594] = 0;
+  _$jscoverage['script.js'][595] = 0;
+  _$jscoverage['script.js'][597] = 0;
+  _$jscoverage['script.js'][598] = 0;
+  _$jscoverage['script.js'][599] = 0;
+  _$jscoverage['script.js'][600] = 0;
+  _$jscoverage['script.js'][601] = 0;
+  _$jscoverage['script.js'][602] = 0;
+  _$jscoverage['script.js'][603] = 0;
+  _$jscoverage['script.js'][604] = 0;
+  _$jscoverage['script.js'][605] = 0;
+  _$jscoverage['script.js'][606] = 0;
+  _$jscoverage['script.js'][607] = 0;
+  _$jscoverage['script.js'][608] = 0;
+  _$jscoverage['script.js'][613] = 0;
+  _$jscoverage['script.js'][615] = 0;
+  _$jscoverage['script.js'][616] = 0;
+  _$jscoverage['script.js'][618] = 0;
+  _$jscoverage['script.js'][619] = 0;
+  _$jscoverage['script.js'][620] = 0;
+  _$jscoverage['script.js'][621] = 0;
+  _$jscoverage['script.js'][622] = 0;
+  _$jscoverage['script.js'][623] = 0;
+  _$jscoverage['script.js'][624] = 0;
+  _$jscoverage['script.js'][625] = 0;
+  _$jscoverage['script.js'][626] = 0;
+  _$jscoverage['script.js'][627] = 0;
+  _$jscoverage['script.js'][628] = 0;
+  _$jscoverage['script.js'][629] = 0;
+  _$jscoverage['script.js'][634] = 0;
+  _$jscoverage['script.js'][636] = 0;
+  _$jscoverage['script.js'][638] = 0;
+  _$jscoverage['script.js'][639] = 0;
+  _$jscoverage['script.js'][640] = 0;
+  _$jscoverage['script.js'][641] = 0;
+  _$jscoverage['script.js'][643] = 0;
+  _$jscoverage['script.js'][644] = 0;
+  _$jscoverage['script.js'][645] = 0;
+  _$jscoverage['script.js'][646] = 0;
+  _$jscoverage['script.js'][648] = 0;
+  _$jscoverage['script.js'][649] = 0;
+  _$jscoverage['script.js'][650] = 0;
+  _$jscoverage['script.js'][651] = 0;
+  _$jscoverage['script.js'][653] = 0;
+  _$jscoverage['script.js'][654] = 0;
+  _$jscoverage['script.js'][655] = 0;
+  _$jscoverage['script.js'][656] = 0;
+  _$jscoverage['script.js'][662] = 0;
+  _$jscoverage['script.js'][664] = 0;
+  _$jscoverage['script.js'][666] = 0;
+  _$jscoverage['script.js'][667] = 0;
+  _$jscoverage['script.js'][668] = 0;
+  _$jscoverage['script.js'][669] = 0;
+  _$jscoverage['script.js'][671] = 0;
+  _$jscoverage['script.js'][672] = 0;
+  _$jscoverage['script.js'][673] = 0;
+  _$jscoverage['script.js'][674] = 0;
+  _$jscoverage['script.js'][676] = 0;
+  _$jscoverage['script.js'][677] = 0;
+  _$jscoverage['script.js'][678] = 0;
+  _$jscoverage['script.js'][679] = 0;
+  _$jscoverage['script.js'][681] = 0;
+  _$jscoverage['script.js'][682] = 0;
+  _$jscoverage['script.js'][683] = 0;
+  _$jscoverage['script.js'][684] = 0;
+  _$jscoverage['script.js'][690] = 0;
+  _$jscoverage['script.js'][692] = 0;
+  _$jscoverage['script.js'][696] = 0;
+  _$jscoverage['script.js'][698] = 0;
+  _$jscoverage['script.js'][702] = 0;
+  _$jscoverage['script.js'][704] = 0;
+  _$jscoverage['script.js'][706] = 0;
+  _$jscoverage['script.js'][707] = 0;
+  _$jscoverage['script.js'][708] = 0;
+  _$jscoverage['script.js'][710] = 0;
+  _$jscoverage['script.js'][713] = 0;
+  _$jscoverage['script.js'][714] = 0;
+  _$jscoverage['script.js'][717] = 0;
+  _$jscoverage['script.js'][721] = 0;
+  _$jscoverage['script.js'][723] = 0;
+  _$jscoverage['script.js'][724] = 0;
+  _$jscoverage['script.js'][725] = 0;
+  _$jscoverage['script.js'][726] = 0;
+  _$jscoverage['script.js'][727] = 0;
+  _$jscoverage['script.js'][728] = 0;
+  _$jscoverage['script.js'][729] = 0;
+  _$jscoverage['script.js'][731] = 0;
+  _$jscoverage['script.js'][732] = 0;
+  _$jscoverage['script.js'][734] = 0;
+  _$jscoverage['script.js'][735] = 0;
+  _$jscoverage['script.js'][736] = 0;
+  _$jscoverage['script.js'][737] = 0;
+  _$jscoverage['script.js'][738] = 0;
+  _$jscoverage['script.js'][739] = 0;
+  _$jscoverage['script.js'][743] = 0;
+  _$jscoverage['script.js'][747] = 0;
+  _$jscoverage['script.js'][749] = 0;
+  _$jscoverage['script.js'][750] = 0;
+  _$jscoverage['script.js'][751] = 0;
+  _$jscoverage['script.js'][752] = 0;
+  _$jscoverage['script.js'][753] = 0;
+  _$jscoverage['script.js'][754] = 0;
+  _$jscoverage['script.js'][755] = 0;
+  _$jscoverage['script.js'][756] = 0;
+  _$jscoverage['script.js'][757] = 0;
+  _$jscoverage['script.js'][758] = 0;
+  _$jscoverage['script.js'][759] = 0;
+  _$jscoverage['script.js'][760] = 0;
+  _$jscoverage['script.js'][761] = 0;
+  _$jscoverage['script.js'][762] = 0;
+  _$jscoverage['script.js'][763] = 0;
+  _$jscoverage['script.js'][767] = 0;
+  _$jscoverage['script.js'][769] = 0;
+  _$jscoverage['script.js'][773] = 0;
+  _$jscoverage['script.js'][775] = 0;
+  _$jscoverage['script.js'][776] = 0;
+  _$jscoverage['script.js'][777] = 0;
+  _$jscoverage['script.js'][778] = 0;
+  _$jscoverage['script.js'][779] = 0;
+  _$jscoverage['script.js'][780] = 0;
+  _$jscoverage['script.js'][781] = 0;
+  _$jscoverage['script.js'][782] = 0;
+  _$jscoverage['script.js'][783] = 0;
+  _$jscoverage['script.js'][784] = 0;
+  _$jscoverage['script.js'][786] = 0;
+  _$jscoverage['script.js'][788] = 0;
+  _$jscoverage['script.js'][790] = 0;
+  _$jscoverage['script.js'][791] = 0;
+  _$jscoverage['script.js'][794] = 0;
+  _$jscoverage['script.js'][795] = 0;
+  _$jscoverage['script.js'][796] = 0;
+  _$jscoverage['script.js'][797] = 0;
+  _$jscoverage['script.js'][799] = 0;
+  _$jscoverage['script.js'][801] = 0;
+  _$jscoverage['script.js'][802] = 0;
+  _$jscoverage['script.js'][805] = 0;
+  _$jscoverage['script.js'][807] = 0;
+  _$jscoverage['script.js'][808] = 0;
+  _$jscoverage['script.js'][809] = 0;
+  _$jscoverage['script.js'][810] = 0;
+  _$jscoverage['script.js'][811] = 0;
+  _$jscoverage['script.js'][812] = 0;
+  _$jscoverage['script.js'][814] = 0;
+  _$jscoverage['script.js'][815] = 0;
+  _$jscoverage['script.js'][817] = 0;
+  _$jscoverage['script.js'][819] = 0;
+  _$jscoverage['script.js'][822] = 0;
+  _$jscoverage['script.js'][823] = 0;
+  _$jscoverage['script.js'][828] = 0;
+  _$jscoverage['script.js'][830] = 0;
+  _$jscoverage['script.js'][834] = 0;
+  _$jscoverage['script.js'][836] = 0;
+  _$jscoverage['script.js'][837] = 0;
+  _$jscoverage['script.js'][838] = 0;
+  _$jscoverage['script.js'][839] = 0;
+  _$jscoverage['script.js'][840] = 0;
+  _$jscoverage['script.js'][841] = 0;
+  _$jscoverage['script.js'][842] = 0;
+  _$jscoverage['script.js'][843] = 0;
+  _$jscoverage['script.js'][844] = 0;
+  _$jscoverage['script.js'][845] = 0;
+  _$jscoverage['script.js'][846] = 0;
+  _$jscoverage['script.js'][848] = 0;
+  _$jscoverage['script.js'][849] = 0;
+  _$jscoverage['script.js'][851] = 0;
+  _$jscoverage['script.js'][852] = 0;
+  _$jscoverage['script.js'][853] = 0;
+  _$jscoverage['script.js'][854] = 0;
+  _$jscoverage['script.js'][855] = 0;
+  _$jscoverage['script.js'][856] = 0;
+  _$jscoverage['script.js'][857] = 0;
+  _$jscoverage['script.js'][858] = 0;
+  _$jscoverage['script.js'][859] = 0;
+  _$jscoverage['script.js'][860] = 0;
+  _$jscoverage['script.js'][865] = 0;
+  _$jscoverage['script.js'][867] = 0;
+  _$jscoverage['script.js'][868] = 0;
+  _$jscoverage['script.js'][869] = 0;
+  _$jscoverage['script.js'][870] = 0;
+  _$jscoverage['script.js'][874] = 0;
+  _$jscoverage['script.js'][875] = 0;
+  _$jscoverage['script.js'][881] = 0;
+  _$jscoverage['script.js'][883] = 0;
+  _$jscoverage['script.js'][884] = 0;
+  _$jscoverage['script.js'][885] = 0;
+  _$jscoverage['script.js'][886] = 0;
+  _$jscoverage['script.js'][890] = 0;
+  _$jscoverage['script.js'][892] = 0;
+  _$jscoverage['script.js'][893] = 0;
+  _$jscoverage['script.js'][894] = 0;
+  _$jscoverage['script.js'][895] = 0;
+  _$jscoverage['script.js'][899] = 0;
+  _$jscoverage['script.js'][901] = 0;
+  _$jscoverage['script.js'][902] = 0;
+  _$jscoverage['script.js'][903] = 0;
+  _$jscoverage['script.js'][904] = 0;
+  _$jscoverage['script.js'][908] = 0;
+  _$jscoverage['script.js'][910] = 0;
+  _$jscoverage['script.js'][911] = 0;
+  _$jscoverage['script.js'][915] = 0;
+  _$jscoverage['script.js'][917] = 0;
+  _$jscoverage['script.js'][918] = 0;
+  _$jscoverage['script.js'][919] = 0;
+  _$jscoverage['script.js'][920] = 0;
+  _$jscoverage['script.js'][921] = 0;
+  _$jscoverage['script.js'][923] = 0;
+  _$jscoverage['script.js'][924] = 0;
+  _$jscoverage['script.js'][926] = 0;
+  _$jscoverage['script.js'][927] = 0;
+  _$jscoverage['script.js'][928] = 0;
+  _$jscoverage['script.js'][929] = 0;
+  _$jscoverage['script.js'][931] = 0;
+  _$jscoverage['script.js'][932] = 0;
+  _$jscoverage['script.js'][935] = 0;
+  _$jscoverage['script.js'][936] = 0;
+  _$jscoverage['script.js'][937] = 0;
+  _$jscoverage['script.js'][938] = 0;
+  _$jscoverage['script.js'][940] = 0;
+  _$jscoverage['script.js'][941] = 0;
+  _$jscoverage['script.js'][942] = 0;
+  _$jscoverage['script.js'][944] = 0;
+  _$jscoverage['script.js'][949] = 0;
+  _$jscoverage['script.js'][951] = 0;
+  _$jscoverage['script.js'][952] = 0;
+  _$jscoverage['script.js'][953] = 0;
+  _$jscoverage['script.js'][957] = 0;
+  _$jscoverage['script.js'][959] = 0;
+  _$jscoverage['script.js'][960] = 0;
+  _$jscoverage['script.js'][961] = 0;
+  _$jscoverage['script.js'][962] = 0;
+  _$jscoverage['script.js'][963] = 0;
+  _$jscoverage['script.js'][964] = 0;
+  _$jscoverage['script.js'][965] = 0;
+  _$jscoverage['script.js'][966] = 0;
+  _$jscoverage['script.js'][967] = 0;
+  _$jscoverage['script.js'][968] = 0;
+  _$jscoverage['script.js'][969] = 0;
+  _$jscoverage['script.js'][970] = 0;
+  _$jscoverage['script.js'][971] = 0;
+  _$jscoverage['script.js'][972] = 0;
+  _$jscoverage['script.js'][973] = 0;
+  _$jscoverage['script.js'][974] = 0;
+  _$jscoverage['script.js'][975] = 0;
+  _$jscoverage['script.js'][976] = 0;
+  _$jscoverage['script.js'][979] = 0;
+  _$jscoverage['script.js'][981] = 0;
+  _$jscoverage['script.js'][982] = 0;
+  _$jscoverage['script.js'][984] = 0;
+  _$jscoverage['script.js'][986] = 0;
+  _$jscoverage['script.js'][987] = 0;
+  _$jscoverage['script.js'][989] = 0;
+  _$jscoverage['script.js'][991] = 0;
+  _$jscoverage['script.js'][992] = 0;
+  _$jscoverage['script.js'][994] = 0;
+  _$jscoverage['script.js'][996] = 0;
+  _$jscoverage['script.js'][997] = 0;
+  _$jscoverage['script.js'][999] = 0;
+  _$jscoverage['script.js'][1001] = 0;
+  _$jscoverage['script.js'][1002] = 0;
+  _$jscoverage['script.js'][1004] = 0;
+  _$jscoverage['script.js'][1006] = 0;
+  _$jscoverage['script.js'][1007] = 0;
+  _$jscoverage['script.js'][1009] = 0;
+  _$jscoverage['script.js'][1011] = 0;
+  _$jscoverage['script.js'][1012] = 0;
+  _$jscoverage['script.js'][1014] = 0;
+  _$jscoverage['script.js'][1015] = 0;
+  _$jscoverage['script.js'][1016] = 0;
+  _$jscoverage['script.js'][1017] = 0;
+  _$jscoverage['script.js'][1019] = 0;
+  _$jscoverage['script.js'][1021] = 0;
+  _$jscoverage['script.js'][1024] = 0;
+  _$jscoverage['script.js'][1026] = 0;
+  _$jscoverage['script.js'][1029] = 0;
+  _$jscoverage['script.js'][1030] = 0;
+  _$jscoverage['script.js'][1032] = 0;
+  _$jscoverage['script.js'][1035] = 0;
+  _$jscoverage['script.js'][1037] = 0;
+  _$jscoverage['script.js'][1038] = 0;
+  _$jscoverage['script.js'][1039] = 0;
+  _$jscoverage['script.js'][1041] = 0;
+  _$jscoverage['script.js'][1042] = 0;
+  _$jscoverage['script.js'][1043] = 0;
+  _$jscoverage['script.js'][1045] = 0;
+  _$jscoverage['script.js'][1046] = 0;
+  _$jscoverage['script.js'][1047] = 0;
+  _$jscoverage['script.js'][1049] = 0;
+  _$jscoverage['script.js'][1050] = 0;
+  _$jscoverage['script.js'][1051] = 0;
+  _$jscoverage['script.js'][1053] = 0;
+  _$jscoverage['script.js'][1054] = 0;
+  _$jscoverage['script.js'][1057] = 0;
+  _$jscoverage['script.js'][1059] = 0;
+  _$jscoverage['script.js'][1060] = 0;
+  _$jscoverage['script.js'][1062] = 0;
+  _$jscoverage['script.js'][1065] = 0;
+  _$jscoverage['script.js'][1067] = 0;
+  _$jscoverage['script.js'][1068] = 0;
+  _$jscoverage['script.js'][1070] = 0;
+  _$jscoverage['script.js'][1071] = 0;
+  _$jscoverage['script.js'][1072] = 0;
+  _$jscoverage['script.js'][1075] = 0;
+  _$jscoverage['script.js'][1077] = 0;
+  _$jscoverage['script.js'][1078] = 0;
+  _$jscoverage['script.js'][1080] = 0;
+  _$jscoverage['script.js'][1081] = 0;
+  _$jscoverage['script.js'][1082] = 0;
+  _$jscoverage['script.js'][1083] = 0;
+  _$jscoverage['script.js'][1085] = 0;
+  _$jscoverage['script.js'][1089] = 0;
+  _$jscoverage['script.js'][1091] = 0;
+  _$jscoverage['script.js'][1092] = 0;
+  _$jscoverage['script.js'][1093] = 0;
+  _$jscoverage['script.js'][1094] = 0;
+  _$jscoverage['script.js'][1095] = 0;
+  _$jscoverage['script.js'][1096] = 0;
+  _$jscoverage['script.js'][1099] = 0;
+  _$jscoverage['script.js'][1101] = 0;
+  _$jscoverage['script.js'][1102] = 0;
+  _$jscoverage['script.js'][1103] = 0;
+  _$jscoverage['script.js'][1104] = 0;
+  _$jscoverage['script.js'][1105] = 0;
+  _$jscoverage['script.js'][1106] = 0;
+  _$jscoverage['script.js'][1109] = 0;
+  _$jscoverage['script.js'][1110] = 0;
+  _$jscoverage['script.js'][1112] = 0;
+  _$jscoverage['script.js'][1115] = 0;
+  _$jscoverage['script.js'][1117] = 0;
+  _$jscoverage['script.js'][1119] = 0;
+  _$jscoverage['script.js'][1120] = 0;
+  _$jscoverage['script.js'][1121] = 0;
+  _$jscoverage['script.js'][1123] = 0;
+  _$jscoverage['script.js'][1127] = 0;
+  _$jscoverage['script.js'][1128] = 0;
+  _$jscoverage['script.js'][1129] = 0;
+  _$jscoverage['script.js'][1130] = 0;
+  _$jscoverage['script.js'][1131] = 0;
+  _$jscoverage['script.js'][1132] = 0;
+  _$jscoverage['script.js'][1133] = 0;
+  _$jscoverage['script.js'][1134] = 0;
+  _$jscoverage['script.js'][1135] = 0;
+  _$jscoverage['script.js'][1136] = 0;
+  _$jscoverage['script.js'][1137] = 0;
+  _$jscoverage['script.js'][1138] = 0;
+  _$jscoverage['script.js'][1139] = 0;
+  _$jscoverage['script.js'][1140] = 0;
+  _$jscoverage['script.js'][1141] = 0;
+  _$jscoverage['script.js'][1142] = 0;
+  _$jscoverage['script.js'][1143] = 0;
+  _$jscoverage['script.js'][1144] = 0;
+  _$jscoverage['script.js'][1145] = 0;
+  _$jscoverage['script.js'][1146] = 0;
+  _$jscoverage['script.js'][1150] = 0;
+  _$jscoverage['script.js'][1151] = 0;
+  _$jscoverage['script.js'][1152] = 0;
+  _$jscoverage['script.js'][1153] = 0;
+  _$jscoverage['script.js'][1154] = 0;
+  _$jscoverage['script.js'][1155] = 0;
+  _$jscoverage['script.js'][1156] = 0;
+  _$jscoverage['script.js'][1159] = 0;
+  _$jscoverage['script.js'][1160] = 0;
+  _$jscoverage['script.js'][1161] = 0;
+  _$jscoverage['script.js'][1162] = 0;
+  _$jscoverage['script.js'][1168] = 0;
+  _$jscoverage['script.js'][1169] = 0;
+  _$jscoverage['script.js'][1170] = 0;
+  _$jscoverage['script.js'][1171] = 0;
+  _$jscoverage['script.js'][1172] = 0;
+  _$jscoverage['script.js'][1175] = 0;
+  _$jscoverage['script.js'][1176] = 0;
+  _$jscoverage['script.js'][1182] = 0;
+  _$jscoverage['script.js'][1183] = 0;
+  _$jscoverage['script.js'][1184] = 0;
+  _$jscoverage['script.js'][1185] = 0;
+  _$jscoverage['script.js'][1186] = 0;
+  _$jscoverage['script.js'][1189] = 0;
+  _$jscoverage['script.js'][1190] = 0;
+}
+_$jscoverage['script.js'].source = ["<span class=\"k\">var</span> gameInterval \t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> canvas<span class=\"k\">;</span>","<span class=\"k\">var</span> ctx<span class=\"k\">;</span>","<span class=\"k\">var</span> width \t\t \t <span class=\"k\">=</span> <span class=\"s\">450</span><span class=\"k\">;</span> \t\t\t\t","<span class=\"k\">var</span> height \t\t \t <span class=\"k\">=</span> <span class=\"s\">450</span><span class=\"k\">;</span> \t\t\t\t","<span class=\"k\">var</span> bgColor \t \t <span class=\"k\">=</span> <span class=\"s\">\"black\"</span><span class=\"k\">;</span>\t","<span class=\"k\">var</span> objectColor  \t <span class=\"k\">=</span> <span class=\"s\">\"white\"</span><span class=\"k\">;</span>\t","<span class=\"k\">var</span> roboX\t\t\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> roboY\t\t\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span> \t\t\t\t\t","<span class=\"k\">var</span> roboWidth\t\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>\t\t\t\t","<span class=\"k\">var</span> roboHeight\t\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>\t\t\t\t","<span class=\"k\">var</span> roboColor \t \t <span class=\"k\">=</span> <span class=\"s\">\"red\"</span><span class=\"k\">;</span>\t","<span class=\"k\">var</span> radian \t\t\t <span class=\"k\">=</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">0</span><span class=\"k\">;</span>\t\t","<span class=\"k\">var</span> degrees \t\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> speed\t\t\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> start\t\t \t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","<span class=\"k\">var</span> crash\t\t \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> lWheelPosX\t\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> lWheelPosY\t\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> rWheelPosX\t\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> rWheelPosY\t\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> distance     \t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> motorA\t\t \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> motorB\t\t \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> last_step    \t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> steps         \t <span class=\"k\">=</span> <span class=\"k\">new</span> Array<span class=\"k\">();</span>","<span class=\"k\">var</span> get_path     \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> pause_ \t\t \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> resetpos_\t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> resize_\t\t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> stop_   \t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> submit_\t\t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> play_page\t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> rightDown \t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> leftDown \t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> upDown \t\t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">var</span> w \t\t\t\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> lang\t\t\t <span class=\"k\">=</span> <span class=\"s\">'e'</span><span class=\"k\">;</span>","<span class=\"k\">var</span> change_lang_\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","","<span class=\"k\">function</span> loadanime<span class=\"k\">()</span> ","<span class=\"k\">{</span>","\t$<span class=\"k\">(</span><span class=\"s\">\"#my_canvas\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span>","\t\t    \twidth<span class=\"k\">:</span>  <span class=\"s\">450</span><span class=\"k\">,</span>","\t\t    \theight<span class=\"k\">:</span> <span class=\"s\">450</span> ","\t\t    <span class=\"k\">}</span><span class=\"k\">,</span> <span class=\"s\">\"slow\"</span><span class=\"k\">);</span>","<span class=\"k\">}</span>","","<span class=\"k\">function</span> init<span class=\"k\">(</span>speed_<span class=\"k\">)</span>","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>start<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(!</span>submit_<span class=\"k\">)</span> <span class=\"k\">{</span>\t\t\t\t\t","\t\t\troboWidth \t <span class=\"k\">=</span> <span class=\"s\">50</span><span class=\"k\">;</span>","\t\t\troboHeight \t <span class=\"k\">=</span> <span class=\"s\">53</span><span class=\"k\">;</span>","\t\t\tlWheelWidth  <span class=\"k\">=</span> <span class=\"s\">7</span><span class=\"k\">;</span>","\t\t\tlWheelHeight <span class=\"k\">=</span> <span class=\"s\">40</span><span class=\"k\">;</span>","\t\t\trWheelWidth  <span class=\"k\">=</span> <span class=\"s\">7</span><span class=\"k\">;</span>","\t\t\trWheelHeight <span class=\"k\">=</span> <span class=\"s\">40</span><span class=\"k\">;</span>\t\t\t\t\t","\t\t<span class=\"k\">}</span>","\t\tcanvas \t\t <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'my_canvas'</span><span class=\"k\">);</span>","\t\tctx \t\t <span class=\"k\">=</span> canvas<span class=\"k\">.</span>getContext<span class=\"k\">(</span><span class=\"s\">\"2d\"</span><span class=\"k\">);</span>","\t\twidth \t\t <span class=\"k\">=</span> canvas<span class=\"k\">.</span>width<span class=\"k\">;</span>","\t\theight \t \t <span class=\"k\">=</span> canvas<span class=\"k\">.</span>height<span class=\"k\">;</span>","\t\treset_data<span class=\"k\">();</span>","\t<span class=\"k\">}</span>\t\t\t","\tspeed \t\t\t <span class=\"k\">=</span> speed_<span class=\"k\">;</span>","\tclearInterval<span class=\"k\">(</span>gameInterval<span class=\"k\">);</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>play_page<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tgameInterval <span class=\"k\">=</span> setInterval<span class=\"k\">(</span>draw_PlayPage<span class=\"k\">,</span> <span class=\"s\">20</span><span class=\"k\">);</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span><span class=\"k\">{</span>","\t\tgameInterval <span class=\"k\">=</span> setInterval<span class=\"k\">(</span>draw<span class=\"k\">,</span> <span class=\"s\">20</span><span class=\"k\">);</span>","\t<span class=\"k\">}</span>\t\t\t","<span class=\"k\">}</span>","","<span class=\"c\">// reset data</span>","<span class=\"k\">function</span> reset_data<span class=\"k\">()</span>","<span class=\"k\">{</span>\t\t\t","\troboX \t\t <span class=\"k\">=</span> width<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\troboY \t   \t <span class=\"k\">=</span> height<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\tlWheelPosX \t <span class=\"k\">=</span> <span class=\"k\">-</span>roboWidth<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">-</span> lWheelWidth<span class=\"k\">;</span>","\tlWheelPosY \t <span class=\"k\">=</span> <span class=\"k\">-</span>roboHeight<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">+</span> roboHeight<span class=\"k\">/</span><span class=\"s\">8</span><span class=\"k\">;</span>","\trWheelPosX \t <span class=\"k\">=</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\trWheelPosY \t <span class=\"k\">=</span> <span class=\"k\">-</span>roboHeight<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">+</span> roboHeight<span class=\"k\">/</span><span class=\"s\">8</span><span class=\"k\">;</span>","\tradian \t\t <span class=\"k\">=</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\tsubmit_ \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tstart \t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>\t\t\t\t","\tmotorA\t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tmotorB\t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>\t\t\t","\tcrash \t \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tpause_\t \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tresetpos_\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tstop_ \t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tresize_ \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tlast_step\t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\tdistance \t <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"c\">// runs if the page is changed</span>","<span class=\"k\">function</span> change_page<span class=\"k\">()</span>","<span class=\"k\">{</span>\t","\treset_data<span class=\"k\">();</span>","\tsteps <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value \t <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>\t","\tresetpos<span class=\"k\">();</span>","<span class=\"k\">}</span>","","<span class=\"c\">// runs if the language is changed</span>","<span class=\"k\">function</span> change_lang<span class=\"k\">(</span>val<span class=\"k\">)</span>","<span class=\"k\">{</span>","\tlang \t\t <span class=\"k\">=</span> val<span class=\"k\">;</span>","\tchange_lang_ <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\tdisplay<span class=\"k\">();</span>","\tchange_lang_ <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"k\">function</span> popup<span class=\"k\">(</span>message<span class=\"k\">)</span> ","<span class=\"k\">{</span>\t\t\t\t\t  ","\t\t<span class=\"k\">var</span> maskHeight <span class=\"k\">=</span> $<span class=\"k\">(</span>document<span class=\"k\">).</span>height<span class=\"k\">();</span>  ","\t\t<span class=\"k\">var</span> maskWidth  <span class=\"k\">=</span> $<span class=\"k\">(</span>window<span class=\"k\">).</span>width<span class=\"k\">();</span>","","\t\t<span class=\"k\">var</span> dialogTop  <span class=\"k\">=</span>  <span class=\"k\">(</span>maskHeight<span class=\"k\">/</span><span class=\"s\">3</span><span class=\"k\">);</span> ","\t\t<span class=\"k\">var</span> dialogLeft <span class=\"k\">=</span> <span class=\"k\">(</span>maskWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">-</span> <span class=\"s\">250</span><span class=\"k\">;</span> ","\t\t","\t\t$<span class=\"k\">(</span><span class=\"s\">'#dialog-overlay'</span><span class=\"k\">).</span>css<span class=\"k\">(</span><span class=\"k\">{</span>","\t\t\theight<span class=\"k\">:</span>maskHeight<span class=\"k\">,</span>","\t\t\twidth<span class=\"k\">:</span>maskWidth","\t\t<span class=\"k\">}</span><span class=\"k\">).</span>show<span class=\"k\">();</span>","\t\t$<span class=\"k\">(</span><span class=\"s\">'#dialog-box'</span><span class=\"k\">).</span>css<span class=\"k\">(</span><span class=\"k\">{</span>","\t\t\ttop<span class=\"k\">:</span>dialogTop<span class=\"k\">,</span>","\t\t\tleft<span class=\"k\">:</span>dialogLeft","\t\t<span class=\"k\">}</span><span class=\"k\">).</span>show<span class=\"k\">();</span>","\t\t$<span class=\"k\">(</span><span class=\"s\">\"#dialog-box\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span>","\t    \theight<span class=\"k\">:</span> <span class=\"s\">0</span><span class=\"k\">,</span>","\t    \twidth<span class=\"k\">:</span>  <span class=\"s\">0</span>","\t    <span class=\"k\">}</span><span class=\"k\">,</span><span class=\"s\">0</span><span class=\"k\">);</span>","\t\t$<span class=\"k\">(</span><span class=\"s\">\"#dialog-box\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span>","\t    \theight<span class=\"k\">:</span> <span class=\"s\">180</span><span class=\"k\">,</span>","\t    \twidth<span class=\"k\">:</span>  <span class=\"s\">500</span>","\t    <span class=\"k\">}</span><span class=\"k\">,</span><span class=\"s\">100</span><span class=\"k\">);</span>","","\t\t$<span class=\"k\">(</span><span class=\"s\">'#dialog-message'</span><span class=\"k\">).</span>html<span class=\"k\">(</span>message<span class=\"k\">);</span>\t","<span class=\"k\">}</span>","","<span class=\"k\">function</span> popupbg<span class=\"k\">(</span>message<span class=\"k\">)</span> ","<span class=\"k\">{</span>\t\t\t\t\t  ","\t\t<span class=\"k\">var</span> maskHeight <span class=\"k\">=</span> $<span class=\"k\">(</span>document<span class=\"k\">).</span>height<span class=\"k\">();</span>  ","\t\t<span class=\"k\">var</span> maskWidth  <span class=\"k\">=</span> $<span class=\"k\">(</span>window<span class=\"k\">).</span>width<span class=\"k\">();</span>","","\t\t<span class=\"k\">var</span> dialogTop  <span class=\"k\">=</span> <span class=\"k\">(</span>maskHeight<span class=\"k\">/</span><span class=\"s\">3</span><span class=\"k\">);</span> ","\t\t<span class=\"k\">var</span> dialogLeft <span class=\"k\">=</span> <span class=\"k\">(</span>maskWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">-</span> <span class=\"s\">250</span><span class=\"k\">;</span> ","\t\t","\t\t$<span class=\"k\">(</span><span class=\"s\">'#dialog-overlay-bg'</span><span class=\"k\">).</span>css<span class=\"k\">(</span><span class=\"k\">{</span>height<span class=\"k\">:</span>maskHeight<span class=\"k\">,</span> width<span class=\"k\">:</span>maskWidth<span class=\"k\">}</span><span class=\"k\">).</span>show<span class=\"k\">();</span>","\t\t$<span class=\"k\">(</span><span class=\"s\">'#dialog-box-bg'</span><span class=\"k\">).</span>css<span class=\"k\">(</span><span class=\"k\">{</span>top<span class=\"k\">:</span>dialogTop<span class=\"k\">,</span> left<span class=\"k\">:</span>dialogLeft<span class=\"k\">}</span><span class=\"k\">).</span>show<span class=\"k\">();</span>","\t\t$<span class=\"k\">(</span><span class=\"s\">\"#dialog-box-bg\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span>","\t    \theight<span class=\"k\">:</span> <span class=\"s\">0</span><span class=\"k\">,</span>","\t    \twidth<span class=\"k\">:</span>  <span class=\"s\">0</span>","\t    <span class=\"k\">}</span><span class=\"k\">,</span><span class=\"s\">0</span><span class=\"k\">);</span>","\t\t$<span class=\"k\">(</span><span class=\"s\">\"#dialog-box-bg\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span>","\t    \theight<span class=\"k\">:</span> <span class=\"s\">180</span><span class=\"k\">,</span>","\t    \twidth<span class=\"k\">:</span>  <span class=\"s\">500</span>","\t    <span class=\"k\">}</span><span class=\"k\">,</span><span class=\"s\">100</span><span class=\"k\">);</span>","","\t\t$<span class=\"k\">(</span><span class=\"s\">'#dialog-message-bg'</span><span class=\"k\">).</span>html<span class=\"k\">(</span>message<span class=\"k\">);</span>\t","<span class=\"k\">}</span>","","<span class=\"c\">// resizing the canvas width and height</span>","<span class=\"k\">function</span> resize<span class=\"k\">()</span>","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>lang <span class=\"k\">==</span> <span class=\"s\">'e'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value  <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span> <span class=\"k\">&amp;&amp;</span> ","\t\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\t$<span class=\"k\">(</span><span class=\"s\">\"#my_canvas\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span>","\t\t    \twidth<span class=\"k\">:</span>  document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value<span class=\"k\">,</span>","\t\t    \theight<span class=\"k\">:</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value ","\t\t    <span class=\"k\">}</span><span class=\"k\">,</span><span class=\"s\">\"slow\"</span><span class=\"k\">);</span>","\t\t\t\tcanvas<span class=\"k\">.</span>width  <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\twidth <span class=\"k\">=</span> canvas<span class=\"k\">.</span>width<span class=\"k\">;</span>","\t\t\tcanvas<span class=\"k\">.</span>height <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\theight <span class=\"k\">=</span> canvas<span class=\"k\">.</span>height<span class=\"k\">;</span>","\t\t\t<span class=\"k\">}</span>","","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t$<span class=\"k\">(</span><span class=\"s\">\"#my_canvas\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span>","\t\t    \twidth<span class=\"k\">:</span>  document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value<span class=\"k\">,</span>","\t\t    <span class=\"k\">}</span><span class=\"k\">,</span><span class=\"s\">\"slow\"</span><span class=\"k\">);</span>","\t\t\tcanvas<span class=\"k\">.</span>width  <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\twidth <span class=\"k\">=</span> canvas<span class=\"k\">.</span>width<span class=\"k\">;</span>","","\t\t<span class=\"k\">}</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t$<span class=\"k\">(</span><span class=\"s\">\"#my_canvas\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span> ","\t\t    \theight<span class=\"k\">:</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value<span class=\"k\">,</span>","\t\t    <span class=\"k\">}</span><span class=\"k\">,</span><span class=\"s\">\"slow\"</span><span class=\"k\">);</span>","\t\t\tcanvas<span class=\"k\">.</span>height <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\theight <span class=\"k\">=</span> canvas<span class=\"k\">.</span>height<span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value <span class=\"k\">==</span> <span class=\"s\">0</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">==</span> <span class=\"s\">0</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter something!'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value  <span class=\"k\">&lt;</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;</span> <span class=\"s\">150</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter width and height higher than 150'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value  <span class=\"k\">==</span> <span class=\"s\">0</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> ","\t\t\t\t   document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t<span class=\"c\">/* Do nothing */</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">==</span> <span class=\"s\">0</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> ","\t\t\t\t   document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value  <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t<span class=\"c\">/* Do nothing */</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;</span> <span class=\"s\">1000</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter width and height less than 1000'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter width less than 1000'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter height less than 1000'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value  <span class=\"k\">&lt;</span> <span class=\"s\">150</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter width higher than 150.'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;</span> <span class=\"s\">150</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter height higher than 150.'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>lang <span class=\"k\">==</span> <span class=\"s\">'b'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span> <span class=\"k\">&amp;&amp;</span> ","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t$<span class=\"k\">(</span><span class=\"s\">\"#my_canvas\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span>","\t    \twidth<span class=\"k\">:</span>  document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value<span class=\"k\">,</span>","\t    \theight<span class=\"k\">:</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value ","\t    <span class=\"k\">}</span><span class=\"k\">,</span><span class=\"s\">\"slow\"</span><span class=\"k\">);</span>","\t\t\tcanvas<span class=\"k\">.</span>width  <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\twidth <span class=\"k\">=</span> canvas<span class=\"k\">.</span>width<span class=\"k\">;</span>","\t\tcanvas<span class=\"k\">.</span>height <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\theight <span class=\"k\">=</span> canvas<span class=\"k\">.</span>height<span class=\"k\">;</span>","\t\t\t<span class=\"k\">}</span>","","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t$<span class=\"k\">(</span><span class=\"s\">\"#my_canvas\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span>","\t\t    \twidth<span class=\"k\">:</span>  document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value<span class=\"k\">,</span>","\t\t    <span class=\"k\">}</span><span class=\"k\">,</span><span class=\"s\">\"slow\"</span><span class=\"k\">);</span>","\t\t\tcanvas<span class=\"k\">.</span>width  <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\twidth <span class=\"k\">=</span> canvas<span class=\"k\">.</span>width<span class=\"k\">;</span>","","\t\t<span class=\"k\">}</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t$<span class=\"k\">(</span><span class=\"s\">\"#my_canvas\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span> ","\t\t    \theight<span class=\"k\">:</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value<span class=\"k\">,</span>","\t\t    <span class=\"k\">}</span><span class=\"k\">,</span><span class=\"s\">\"slow\"</span><span class=\"k\">);</span>","\t\t\tcanvas<span class=\"k\">.</span>height <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\theight <span class=\"k\">=</span> canvas<span class=\"k\">.</span>height<span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">==</span> <span class=\"s\">0</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">==</span> <span class=\"s\">0</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#208;&#189;&#208;&#181;&#209;&#137;&#208;&#190;!'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">&lt;</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;</span> <span class=\"s\">150</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#208;&#178;&#208;&#184;&#209;&#129;&#208;&#190;&#209;&#135;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#184; &#209;&#136;&#208;&#184;&#209;&#128;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#179;&#208;&#190;&#208;&#187;&#208;&#181;&#208;&#188;&#208;&#184; &#208;&#190;&#209;&#130; 150'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">==</span> <span class=\"s\">0</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> ","\t\t\t\t   document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t<span class=\"c\">/* Do nothing */</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">==</span> <span class=\"s\">0</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value   <span class=\"k\">&gt;=</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> ","\t\t\t\t   document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">&lt;=</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t<span class=\"c\">/* Do nothing */</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;</span> <span class=\"s\">1000</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#208;&#178;&#208;&#184;&#209;&#129;&#208;&#190;&#209;&#135;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#184; &#209;&#136;&#208;&#184;&#209;&#128;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#188;&#208;&#176;&#208;&#187;&#208;&#186;&#208;&#184; &#208;&#190;&#209;&#130; 1000'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#209;&#136;&#208;&#184;&#209;&#128;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#188;&#208;&#176;&#208;&#187;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 1000'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">1000</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#208;&#178;&#208;&#184;&#209;&#129;&#208;&#190;&#209;&#135;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#188;&#208;&#176;&#208;&#187;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 1000'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">&lt;</span> <span class=\"s\">150</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#209;&#136;&#208;&#184;&#209;&#128;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#178;&#208;&#184;&#209;&#129;&#208;&#190;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 150.'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;</span> <span class=\"s\">150</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#208;&#178;&#208;&#184;&#209;&#129;&#208;&#190;&#209;&#135;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#178;&#208;&#184;&#209;&#129;&#208;&#190;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 150.'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span>","\tresize_ <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t\t","\troboX   <span class=\"k\">=</span> width<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\troboY   <span class=\"k\">=</span> height<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\tradian  <span class=\"k\">=</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\tresetpos<span class=\"k\">();</span>","<span class=\"k\">}</span>","","<span class=\"c\">// reseting the canvas width and height</span>","<span class=\"k\">function</span> reset<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tresize_ \t  <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t$<span class=\"k\">(</span><span class=\"s\">\"#my_canvas\"</span><span class=\"k\">).</span>animate<span class=\"k\">(</span><span class=\"k\">{</span>","    \twidth<span class=\"k\">:</span>  <span class=\"s\">450</span><span class=\"k\">,</span>","    \theight<span class=\"k\">:</span> <span class=\"s\">450</span> ","    <span class=\"k\">}</span><span class=\"k\">,</span><span class=\"s\">\"slow\"</span><span class=\"k\">);</span>","\twidth \t\t  <span class=\"k\">=</span> <span class=\"s\">450</span><span class=\"k\">;</span>","\tcanvas<span class=\"k\">.</span>width  <span class=\"k\">=</span> width<span class=\"k\">;</span>","\theight \t\t  <span class=\"k\">=</span> <span class=\"s\">450</span><span class=\"k\">;</span>","\tcanvas<span class=\"k\">.</span>height <span class=\"k\">=</span> height<span class=\"k\">;</span>","","\t<span class=\"k\">if</span> <span class=\"k\">(</span>start<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\troboX \t  <span class=\"k\">=</span> width<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\troboY \t  <span class=\"k\">=</span> height<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\tradian \t  <span class=\"k\">=</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1'</span><span class=\"k\">).</span>value  \t<span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1'</span><span class=\"k\">).</span>value \t<span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width1-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height1-bg'</span><span class=\"k\">).</span>value <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\tresetpos<span class=\"k\">();</span>","<span class=\"k\">}</span>","","<span class=\"c\">// reset the position of the robot</span>","<span class=\"k\">function</span> resetpos<span class=\"k\">()</span>","<span class=\"k\">{</span>","\troboX  \t  \t  <span class=\"k\">=</span> width<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\troboY  \t  \t  <span class=\"k\">=</span> height<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\tradian \t  \t  <span class=\"k\">=</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\tinit<span class=\"k\">(</span>speed<span class=\"k\">);</span>","\tresetpos_ \t  <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>crash<span class=\"k\">)</span> <span class=\"k\">{</span>  ","\t\tcrash \t  <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\t\tdisplay<span class=\"k\">();</span>","\t<span class=\"k\">}</span>","<span class=\"k\">}</span>","","<span class=\"c\">// resizing the robot width and height</span>","<span class=\"k\">function</span> robo_resize<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tresize_ <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>lang <span class=\"k\">==</span> <span class=\"s\">'e'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r'</span><span class=\"k\">).</span>value     <span class=\"k\">&gt;=</span> <span class=\"s\">20</span> <span class=\"k\">||</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;=</span> <span class=\"s\">20</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">20</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r'</span><span class=\"k\">).</span>value   <span class=\"k\">&lt;=</span> <span class=\"s\">100</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboWidth  <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\tlWheelPosX <span class=\"k\">=</span> <span class=\"k\">-</span>roboWidth<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">-</span> <span class=\"s\">7</span><span class=\"k\">;</span>","\t\t\trWheelPosX <span class=\"k\">=</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">20</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">150</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboHeight <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t\t","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;</span> <span class=\"s\">100</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter height and width for the robot less than 100'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">150</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter height for the robot less than 150'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;</span> <span class=\"s\">100</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter width for the robot less than 100'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> ","\t\t ","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>start <span class=\"k\">==</span> <span class=\"k\">false</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter width/height for the robot &lt;br/&gt;(higher than 20)'</span><span class=\"k\">);</span>","\t<span class=\"k\">}</span>","","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>lang <span class=\"k\">==</span> <span class=\"s\">'b'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">20</span> <span class=\"k\">||</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">20</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">20</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">&lt;=</span> <span class=\"s\">100</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboWidth  <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\tlWheelPosX <span class=\"k\">=</span> <span class=\"k\">-</span>roboWidth<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">-</span> <span class=\"s\">7</span><span class=\"k\">;</span>","\t\t\trWheelPosX <span class=\"k\">=</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">20</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">150</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboHeight <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">150</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;</span> <span class=\"s\">100</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#208;&#178;&#208;&#184;&#209;&#129;&#208;&#190;&#209;&#135;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#184; &#209;&#136;&#208;&#184;&#209;&#128;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#183;&#208;&#176; &#209;&#128;&#208;&#190;&#208;&#177;&#208;&#190;&#209;&#130;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#188;&#208;&#176;&#208;&#187;&#208;&#186;&#208;&#184; &#208;&#190;&#209;&#130; 100'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">150</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#208;&#178;&#208;&#184;&#209;&#129;&#208;&#190;&#209;&#135;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#183;&#208;&#176; &#209;&#128;&#208;&#190;&#208;&#177;&#208;&#190;&#209;&#130;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#188;&#208;&#176;&#208;&#187;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 150'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">&gt;</span> <span class=\"s\">100</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#209;&#136;&#208;&#184;&#209;&#128;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#183;&#208;&#176; &#209;&#128;&#208;&#190;&#208;&#177;&#208;&#190;&#209;&#130;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#188;&#208;&#176;&#208;&#187;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 100'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span>","","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>start <span class=\"k\">==</span> <span class=\"k\">false</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#208;&#178;&#208;&#184;&#209;&#129;&#208;&#190;&#209;&#135;&#208;&#184;&#208;&#189;&#208;&#176;/&#209;&#136;&#208;&#184;&#209;&#128;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#183;&#208;&#176; &#209;&#128;&#208;&#190;&#208;&#177;&#208;&#190;&#209;&#130;&#208;&#176; &lt;br/&gt;(&#208;&#191;&#208;&#190;-&#208;&#179;&#208;&#190;&#208;&#187;&#209;&#143;&#208;&#188;&#208;&#176; &#208;&#190;&#209;&#130; 20)'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span>","\trobo_data_reset<span class=\"k\">();</span>","<span class=\"k\">}</span>","","<span class=\"c\">// reset the data for the robot</span>","<span class=\"k\">function</span> robo_data_reset<span class=\"k\">()</span>","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(!</span>pause_ <span class=\"k\">&amp;&amp;</span> <span class=\"k\">!</span>stop_<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\troboX \t<span class=\"k\">=</span> width<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\troboY \t<span class=\"k\">=</span> height<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\tradian \t<span class=\"k\">=</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span>","\t\t\t","\tstart <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tdisplay<span class=\"k\">();</span>","<span class=\"k\">}</span>","","<span class=\"c\">// resetting the robot width and height</span>","<span class=\"k\">function</span> robo_reset<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tresize_ \t<span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\troboWidth \t<span class=\"k\">=</span> <span class=\"s\">50</span><span class=\"k\">;</span>","\troboHeight \t<span class=\"k\">=</span> <span class=\"s\">53</span><span class=\"k\">;</span>","\trobo_data_reset<span class=\"k\">();</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_r'</span><span class=\"k\">).</span>value  <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_r'</span><span class=\"k\">).</span>value <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"c\">// resizing the robot wheels</span>","<span class=\"k\">function</span> wheel_resize<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tresize_ <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>lang <span class=\"k\">==</span> <span class=\"s\">'e'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">5</span> <span class=\"k\">||</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">10</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">5</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">15</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tlWheelWidth\t <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\t\tlWheelPosX \t <span class=\"k\">=</span> <span class=\"k\">-</span>roboWidth<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">-</span> lWheelWidth<span class=\"k\">;</span>","\t\t\t\trWheelWidth\t <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\t<span class=\"k\">}</span>","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">10</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">100</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tlWheelHeight <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\t\trWheelHeight <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\t<span class=\"k\">}</span>","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">100</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">15</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter height less than 100 and width for the robot wheels less than 15'</span><span class=\"k\">);</span>","\t\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">15</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter width for the robot wheels less than 15'</span><span class=\"k\">);</span>","\t\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">100</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter height for the robot less than 100'</span><span class=\"k\">);</span>","\t\t\t<span class=\"k\">}</span>\t\t\t\t\t","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w'</span><span class=\"k\">).</span>value <span class=\"k\">==</span> <span class=\"s\">0</span> <span class=\"k\">||</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w'</span><span class=\"k\">).</span>value <span class=\"k\">==</span> <span class=\"s\">0</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter something and then resize'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\t\tpopup<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; Please enter width for the wheels higher than 5 and height, higher than 10'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>lang <span class=\"k\">==</span> <span class=\"s\">'b'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">5</span> <span class=\"k\">||</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">10</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">5</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">15</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tlWheelWidth\t <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\t\tlWheelPosX \t <span class=\"k\">=</span> <span class=\"k\">-</span>roboWidth<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">-</span> lWheelWidth<span class=\"k\">;</span>","\t\t\t\trWheelWidth\t <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\t<span class=\"k\">}</span>","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;=</span> <span class=\"s\">10</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&lt;=</span> <span class=\"s\">100</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tlWheelHeight <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\t\trWheelHeight <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\t\t<span class=\"k\">}</span>","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">100</span> <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">15</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#208;&#180;&#209;&#138;&#208;&#187;&#208;&#182;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#188;&#208;&#176;&#208;&#187;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 100 &#208;&#184; &#209;&#136;&#208;&#184;&#209;&#128;&#208;&#184;&#208;&#189;&#208;&#176;  &#208;&#183;&#208;&#176; &#208;&#179;&#209;&#131;&#208;&#188;&#208;&#184;&#209;&#130;&#208;&#181; &#208;&#189;&#208;&#176; &#209;&#128;&#208;&#190;&#208;&#177;&#208;&#190;&#209;&#130;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#188;&#208;&#176;&#208;&#187;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 15'</span><span class=\"k\">);</span>","\t\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">15</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#209;&#136;&#208;&#184;&#209;&#128;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#183;&#208;&#176; &#208;&#179;&#209;&#131;&#208;&#188;&#208;&#184;&#209;&#130;&#208;&#181; &#208;&#189;&#208;&#176; &#209;&#128;&#208;&#190;&#208;&#177;&#208;&#190;&#209;&#130;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#188;&#208;&#176;&#208;&#187;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 15'</span><span class=\"k\">);</span>","\t\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w-bg'</span><span class=\"k\">).</span>value <span class=\"k\">&gt;</span> <span class=\"s\">100</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#208;&#180;&#209;&#138;&#208;&#187;&#208;&#182;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#183;&#208;&#176; &#208;&#179;&#209;&#131;&#208;&#188;&#208;&#184;&#209;&#130;&#208;&#181; &#208;&#189;&#208;&#176; &#209;&#128;&#208;&#190;&#208;&#177;&#208;&#190;&#209;&#130;&#208;&#176; &#208;&#191;&#208;&#190;-&#208;&#188;&#208;&#176;&#208;&#187;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 100'</span><span class=\"k\">);</span>","\t\t\t<span class=\"k\">}</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w'</span><span class=\"k\">).</span>value <span class=\"k\">==</span> <span class=\"s\">0</span> <span class=\"k\">||</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w'</span><span class=\"k\">).</span>value <span class=\"k\">==</span> <span class=\"s\">0</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#208;&#189;&#208;&#181;&#209;&#137;&#208;&#190; &#208;&#191;&#209;&#128;&#208;&#181;&#208;&#180;&#208;&#184; &#208;&#180;&#208;&#176; &#208;&#191;&#209;&#128;&#208;&#181;&#208;&#190;&#209;&#128;&#208;&#176;&#208;&#183;&#208;&#188;&#208;&#181;&#209;&#128;&#209;&#143;&#208;&#178;&#208;&#176;&#209;&#130;&#208;&#181;'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\t\tpopupbg<span class=\"k\">(</span><span class=\"s\">'&lt;img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/&gt; &lt;br/&gt; &#208;&#156;&#208;&#190;&#208;&#187;&#209;&#143; &#208;&#178;&#209;&#138;&#208;&#178;&#208;&#181;&#208;&#180;&#208;&#181;&#209;&#130;&#208;&#181; &#209;&#136;&#208;&#184;&#209;&#128;&#208;&#184;&#208;&#189;&#208;&#176; &#208;&#183;&#208;&#176; &#208;&#179;&#209;&#131;&#208;&#188;&#208;&#184;&#209;&#130;&#208;&#181; &#208;&#191;&#208;&#190;-&#208;&#178;&#208;&#184;&#209;&#129;&#208;&#190;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 5 &#208;&#184; &#208;&#180;&#209;&#138;&#208;&#187;&#208;&#182;&#208;&#184;&#208;&#189;&#208;&#176;, &#208;&#191;&#208;&#190;-&#208;&#178;&#208;&#184;&#209;&#129;&#208;&#190;&#208;&#186;&#208;&#176; &#208;&#190;&#209;&#130; 10'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span>","\t<span class=\"k\">if</span> <span class=\"k\">(!</span>pause_ <span class=\"k\">&amp;&amp;</span> <span class=\"k\">!</span>stop_<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\troboX <span class=\"k\">=</span> width<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\troboY <span class=\"k\">=</span> height<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span>\t\t","\tdisplay<span class=\"k\">();</span>","<span class=\"k\">}</span>","","<span class=\"c\">// resetting the robot wheels</span>","<span class=\"k\">function</span> wheel_reset<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tresize_ \t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\tlWheelWidth  <span class=\"k\">=</span> <span class=\"s\">7</span><span class=\"k\">;</span>","\tlWheelHeight <span class=\"k\">=</span> <span class=\"s\">40</span><span class=\"k\">;</span>","\trWheelWidth  <span class=\"k\">=</span> <span class=\"s\">7</span><span class=\"k\">;</span>","\trWheelHeight <span class=\"k\">=</span> <span class=\"s\">40</span><span class=\"k\">;</span>\t\t\t","\tlWheelPosX \t <span class=\"k\">=</span> <span class=\"k\">-</span>roboWidth<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">-</span> <span class=\"s\">7</span><span class=\"k\">;</span>","\tlWheelPosX \t<span class=\"k\">-=</span> lWheelWidth <span class=\"k\">-</span><span class=\"s\">7</span><span class=\"k\">;</span>","\trWheelPosX   <span class=\"k\">=</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'width_w'</span><span class=\"k\">).</span>value  <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'height_w'</span><span class=\"k\">).</span>value <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\tdisplay<span class=\"k\">();</span>","<span class=\"k\">}</span>","","<span class=\"c\">// draw on canvas for Simulate</span>","<span class=\"k\">function</span> draw<span class=\"k\">()</span>","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(!</span>pause_ <span class=\"k\">&amp;&amp;</span> <span class=\"k\">!</span>stop_<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t","\t\tcheck_rect_angles<span class=\"k\">();</span>","\t\tcalc_new_coords_for_draw<span class=\"k\">();</span>","\t\tdisplay<span class=\"k\">();</span>","\t<span class=\"k\">}</span>\t","\t<span class=\"k\">if</span> <span class=\"k\">(</span> <span class=\"k\">(</span>pause_ <span class=\"k\">||</span> stop_ <span class=\"k\">)&amp;&amp;</span> resetpos_<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tresetpos_ <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\t\tdisplay<span class=\"k\">();</span>","\t<span class=\"k\">}</span>\t\t\t\t","\t<span class=\"k\">if</span> <span class=\"k\">(</span>resize_<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tresize_   <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\t\tdisplay<span class=\"k\">();</span>","\t<span class=\"k\">}</span>","<span class=\"k\">}</span>","","<span class=\"c\">// draw on canvas for Play</span>","<span class=\"k\">function</span> draw_PlayPage<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tdisplay<span class=\"k\">();</span>","\tcheck_rect_angles<span class=\"k\">();</span>","\tcheck_LeftRight_key<span class=\"k\">();</span>","\tcheck_Up_key<span class=\"k\">();</span>","<span class=\"k\">}</span>","","<span class=\"c\">// check if left or right key is down</span>","<span class=\"k\">function</span> check_LeftRight_key<span class=\"k\">()</span>","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>roboX <span class=\"k\">+</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">&lt;</span> width <span class=\"k\">&amp;&amp;</span> roboX <span class=\"k\">&gt;</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">{</span>\t\t\t\t\t\t","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>rightDown<span class=\"k\">)</span> <span class=\"k\">{</span>\t\t\t\t\t\t","\t\t\tradian <span class=\"k\">+=</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> speed<span class=\"k\">;</span>\t\t\t\t\t\t\t","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>leftDown<span class=\"k\">)</span> <span class=\"k\">{</span>\t\t\t\t\t","\t\t\tradian <span class=\"k\">-=</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> speed<span class=\"k\">;</span>\t\t\t\t\t","\t\t<span class=\"k\">}</span>\t\t\t","\t<span class=\"k\">}</span>\t","<span class=\"k\">}</span>","","<span class=\"c\">// check if up key is down</span>","<span class=\"k\">function</span> check_Up_key<span class=\"k\">()</span>","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>roboY <span class=\"k\">+</span> <span class=\"k\">(</span>roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">&lt;</span> height <span class=\"k\">&amp;&amp;</span> roboY <span class=\"k\">&gt;</span> roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>upDown<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tcalc_coord_play_page<span class=\"k\">();</span>","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>roboX  <span class=\"k\">+</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">&gt;</span> width<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tcrash  <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t\t\t\troboX <span class=\"k\">-=</span> speed <span class=\"k\">+</span> <span class=\"s\">2</span><span class=\"k\">;</span>\t\t\t","\t\t\t<span class=\"k\">}</span>","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>roboX  <span class=\"k\">&lt;</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tcrash  <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t\t\t\troboX <span class=\"k\">+=</span> speed <span class=\"k\">+</span> <span class=\"s\">2</span><span class=\"k\">;</span>","\t\t\t<span class=\"k\">}</span>","\t\t<span class=\"k\">}</span> ","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>roboHeight<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">+</span> roboY <span class=\"k\">&lt;</span> height<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\troboY <span class=\"k\">+=</span> speed <span class=\"k\">+</span> <span class=\"s\">2</span><span class=\"k\">;</span>","\t\tcrash  <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t\t\t\t\t","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\troboY <span class=\"k\">-=</span> speed <span class=\"k\">+</span> <span class=\"s\">2</span><span class=\"k\">;</span>   \t","\t\tcrash  <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t\t","\t<span class=\"k\">}</span>\t","<span class=\"k\">}</span>","","<span class=\"c\">// calculate the new coordinates for Simulate</span>","<span class=\"k\">function</span> calc_new_coords_for_draw<span class=\"k\">()</span>","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>roboX <span class=\"k\">+</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">&lt;</span> width <span class=\"k\">&amp;&amp;</span> roboX <span class=\"k\">&gt;</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">{</span>\t\t\t\t\t\t","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>motorA <span class=\"k\">&amp;&amp;</span> <span class=\"k\">!</span>motorB <span class=\"k\">&amp;&amp;</span> distance <span class=\"k\">&gt;</span> <span class=\"s\">0</span><span class=\"k\">)</span> <span class=\"k\">{</span>\t\t\t\t\t\t","\t\t\tradian <span class=\"k\">+=</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> speed<span class=\"k\">;</span>","\t\t\trecalc_distance<span class=\"k\">();</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(!</span>motorA <span class=\"k\">&amp;&amp;</span> motorB <span class=\"k\">&amp;&amp;</span> distance <span class=\"k\">&gt;</span> <span class=\"s\">0</span><span class=\"k\">)</span> <span class=\"k\">{</span>\t","\t\t\tradian <span class=\"k\">-=</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> speed<span class=\"k\">;</span>","\t\t\trecalc_distance<span class=\"k\">();</span>\t\t\t\t\t\t","\t\t<span class=\"k\">}</span>\t\t\t","\t<span class=\"k\">}</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>roboY <span class=\"k\">+</span> <span class=\"k\">(</span>roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">&lt;</span> height <span class=\"k\">&amp;&amp;</span> roboY <span class=\"k\">&gt;</span> roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>motorA <span class=\"k\">&amp;&amp;</span> motorB <span class=\"k\">&amp;&amp;</span> distance<span class=\"k\">&gt;</span><span class=\"s\">0</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\trecalc_distance<span class=\"k\">();</span>","\t\t\tcalc_coord<span class=\"k\">();</span>\t","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>roboX <span class=\"k\">+</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">&gt;</span> width<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tcrash <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t\t","\t\t\t<span class=\"k\">}</span>","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>roboX <span class=\"k\">&lt;</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tcrash <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t\t\t<span class=\"k\">}</span>","\t\t<span class=\"k\">}</span> ","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>roboHeight<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">+</span> roboY <span class=\"k\">&lt;</span> height<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tcrash <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t\t\t\t\t","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>\t\t\t \t","\t\tcrash <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t","\t<span class=\"k\">}</span>\t\t\t\t \t","<span class=\"k\">}</span>","","<span class=\"c\">// recalculate distance </span>","<span class=\"k\">function</span> recalc_distance<span class=\"k\">()</span>","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>distance  <span class=\"k\">&gt;</span> speed<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tdistance <span class=\"k\">-=</span> speed<span class=\"k\">;</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\tdistance  <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span>","<span class=\"k\">}</span>","","<span class=\"c\">// check if any angle of the robo is out of the table</span>","<span class=\"k\">function</span> check_rect_angles<span class=\"k\">()</span>","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>roboX <span class=\"k\">+</span> check_angleX<span class=\"k\">(</span><span class=\"s\">1</span><span class=\"k\">)</span> <span class=\"k\">&gt;</span> width  <span class=\"k\">||</span> roboX <span class=\"k\">+</span> check_angleX<span class=\"k\">(</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">&gt;</span> width  <span class=\"k\">||</span> ","\t\troboX <span class=\"k\">+</span> check_angleX<span class=\"k\">(</span><span class=\"s\">3</span><span class=\"k\">)</span> <span class=\"k\">&gt;</span> width  <span class=\"k\">||</span> roboX <span class=\"k\">+</span> check_angleX<span class=\"k\">(</span><span class=\"s\">4</span><span class=\"k\">)</span> <span class=\"k\">&gt;</span> width  <span class=\"k\">||</span> ","\t\troboX <span class=\"k\">+</span> check_angleX<span class=\"k\">(</span><span class=\"s\">1</span><span class=\"k\">)</span> <span class=\"k\">&lt;</span> <span class=\"s\">0</span> \t <span class=\"k\">||</span> roboX <span class=\"k\">+</span> check_angleX<span class=\"k\">(</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">&lt;</span> <span class=\"s\">0</span> \t <span class=\"k\">||</span> ","\t\troboX <span class=\"k\">+</span> check_angleX<span class=\"k\">(</span><span class=\"s\">3</span><span class=\"k\">)</span> <span class=\"k\">&lt;</span> <span class=\"s\">0</span> \t <span class=\"k\">||</span> roboX <span class=\"k\">+</span> check_angleX<span class=\"k\">(</span><span class=\"s\">4</span><span class=\"k\">)</span> <span class=\"k\">&lt;</span> <span class=\"s\">0</span> \t <span class=\"k\">||</span>\t","\t\troboY <span class=\"k\">+</span> check_angleY<span class=\"k\">(</span><span class=\"s\">1</span><span class=\"k\">)</span> <span class=\"k\">&gt;</span> height <span class=\"k\">||</span> roboY <span class=\"k\">+</span> check_angleY<span class=\"k\">(</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">&gt;</span> height <span class=\"k\">||</span> ","\t\troboY <span class=\"k\">+</span> check_angleY<span class=\"k\">(</span><span class=\"s\">3</span><span class=\"k\">)</span> <span class=\"k\">&gt;</span> height <span class=\"k\">||</span> roboY <span class=\"k\">+</span> check_angleY<span class=\"k\">(</span><span class=\"s\">4</span><span class=\"k\">)</span> <span class=\"k\">&gt;</span> height <span class=\"k\">||</span> ","\t\troboY <span class=\"k\">+</span> check_angleY<span class=\"k\">(</span><span class=\"s\">1</span><span class=\"k\">)</span> <span class=\"k\">&lt;</span> <span class=\"s\">0</span> \t <span class=\"k\">||</span> roboY <span class=\"k\">+</span> check_angleY<span class=\"k\">(</span><span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">&lt;</span> <span class=\"s\">0</span> \t <span class=\"k\">||</span> ","\t\troboY <span class=\"k\">+</span> check_angleY<span class=\"k\">(</span><span class=\"s\">3</span><span class=\"k\">)</span> <span class=\"k\">&lt;</span> <span class=\"s\">0</span> \t <span class=\"k\">||</span> roboY <span class=\"k\">+</span> check_angleY<span class=\"k\">(</span><span class=\"s\">4</span><span class=\"k\">)</span> <span class=\"k\">&lt;</span> <span class=\"s\">0</span> <span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tcrash <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\tcrash <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>\t","\t<span class=\"k\">}</span>","<span class=\"k\">}</span>","","<span class=\"c\">// check the angle on X </span>","<span class=\"k\">function</span> check_angleX<span class=\"k\">(</span>angle<span class=\"k\">)</span>","<span class=\"k\">{</span>","\t<span class=\"k\">var</span> x   <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\tdegrees <span class=\"k\">=</span> make_degrees<span class=\"k\">();</span>","","\t<span class=\"k\">if</span> <span class=\"k\">(</span>angle <span class=\"k\">==</span> <span class=\"s\">1</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tx <span class=\"k\">=</span> Math<span class=\"k\">.</span>cos<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">90</span> <span class=\"k\">-</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\t<span class=\"k\">return</span> x <span class=\"k\">-</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>cos<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">);</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>angle <span class=\"k\">==</span> <span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tx <span class=\"k\">=</span> Math<span class=\"k\">.</span>cos<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">90</span> <span class=\"k\">-</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\t<span class=\"k\">return</span> x <span class=\"k\">+</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>cos<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">);</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>angle <span class=\"k\">==</span> <span class=\"s\">3</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tx <span class=\"k\">=</span> <span class=\"k\">-</span>Math<span class=\"k\">.</span>sin<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\t<span class=\"k\">return</span> x <span class=\"k\">+</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>cos<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">);</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>angle <span class=\"k\">==</span> <span class=\"s\">4</span><span class=\"k\">)</span> <span class=\"k\">{</span>\t\t\t\t","\t\tx <span class=\"k\">=</span> Math<span class=\"k\">.</span>sin<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\t<span class=\"k\">return</span> <span class=\"k\">-(</span>x <span class=\"k\">+</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>sin<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">90</span> <span class=\"k\">-</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">));</span>","\t<span class=\"k\">}</span>","<span class=\"k\">}</span>","","<span class=\"c\">// check the angle on Y</span>","<span class=\"k\">function</span> check_angleY<span class=\"k\">(</span>angle<span class=\"k\">)</span>","<span class=\"k\">{</span>","\t<span class=\"k\">var</span> y   <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\tdegrees <span class=\"k\">=</span> make_degrees<span class=\"k\">();</span>","","\t<span class=\"k\">if</span> <span class=\"k\">(</span>angle <span class=\"k\">==</span> <span class=\"s\">1</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\ty <span class=\"k\">=</span> <span class=\"k\">-</span>Math<span class=\"k\">.</span>sin<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">90</span> <span class=\"k\">-</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\t<span class=\"k\">return</span> y <span class=\"k\">-</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>sin<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">);</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>angle <span class=\"k\">==</span> <span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\ty <span class=\"k\">=</span>  <span class=\"k\">-</span>Math<span class=\"k\">.</span>sin<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">90</span> <span class=\"k\">-</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\t<span class=\"k\">return</span> y <span class=\"k\">+</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>sin<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">);</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>angle <span class=\"k\">==</span> <span class=\"s\">3</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\ty <span class=\"k\">=</span> Math<span class=\"k\">.</span>cos<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\t<span class=\"k\">return</span> y <span class=\"k\">+</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>sin<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">);</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>angle <span class=\"k\">==</span> <span class=\"s\">4</span><span class=\"k\">)</span> <span class=\"k\">{</span>\t\t\t\t","\t\ty <span class=\"k\">=</span> <span class=\"k\">-</span>Math<span class=\"k\">.</span>cos<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">;</span>","\t\t<span class=\"k\">return</span> <span class=\"k\">-(</span>y <span class=\"k\">+</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>cos<span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> <span class=\"s\">90</span> <span class=\"k\">-</span> <span class=\"k\">(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">)</span> <span class=\"k\">*</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">));</span>","\t<span class=\"k\">}</span>","<span class=\"k\">}</span>","","<span class=\"c\">// calculate the coords for Simulate </span>","<span class=\"k\">function</span> calc_coord<span class=\"k\">()</span>","<span class=\"k\">{</span>\t\t\t","\tdegrees <span class=\"k\">=</span> make_degrees<span class=\"k\">();</span>","","\t<span class=\"k\">if</span> <span class=\"k\">(</span>degrees <span class=\"k\">&gt;=</span> <span class=\"s\">0</span> <span class=\"k\">&amp;&amp;</span> degrees <span class=\"k\">&lt;=</span> <span class=\"s\">90</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>motorA <span class=\"k\">&amp;&amp;</span> motorB<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboX <span class=\"k\">+=</span> calc_distance_cos<span class=\"k\">(</span><span class=\"s\">90</span><span class=\"k\">);</span>","\t\t\troboY <span class=\"k\">-=</span> calc_distance_sin<span class=\"k\">(</span><span class=\"s\">90</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> ","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>degrees <span class=\"k\">&gt;</span> <span class=\"s\">90</span> <span class=\"k\">&amp;&amp;</span> degrees  <span class=\"k\">&lt;=</span> <span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>motorA <span class=\"k\">&amp;&amp;</span> motorB<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboX <span class=\"k\">+=</span> calc_distance_sin<span class=\"k\">(</span><span class=\"s\">180</span><span class=\"k\">);</span>","\t\t\troboY <span class=\"k\">+=</span> calc_distance_cos<span class=\"k\">(</span><span class=\"s\">180</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>degrees <span class=\"k\">&gt;</span> <span class=\"s\">180</span> <span class=\"k\">&amp;&amp;</span> degrees <span class=\"k\">&lt;=</span> <span class=\"s\">270</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>motorA <span class=\"k\">&amp;&amp;</span> motorB<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboX <span class=\"k\">-=</span> calc_distance_cos<span class=\"k\">(</span><span class=\"s\">270</span><span class=\"k\">);</span>","\t\t\troboY <span class=\"k\">+=</span> calc_distance_sin<span class=\"k\">(</span><span class=\"s\">270</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> ","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>degrees <span class=\"k\">&gt;</span> <span class=\"s\">270</span> <span class=\"k\">&amp;&amp;</span> degrees <span class=\"k\">&lt;=</span> <span class=\"s\">360</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>motorA <span class=\"k\">&amp;&amp;</span> motorB<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboX <span class=\"k\">-=</span> calc_distance_sin<span class=\"k\">(</span><span class=\"s\">360</span><span class=\"k\">);</span>","\t\t\troboY <span class=\"k\">-=</span> calc_distance_cos<span class=\"k\">(</span><span class=\"s\">360</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span>\t\t","<span class=\"k\">}</span>","","<span class=\"c\">// claculate coords for Play</span>","<span class=\"k\">function</span> calc_coord_play_page<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tdegrees <span class=\"k\">=</span> make_degrees<span class=\"k\">();</span>","","\t<span class=\"k\">if</span> <span class=\"k\">(</span>degrees <span class=\"k\">&gt;=</span> <span class=\"s\">0</span> <span class=\"k\">&amp;&amp;</span> degrees <span class=\"k\">&lt;=</span> <span class=\"s\">90</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>upDown<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboX <span class=\"k\">+=</span> calc_distance_cos<span class=\"k\">(</span><span class=\"s\">90</span><span class=\"k\">);</span>","\t\t\troboY <span class=\"k\">-=</span> calc_distance_sin<span class=\"k\">(</span><span class=\"s\">90</span><span class=\"k\">);</span>\t","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>degrees <span class=\"k\">&gt;</span> <span class=\"s\">90</span> <span class=\"k\">&amp;&amp;</span> degrees  <span class=\"k\">&lt;=</span> <span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>upDown<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboX <span class=\"k\">+=</span> calc_distance_sin<span class=\"k\">(</span><span class=\"s\">180</span><span class=\"k\">);</span>","\t\t\troboY <span class=\"k\">+=</span> calc_distance_cos<span class=\"k\">(</span><span class=\"s\">180</span><span class=\"k\">);</span>\t","\t\t<span class=\"k\">}</span>\t\t\t","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>degrees <span class=\"k\">&gt;</span> <span class=\"s\">180</span> <span class=\"k\">&amp;&amp;</span> degrees <span class=\"k\">&lt;=</span> <span class=\"s\">270</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>upDown<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboX <span class=\"k\">-=</span> calc_distance_cos<span class=\"k\">(</span><span class=\"s\">270</span><span class=\"k\">);</span>","\t\t\troboY <span class=\"k\">+=</span> calc_distance_sin<span class=\"k\">(</span><span class=\"s\">270</span><span class=\"k\">);</span>\t","\t\t<span class=\"k\">}</span>\t\t\t\t","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>degrees <span class=\"k\">&gt;</span> <span class=\"s\">270</span> <span class=\"k\">&amp;&amp;</span> degrees <span class=\"k\">&lt;=</span> <span class=\"s\">360</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>upDown<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\troboX <span class=\"k\">-=</span> calc_distance_sin<span class=\"k\">(</span><span class=\"s\">360</span><span class=\"k\">);</span>","\t\t\troboY <span class=\"k\">-=</span> calc_distance_cos<span class=\"k\">(</span><span class=\"s\">360</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span>\t\t\t\t\t\t\t","<span class=\"k\">}</span>","","<span class=\"c\">// calculate the distance - sin</span>","<span class=\"k\">function</span> calc_distance_sin<span class=\"k\">(</span>val<span class=\"k\">)</span>","<span class=\"k\">{</span>","\t<span class=\"k\">return</span> Math<span class=\"k\">.</span>sin<span class=\"k\">(((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> val<span class=\"k\">)</span> <span class=\"k\">-</span> <span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">))</span> <span class=\"k\">*</span> speed<span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"c\">// calculate the distance - cos</span>","<span class=\"k\">function</span> calc_distance_cos<span class=\"k\">(</span>val<span class=\"k\">)</span>","<span class=\"k\">{</span>","\t<span class=\"k\">return</span> Math<span class=\"k\">.</span>cos<span class=\"k\">(((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> val<span class=\"k\">)</span> <span class=\"k\">-</span> <span class=\"k\">((</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">)</span> <span class=\"k\">*</span> degrees<span class=\"k\">))</span> <span class=\"k\">*</span> speed<span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"c\">// make degrees from radian</span>","<span class=\"k\">function</span> make_degrees<span class=\"k\">()</span>","<span class=\"k\">{</span>","\t<span class=\"k\">var</span> val <span class=\"k\">=</span> radian<span class=\"k\">/(</span>Math<span class=\"k\">.</span>PI<span class=\"k\">/</span><span class=\"s\">180</span><span class=\"k\">);</span>\t","","\t<span class=\"k\">while</span><span class=\"k\">(</span>val <span class=\"k\">&gt;</span> <span class=\"s\">360</span> <span class=\"k\">||</span> val <span class=\"k\">&lt;</span> <span class=\"k\">-</span><span class=\"s\">360</span><span class=\"k\">)</span> <span class=\"k\">{</span>\t\t\t\t","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>val  <span class=\"k\">&gt;</span> <span class=\"s\">360</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\tval <span class=\"k\">-=</span> <span class=\"s\">360</span><span class=\"k\">;</span>","\t\t\t<span class=\"k\">}</span><span class=\"k\">else</span> <span class=\"k\">{</span>","\t\t\t\tval <span class=\"k\">+=</span> <span class=\"s\">360</span><span class=\"k\">;</span>","\t\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>val <span class=\"k\">&lt;</span> <span class=\"s\">0</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tval <span class=\"k\">=</span> <span class=\"s\">360</span> <span class=\"k\">+</span> val<span class=\"k\">;</span>","\t<span class=\"k\">}</span>","","\t<span class=\"k\">return</span> val<span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"c\">// check the inpath for moje space or new lines</span>","<span class=\"k\">function</span> check_inpath_free_space<span class=\"k\">()</span>","<span class=\"k\">{</span>","\ttemp_input <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>lang <span class=\"k\">==</span> <span class=\"s\">'e'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\ttemp <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'robo_path'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'robo_path-bg'</span><span class=\"k\">).</span>value   <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'robo_path'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>lang <span class=\"k\">==</span> <span class=\"s\">'b'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\ttemp <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'robo_path-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'robo_path'</span><span class=\"k\">).</span>value  \t<span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'robo_path-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\talert<span class=\"k\">(</span><span class=\"s\">'Something went wrong. Please refresh the page and try again.'</span><span class=\"k\">);</span>","\t\t<span class=\"k\">return</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span>","\t<span class=\"k\">for</span> <span class=\"k\">(</span><span class=\"k\">var</span> k<span class=\"k\">=</span><span class=\"s\">0</span><span class=\"k\">;</span> k <span class=\"k\">&lt;</span> temp<span class=\"k\">.</span>length<span class=\"k\">;</span> k<span class=\"k\">++)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span> temp<span class=\"k\">[</span>k<span class=\"k\">]</span> <span class=\"k\">!=</span> <span class=\"s\">' '</span> <span class=\"k\">&amp;&amp;</span> temp<span class=\"k\">[</span>k<span class=\"k\">]</span> <span class=\"k\">!=</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span> <span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\ttemp_input      <span class=\"k\">+=</span> temp<span class=\"k\">[</span>k<span class=\"k\">];</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">((</span>temp<span class=\"k\">[</span>k<span class=\"k\">]</span> <span class=\"k\">==</span> <span class=\"s\">' '</span> <span class=\"k\">||</span> temp<span class=\"k\">[</span>k<span class=\"k\">]</span>   <span class=\"k\">==</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">)</span> <span class=\"k\">&amp;&amp;</span> k <span class=\"k\">!=</span> <span class=\"s\">0</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>temp<span class=\"k\">[</span>k<span class=\"k\">-</span><span class=\"s\">1</span><span class=\"k\">]</span>   <span class=\"k\">!=</span> <span class=\"s\">' '</span> <span class=\"k\">&amp;&amp;</span> temp<span class=\"k\">[</span>k<span class=\"k\">-</span><span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">!=</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span> <span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\t\ttemp_input  <span class=\"k\">+=</span> temp<span class=\"k\">[</span>k<span class=\"k\">];</span>","\t\t\t<span class=\"k\">}</span>     ","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span>","\tsteps <span class=\"k\">=</span> temp_input<span class=\"k\">.</span>split<span class=\"k\">(</span><span class=\"s\">/\\r\\n|\\r|\\n|\\s/</span><span class=\"k\">);</span>\t\t\t\t\t\t","<span class=\"k\">}</span>","","<span class=\"c\">// generate new path</span>","<span class=\"k\">function</span> generate_path<span class=\"k\">()</span>","<span class=\"k\">{</span>","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value \t\t\t<span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value \t\t<span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\t\tcheck_inpath_free_space<span class=\"k\">();</span>\t\t","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'path'</span><span class=\"k\">).</span>disabled  \t\t \t<span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'replace_path'</span><span class=\"k\">).</span>disabled \t<span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'clear_text'</span><span class=\"k\">).</span>disabled \t\t<span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'clear_text-bg'</span><span class=\"k\">).</span>disabled \t<span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'path-bg'</span><span class=\"k\">).</span>disabled \t\t<span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'replace_path-bg'</span><span class=\"k\">).</span>disabled <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>color  \t<span class=\"k\">=</span> <span class=\"s\">\"green\"</span><span class=\"k\">;</span>\t\t\t\t","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>color  <span class=\"k\">=</span> <span class=\"s\">\"green\"</span><span class=\"k\">;</span>","\t\tget_path <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t\t","\t\tstart \t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t\tsubmit_  <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t\tinit<span class=\"k\">(</span>speed<span class=\"k\">);</span>","<span class=\"k\">}</span>","","<span class=\"c\">// calculate the distance - sin</span>","<span class=\"k\">function</span> calc_distance<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tdistance <span class=\"k\">=</span> <span class=\"k\">((</span>rWheelHeight <span class=\"k\">*</span> <span class=\"s\">3.14</span><span class=\"k\">)</span> <span class=\"k\">/</span> <span class=\"s\">360</span><span class=\"k\">)</span> <span class=\"k\">*</span> distance<span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"c\">// get new step from the inpath textarea</span>","<span class=\"k\">function</span> get_new_step<span class=\"k\">()</span>","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>steps<span class=\"k\">[</span>last_step <span class=\"k\">+</span> <span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">*</span> <span class=\"s\">1</span> <span class=\"k\">&gt;</span> <span class=\"s\">0</span><span class=\"k\">)</span> <span class=\"k\">{</span> <span class=\"c\">// check if there are more steps</span>","\t\tmotorA \t   <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\t\tmotorB \t   <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">==</span> <span class=\"s\">\"A\"</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tmotorA <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">==</span> <span class=\"s\">\"B\"</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tmotorB <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">==</span> <span class=\"s\">\"AB\"</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tmotorA <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t\t\tmotorB <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value \t     <span class=\"k\">+=</span> <span class=\"s\">'Wrong Input - '</span> ","\t\t\t<span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">' '</span> <span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">+</span><span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value \t <span class=\"k\">+=</span> <span class=\"s\">'&#208;&#147;&#209;&#128;&#208;&#181;&#209;&#136;&#208;&#189;&#208;&#184; &#208;&#180;&#208;&#176;&#208;&#189;&#208;&#189;&#208;&#184; - '</span> ","\t\t\t<span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">' '</span> <span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">+</span><span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>","\t\t\tstop_simulation<span class=\"k\">();</span>","\t\t\t<span class=\"k\">return</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","","\t\tdistance   <span class=\"k\">=</span> steps<span class=\"k\">[</span>last_step <span class=\"k\">+</span> <span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">*</span> <span class=\"s\">1</span><span class=\"k\">;</span>\t","\t\tw <span class=\"k\">=</span> <span class=\"s\">3</span><span class=\"k\">;</span>","\t\tcalc_distance<span class=\"k\">();</span>\t\t","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value \t <span class=\"k\">+=</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">+</span> ","\t\t<span class=\"s\">' '</span> <span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">+</span><span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>","\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value <span class=\"k\">+=</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">+</span> ","\t\t<span class=\"s\">' '</span> <span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">+</span><span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>\t\t\t\t\t\t\t","\t\tlast_step <span class=\"k\">+=</span> <span class=\"s\">2</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">((</span>isCoord<span class=\"k\">(</span>steps<span class=\"k\">[</span>last_step<span class=\"k\">])</span> <span class=\"k\">||</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">==</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span> <span class=\"k\">||</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">==</span> <span class=\"s\">''</span> <span class=\"k\">||</span>","\t\t\t   steps<span class=\"k\">[</span>last_step <span class=\"k\">+</span> <span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">==</span> undefined <span class=\"k\">||</span> last_step <span class=\"k\">==</span> <span class=\"s\">1</span> <span class=\"k\">)</span> <span class=\"k\">&amp;&amp;</span> ","\t\t\t   steps<span class=\"k\">[</span>last_step <span class=\"k\">-</span> <span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">!=</span> undefined<span class=\"k\">)</span>  <span class=\"k\">{</span>","\t\tstop_simulation<span class=\"k\">();</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>steps<span class=\"k\">[</span>last_step <span class=\"k\">+</span> <span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">!=</span> undefined <span class=\"k\">&amp;&amp;</span> <span class=\"k\">!</span>isCoord<span class=\"k\">(</span>steps<span class=\"k\">[</span>last_step <span class=\"k\">+</span> <span class=\"s\">1</span><span class=\"k\">]))</span> <span class=\"k\">{</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value \t\t <span class=\"k\">+=</span> <span class=\"s\">'Wrong Input  '</span> <span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value \t <span class=\"k\">+=</span> <span class=\"s\">'&#208;&#147;&#209;&#128;&#208;&#181;&#209;&#136;&#208;&#189;&#208;&#184; &#208;&#180;&#208;&#176;&#208;&#189;&#208;&#189;&#208;&#184;  '</span> <span class=\"k\">;</span>","\t\t\t<span class=\"k\">for</span> <span class=\"k\">(</span>i <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span> steps<span class=\"k\">[</span>last_step <span class=\"k\">+</span> i<span class=\"k\">]</span> <span class=\"k\">!=</span> undefined <span class=\"k\">&amp;&amp;</span> <span class=\"k\">!</span>isCoord<span class=\"k\">(</span>steps<span class=\"k\">[</span>last_step <span class=\"k\">+</span> i<span class=\"k\">]);</span> i<span class=\"k\">++)</span> <span class=\"k\">{</span>","\t\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value \t <span class=\"k\">+=</span> steps<span class=\"k\">[</span>last_step <span class=\"k\">+</span> i<span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">' '</span><span class=\"k\">;</span>","\t\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value <span class=\"k\">+=</span> steps<span class=\"k\">[</span>last_step <span class=\"k\">+</span> i<span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">' '</span><span class=\"k\">;</span>","\t\t\t<span class=\"k\">}</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value \t <span class=\"k\">+=</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value <span class=\"k\">+=</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value \t <span class=\"k\">+=</span> <span class=\"s\">'Wrong Input  '</span> ","\t\t\t\t<span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value <span class=\"k\">+=</span> <span class=\"s\">'&#208;&#147;&#209;&#128;&#208;&#181;&#209;&#136;&#208;&#189;&#208;&#184; &#208;&#180;&#208;&#176;&#208;&#189;&#208;&#189;&#208;&#184;  '</span> ","\t\t\t\t<span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t\t\tstop_simulation<span class=\"k\">();</span>","\t\t\t<span class=\"k\">return</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span> ","<span class=\"k\">}</span>","","<span class=\"c\">// check if the inpath step is coord</span>","<span class=\"k\">function</span> isCoord<span class=\"k\">(</span>val<span class=\"k\">)</span> ","<span class=\"k\">{</span>","\t<span class=\"k\">return</span> val <span class=\"k\">==</span> <span class=\"s\">\"A\"</span> <span class=\"k\">||</span> val <span class=\"k\">==</span> <span class=\"s\">\"B\"</span> <span class=\"k\">||</span> val <span class=\"k\">==</span> <span class=\"s\">\"AB\"</span><span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"c\">// display on canvas</span>","<span class=\"k\">function</span> display<span class=\"k\">()</span>","<span class=\"k\">{</span>\t\t\t\t\t\t","\tctx<span class=\"k\">.</span>beginPath<span class=\"k\">();</span>","\tctx<span class=\"k\">.</span>fillStyle \t<span class=\"k\">=</span> bgColor<span class=\"k\">;</span>\t\t\t\t\t\t","\tclear<span class=\"k\">();</span>\t\t","\tctx<span class=\"k\">.</span>fillStyle\t<span class=\"k\">=</span> objectColor<span class=\"k\">;</span>","\tctx<span class=\"k\">.</span>save<span class=\"k\">();</span>\t\t","\tctx<span class=\"k\">.</span>translate<span class=\"k\">(</span>roboX<span class=\"k\">,</span> roboY<span class=\"k\">);</span>","\tctx<span class=\"k\">.</span>rotate<span class=\"k\">(</span>radian<span class=\"k\">);</span>\t\t\t","\tctx<span class=\"k\">.</span>rect<span class=\"k\">(-</span>roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">,</span> <span class=\"k\">-</span>roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">,</span> roboWidth<span class=\"k\">,</span> roboHeight<span class=\"k\">);</span>","\tctx<span class=\"k\">.</span>font \t\t<span class=\"k\">=</span> <span class=\"s\">\"bold 19pt Calibri,Times New Roman\"</span><span class=\"k\">;</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>get_path <span class=\"k\">&amp;&amp;</span> distance <span class=\"k\">==</span> <span class=\"s\">0</span> <span class=\"k\">&amp;&amp;</span> <span class=\"k\">!</span>play_page <span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tget_new_step<span class=\"k\">();</span>","\t<span class=\"k\">}</span>\t","\t<span class=\"k\">if</span> <span class=\"k\">(!</span>change_lang_ <span class=\"k\">&amp;&amp;</span> <span class=\"k\">!</span>play_page<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tw \t\t\t<span class=\"k\">=</span> <span class=\"k\">-</span>w<span class=\"k\">;</span>\t\t\t","\t<span class=\"k\">}</span>","\tdisplay_robo_and_wheels<span class=\"k\">();</span>\t","\tctx<span class=\"k\">.</span>font \t\t<span class=\"k\">=</span> <span class=\"s\">\"bold 30pt Calibri\"</span><span class=\"k\">;</span>","\tctx<span class=\"k\">.</span>restore<span class=\"k\">();</span>","\tctx<span class=\"k\">.</span>fillStyle \t<span class=\"k\">=</span> <span class=\"s\">\"white\"</span><span class=\"k\">;</span>","\tctx<span class=\"k\">.</span>fill<span class=\"k\">();</span>","\tctx<span class=\"k\">.</span>lineWidth \t<span class=\"k\">=</span> <span class=\"s\">3</span><span class=\"k\">;</span>","\tctx<span class=\"k\">.</span>strokeStyle <span class=\"k\">=</span> <span class=\"s\">\"black\"</span><span class=\"k\">;</span>","\tctx<span class=\"k\">.</span>stroke<span class=\"k\">();</span> ","\t<span class=\"k\">if</span> <span class=\"k\">(</span>crash<span class=\"k\">)</span> <span class=\"k\">{</span>\t\t","\t\tcrash_mess<span class=\"k\">();</span>","\t<span class=\"k\">}</span>","<span class=\"k\">}</span>","","<span class=\"c\">// display on canvas the robo and wheels</span>","<span class=\"k\">function</span> display_robo_and_wheels<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tctx<span class=\"k\">.</span>rect<span class=\"k\">(</span>lWheelPosX<span class=\"k\">,</span> lWheelPosY<span class=\"k\">,</span> lWheelWidth<span class=\"k\">,</span> lWheelHeight<span class=\"k\">);</span>","\tctx<span class=\"k\">.</span>rect<span class=\"k\">(</span>rWheelPosX<span class=\"k\">,</span> rWheelPosY<span class=\"k\">,</span> rWheelWidth<span class=\"k\">,</span> rWheelHeight<span class=\"k\">);</span>","\tctx<span class=\"k\">.</span>rect<span class=\"k\">(-</span>roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">,</span> <span class=\"k\">-</span>roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">,</span> roboWidth<span class=\"k\">,</span>   <span class=\"s\">10</span><span class=\"k\">);</span>","\tctx<span class=\"k\">.</span>rect<span class=\"k\">(-</span>roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">,</span> <span class=\"k\">-</span>roboHeight<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">,</span> roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">,</span> <span class=\"s\">10</span><span class=\"k\">);</span>","","\t<span class=\"c\">/* Wheel Animation */</span>","\t","\t<span class=\"k\">for</span> <span class=\"k\">(</span>i <span class=\"k\">=</span> <span class=\"s\">10</span><span class=\"k\">;</span> i <span class=\"k\">&lt;=</span> <span class=\"s\">90</span><span class=\"k\">;</span> i<span class=\"k\">+=</span><span class=\"s\">10</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tdrawWheelLines<span class=\"k\">(</span>i<span class=\"k\">);</span>","\t<span class=\"k\">}</span> \t\t\t","","<span class=\"k\">}</span>","","<span class=\"c\">// display on canvas lines of the wheels</span>","<span class=\"k\">function</span> drawWheelLines<span class=\"k\">(</span>hei<span class=\"k\">)</span>","<span class=\"k\">{</span>","\tctx<span class=\"k\">.</span>moveTo<span class=\"k\">(</span>rWheelPosX<span class=\"k\">,</span> rWheelPosY <span class=\"k\">+</span> hei <span class=\"k\">-</span> w<span class=\"k\">);</span>","\t\tctx<span class=\"k\">.</span>lineTo<span class=\"k\">(</span>rWheelPosX <span class=\"k\">+</span> <span class=\"s\">35</span><span class=\"k\">,</span> rWheelPosY <span class=\"k\">+</span> hei <span class=\"k\">-</span> w<span class=\"k\">);</span>","\t\tctx<span class=\"k\">.</span>moveTo<span class=\"k\">(-</span>roboWidth<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">,</span> lWheelPosY <span class=\"k\">+</span> hei <span class=\"k\">-</span> w<span class=\"k\">);</span>","\t\tctx<span class=\"k\">.</span>lineTo<span class=\"k\">(</span>lWheelPosX <span class=\"k\">-</span> <span class=\"s\">35</span><span class=\"k\">,</span> lWheelPosY <span class=\"k\">+</span> hei <span class=\"k\">-</span> w<span class=\"k\">);</span>","<span class=\"k\">}</span>","","<span class=\"c\">// clear canvas</span>","<span class=\"k\">function</span> clear<span class=\"k\">()</span>","<span class=\"k\">{</span> \t\t\t\t","\tctx<span class=\"k\">.</span>clearRect<span class=\"k\">(</span><span class=\"s\">0</span><span class=\"k\">,</span> <span class=\"s\">0</span><span class=\"k\">,</span> canvas<span class=\"k\">.</span>width<span class=\"k\">,</span> canvas<span class=\"k\">.</span>height<span class=\"k\">);</span>","\tctx<span class=\"k\">.</span>beginPath<span class=\"k\">();</span>","\tctx<span class=\"k\">.</span>fillRect<span class=\"k\">(</span><span class=\"s\">0</span><span class=\"k\">,</span> <span class=\"s\">0</span><span class=\"k\">,</span> width<span class=\"k\">,</span> height<span class=\"k\">);</span>","\tctx<span class=\"k\">.</span>closePath<span class=\"k\">();</span>","<span class=\"k\">}</span>","","<span class=\"c\">// clear textarea</span>","<span class=\"k\">function</span> clear_textareas<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'robo_path'</span><span class=\"k\">).</span>value \t  <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'robo_path-bg'</span><span class=\"k\">).</span>value <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value     <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>\t\t\t","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value  <span class=\"k\">=</span> <span class=\"s\">\"\"</span><span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"c\">// replace robo_path textarea with out_path textarea value</span>","<span class=\"k\">function</span> replace_path<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'robo_path'</span><span class=\"k\">).</span>value \t  <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'robo_path-bg'</span><span class=\"k\">).</span>value <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value<span class=\"k\">;</span>\t","<span class=\"k\">}</span>","","<span class=\"c\">// display on canvas and textarea crash message</span>","<span class=\"k\">function</span> crash_mess<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tctx<span class=\"k\">.</span>fillStyle <span class=\"k\">=</span> <span class=\"s\">\"white\"</span><span class=\"k\">;</span>\t","\t<span class=\"k\">if</span> <span class=\"k\">(</span>lang <span class=\"k\">==</span> <span class=\"s\">'e'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>width <span class=\"k\">&lt;</span> <span class=\"s\">200</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tctx<span class=\"k\">.</span>font <span class=\"k\">=</span> <span class=\"s\">\"bold 30pt Calibri,Times New Roman\"</span><span class=\"k\">;</span>","\t\t\tctx<span class=\"k\">.</span>fillText<span class=\"k\">(</span><span class=\"s\">\"CRASH!\"</span><span class=\"k\">,</span> width<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">-</span><span class=\"s\">65</span><span class=\"k\">,</span> height<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">+</span> <span class=\"s\">10</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\t\tctx<span class=\"k\">.</span>font <span class=\"k\">=</span> <span class=\"s\">\"bold 50pt Calibri,Times New Roman\"</span><span class=\"k\">;</span>","\t\t\tctx<span class=\"k\">.</span>fillText<span class=\"k\">(</span><span class=\"s\">\"CRASH!\"</span><span class=\"k\">,</span> width<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">-</span><span class=\"s\">100</span><span class=\"k\">,</span> height<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">+</span> <span class=\"s\">10</span><span class=\"k\">);</span>\t\t\t\t","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>lang <span class=\"k\">==</span> <span class=\"s\">'b'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>width <span class=\"k\">&lt;</span> <span class=\"s\">200</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tctx<span class=\"k\">.</span>font <span class=\"k\">=</span> <span class=\"s\">\"bold 30pt Calibri,Times New Roman\"</span><span class=\"k\">;</span>","\t\t\tctx<span class=\"k\">.</span>fillText<span class=\"k\">(</span><span class=\"s\">\"&#208;&#161;&#208;&#177;&#208;&#187;&#209;&#138;&#209;&#129;&#209;&#138;&#208;&#186;!\"</span><span class=\"k\">,</span> width<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">-</span><span class=\"s\">55</span><span class=\"k\">,</span> height<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">+</span> <span class=\"s\">10</span><span class=\"k\">);</span>","\t\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\t\tctx<span class=\"k\">.</span>font <span class=\"k\">=</span> <span class=\"s\">\"bold 50pt Calibri,Times New Roman\"</span><span class=\"k\">;</span>","\t\t\tctx<span class=\"k\">.</span>fillText<span class=\"k\">(</span><span class=\"s\">\"&#208;&#161;&#208;&#177;&#208;&#187;&#209;&#138;&#209;&#129;&#209;&#138;&#208;&#186;!\"</span><span class=\"k\">,</span> width<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">-</span><span class=\"s\">125</span><span class=\"k\">,</span> height<span class=\"k\">/</span><span class=\"s\">2</span> <span class=\"k\">+</span> <span class=\"s\">10</span><span class=\"k\">);</span>\t\t\t\t","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span>\t","\t<span class=\"k\">if</span> <span class=\"k\">(!</span>play_page<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(!</span>stop_<span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value    <span class=\"k\">+=</span> <span class=\"s\">\"Crash on line \"</span>  <span class=\"k\">+</span> <span class=\"k\">(</span>last_step<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">+</span><span class=\"s\">1</span><span class=\"k\">)+</span> <span class=\"s\">\" (\"</span><span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">-</span><span class=\"s\">2</span><span class=\"k\">]+</span> <span class=\"s\">' '</span> <span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">-</span><span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">')'</span> <span class=\"k\">+</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value <span class=\"k\">+=</span> <span class=\"s\">\"&#208;&#161;&#208;&#177;&#208;&#187;&#209;&#138;&#209;&#129;&#209;&#138;&#208;&#186; &#208;&#189;&#208;&#176; &#209;&#128;&#208;&#181;&#208;&#180; \"</span> <span class=\"k\">+</span> <span class=\"k\">(</span>last_step<span class=\"k\">/</span><span class=\"s\">2</span><span class=\"k\">+</span><span class=\"s\">1</span><span class=\"k\">)+</span> <span class=\"s\">\" (\"</span><span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">-</span><span class=\"s\">2</span><span class=\"k\">]+</span> <span class=\"s\">' '</span> <span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">-</span><span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">')'</span> <span class=\"k\">+</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t\t<span class=\"k\">for</span> <span class=\"k\">(;</span> steps<span class=\"k\">[</span>last_step <span class=\"k\">+</span> <span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">*</span> <span class=\"s\">1</span> <span class=\"k\">&gt;</span> <span class=\"s\">0</span><span class=\"k\">;</span> last_step <span class=\"k\">+=</span> <span class=\"s\">2</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value    <span class=\"k\">+=</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">' '</span> <span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">+</span><span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value <span class=\"k\">+=</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">' '</span> <span class=\"k\">+</span> steps<span class=\"k\">[</span>last_step<span class=\"k\">+</span><span class=\"s\">1</span><span class=\"k\">]</span> <span class=\"k\">+</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span><span class=\"k\">;</span>\t\t","\t\t<span class=\"k\">}</span>\t\t\t","\t\tstop_simulation<span class=\"k\">();</span>","\t<span class=\"k\">}</span>","<span class=\"k\">}</span>","","<span class=\"c\">// runs if the Stop button is down</span>","<span class=\"k\">function</span> stopgen<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path'</span><span class=\"k\">).</span>value \t <span class=\"k\">+=</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span> <span class=\"k\">+</span> <span class=\"s\">\"Stoped!\"</span><span class=\"k\">;</span>\t\t\t","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'out_path-bg'</span><span class=\"k\">).</span>value <span class=\"k\">+=</span> <span class=\"s\">'</span><span class=\"t\">\\n</span><span class=\"s\">'</span> <span class=\"k\">+</span> <span class=\"s\">\"&#208;&#161;&#208;&#191;&#209;&#128;&#209;&#143;&#208;&#189;&#208;&#190;!\"</span><span class=\"k\">;</span>\t\t\t","\tstop_simulation<span class=\"k\">();</span>","<span class=\"k\">}</span>","","<span class=\"c\">// stop simulation </span>","<span class=\"k\">function</span> stop_simulation<span class=\"k\">()</span>","<span class=\"k\">{</span>","\tw <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'path'</span><span class=\"k\">).</span>disabled \t\t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>\t","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'path-bg'</span><span class=\"k\">).</span>disabled \t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>\t","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'replace_path'</span><span class=\"k\">).</span>disabled\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'replace_path-bg'</span><span class=\"k\">).</span>disabled  <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'clear_text'</span><span class=\"k\">).</span>disabled \t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>\t","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'clear_text-bg'</span><span class=\"k\">).</span>disabled    <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>\t\t\t\t\t","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'play'</span><span class=\"k\">).</span>disabled \t\t\t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'pause'</span><span class=\"k\">).</span>disabled \t\t\t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'stop'</span><span class=\"k\">).</span>disabled \t\t\t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'play-bg'</span><span class=\"k\">).</span>disabled \t\t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'pause-bg'</span><span class=\"k\">).</span>disabled \t\t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>\t","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'stop-bg'</span><span class=\"k\">).</span>disabled \t\t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\tget_path <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tdistance <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","\tpause_ \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tstop_ \t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\tclearInterval<span class=\"k\">(</span>gameInterval<span class=\"k\">);</span>","<span class=\"k\">}</span>","","<span class=\"k\">function</span> showing<span class=\"k\">(</span>obj<span class=\"k\">)</span>","<span class=\"k\">{</span>","\t$<span class=\"k\">(</span>obj<span class=\"k\">).</span>show<span class=\"k\">(</span><span class=\"s\">500</span><span class=\"k\">);</span>","<span class=\"k\">}</span><span class=\"k\">;</span>","","<span class=\"k\">function</span> fade<span class=\"k\">(</span>obj<span class=\"k\">)</span> ","<span class=\"k\">{</span>","\t$<span class=\"k\">(</span>obj<span class=\"k\">).</span>fadeIn<span class=\"k\">(</span><span class=\"s\">500</span><span class=\"k\">);</span>","<span class=\"k\">}</span><span class=\"k\">;</span>","","<span class=\"k\">function</span> fadelogo<span class=\"k\">(</span>obj<span class=\"k\">)</span> ","<span class=\"k\">{</span>","\t$<span class=\"k\">(</span>obj<span class=\"k\">).</span>fadeIn<span class=\"k\">(</span><span class=\"s\">2000</span><span class=\"k\">);</span>","<span class=\"k\">}</span><span class=\"k\">;</span>","","<span class=\"k\">function</span> fadeo<span class=\"k\">(</span>obj<span class=\"k\">)</span>","<span class=\"k\">{</span>","\t$<span class=\"k\">(</span>obj<span class=\"k\">).</span>fadeOut<span class=\"k\">(</span><span class=\"s\">1</span><span class=\"k\">);</span>","<span class=\"k\">}</span><span class=\"k\">;</span>","","<span class=\"k\">function</span> slide<span class=\"k\">(</span>obj<span class=\"k\">)</span> ","<span class=\"k\">{</span>","\t$<span class=\"k\">(</span>obj<span class=\"k\">).</span>slideDown<span class=\"k\">(</span><span class=\"s\">1000</span><span class=\"k\">);</span>","<span class=\"k\">}</span><span class=\"k\">;</span>","","<span class=\"k\">function</span> slide2<span class=\"k\">(</span>obj<span class=\"k\">)</span> ","<span class=\"k\">{</span>\t    \t","\t$<span class=\"k\">(</span>obj<span class=\"k\">).</span>slideDown<span class=\"k\">(</span><span class=\"s\">1</span><span class=\"k\">);</span>","<span class=\"k\">}</span><span class=\"k\">;</span>","","<span class=\"k\">function</span> hiding<span class=\"k\">(</span>obj<span class=\"k\">)</span> ","<span class=\"k\">{</span>","\t$<span class=\"k\">(</span>obj<span class=\"k\">).</span>hide<span class=\"k\">(</span><span class=\"s\">500</span><span class=\"k\">);</span>","<span class=\"k\">}</span><span class=\"k\">;</span>","","<span class=\"k\">var</span> cX <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> cY <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> rX <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","<span class=\"k\">var</span> rY <span class=\"k\">=</span> <span class=\"s\">0</span><span class=\"k\">;</span>","","<span class=\"k\">function</span> UpdateCursorPosition<span class=\"k\">(</span>e<span class=\"k\">)</span>","<span class=\"k\">{</span> ","\tcX <span class=\"k\">=</span> e<span class=\"k\">.</span>pageX<span class=\"k\">;</span> cY <span class=\"k\">=</span> e<span class=\"k\">.</span>pageY<span class=\"k\">;</span>","<span class=\"k\">}</span> ","","<span class=\"k\">function</span> UpdateCursorPositionDocAll<span class=\"k\">(</span>e<span class=\"k\">)</span>","<span class=\"k\">{</span>","\tcX <span class=\"k\">=</span> event<span class=\"k\">.</span>clientX<span class=\"k\">;</span> cY <span class=\"k\">=</span> event<span class=\"k\">.</span>clientY<span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>all<span class=\"k\">)</span> <span class=\"k\">{</span>","\tdocument<span class=\"k\">.</span>onmousemove <span class=\"k\">=</span> UpdateCursorPositionDocAll<span class=\"k\">;</span>","<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span> ","\tdocument<span class=\"k\">.</span>onmousemove <span class=\"k\">=</span> UpdateCursorPosition<span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"k\">function</span> AssignPosition<span class=\"k\">(</span>d<span class=\"k\">)</span> ","<span class=\"k\">{</span> ","\t<span class=\"k\">if</span> <span class=\"k\">(</span>self<span class=\"k\">.</span>pageYOffset<span class=\"k\">)</span> <span class=\"k\">{</span> ","\t\trX <span class=\"k\">=</span> self<span class=\"k\">.</span>pageXOffset<span class=\"k\">;</span> ","\t\trY <span class=\"k\">=</span> self<span class=\"k\">.</span>pageYOffset<span class=\"k\">;</span> ","\t<span class=\"k\">}</span> ","\t<span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>documentElement <span class=\"k\">&amp;&amp;</span> document<span class=\"k\">.</span>documentElement<span class=\"k\">.</span>scrollTop<span class=\"k\">)</span> <span class=\"k\">{</span> ","\t\trX <span class=\"k\">=</span> document<span class=\"k\">.</span>documentElement<span class=\"k\">.</span>scrollLeft<span class=\"k\">;</span> ","\t\trY <span class=\"k\">=</span> document<span class=\"k\">.</span>documentElement<span class=\"k\">.</span>scrollTop<span class=\"k\">;</span> ","\t<span class=\"k\">}</span> ","\t<span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>body<span class=\"k\">)</span> <span class=\"k\">{</span> ","\t\trX <span class=\"k\">=</span> document<span class=\"k\">.</span>body<span class=\"k\">.</span>scrollLeft<span class=\"k\">;</span> ","\t\trY <span class=\"k\">=</span> document<span class=\"k\">.</span>body<span class=\"k\">.</span>scrollTop<span class=\"k\">;</span> ","\t<span class=\"k\">}</span> ","\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>all<span class=\"k\">)</span> <span class=\"k\">{</span> ","\t\tcX <span class=\"k\">+=</span> rX<span class=\"k\">;</span> ","\t\tcY <span class=\"k\">+=</span> rY<span class=\"k\">;</span> ","\t<span class=\"k\">}</span> ","\td<span class=\"k\">.</span>style<span class=\"k\">.</span>left <span class=\"k\">=</span> <span class=\"k\">(</span>cX<span class=\"k\">+</span><span class=\"s\">10</span><span class=\"k\">)</span> <span class=\"k\">+</span> <span class=\"s\">\"px\"</span><span class=\"k\">;</span> ","\td<span class=\"k\">.</span>style<span class=\"k\">.</span>top  <span class=\"k\">=</span> <span class=\"k\">(</span>cY<span class=\"k\">+</span><span class=\"s\">10</span><span class=\"k\">)</span> <span class=\"k\">+</span> <span class=\"s\">\"px\"</span><span class=\"k\">;</span> ","<span class=\"k\">}</span> ","","<span class=\"k\">function</span> HideText<span class=\"k\">(</span>d<span class=\"k\">)</span> ","<span class=\"k\">{</span> ","\t<span class=\"k\">if</span> <span class=\"k\">(</span>d<span class=\"k\">.</span>length <span class=\"k\">&lt;</span> <span class=\"s\">1</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">return</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span>d<span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">\"none\"</span><span class=\"k\">;</span> ","<span class=\"k\">}</span> ","","<span class=\"k\">function</span> ShowText<span class=\"k\">(</span>d<span class=\"k\">)</span>","<span class=\"k\">{</span> ","\t<span class=\"k\">if</span> <span class=\"k\">(</span>d<span class=\"k\">.</span>length <span class=\"k\">&lt;</span> <span class=\"s\">1</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">return</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span>","\t<span class=\"k\">var</span> dd <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span>d<span class=\"k\">);</span> ","\tAssignPosition<span class=\"k\">(</span>dd<span class=\"k\">);</span> ","\tdd<span class=\"k\">.</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">\"block\"</span><span class=\"k\">;</span> ","<span class=\"k\">}</span> ","","<span class=\"k\">function</span> ReverseContentDisplay<span class=\"k\">(</span>d<span class=\"k\">)</span>","<span class=\"k\">{</span> ","\t<span class=\"k\">if</span> <span class=\"k\">(</span>d<span class=\"k\">.</span>length <span class=\"k\">&lt;</span> <span class=\"s\">1</span><span class=\"k\">)</span> <span class=\"k\">{</span> ","\t\t<span class=\"k\">return</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span> ","\t<span class=\"k\">var</span> dd <span class=\"k\">=</span> document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span>d<span class=\"k\">);</span> ","\tAssignPosition<span class=\"k\">(</span>dd<span class=\"k\">);</span> ","\t<span class=\"k\">if</span> <span class=\"k\">(</span>dd<span class=\"k\">.</span>style<span class=\"k\">.</span>display <span class=\"k\">==</span> <span class=\"s\">\"none\"</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\tdd<span class=\"k\">.</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">\"block\"</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span> <span class=\"k\">else</span> <span class=\"k\">{</span>","\t\tdd<span class=\"k\">.</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">\"none\"</span><span class=\"k\">;</span>","\t<span class=\"k\">}</span> ","<span class=\"k\">}</span>","","<span class=\"k\">function</span> onKeyDown<span class=\"k\">(</span>evt<span class=\"k\">)</span> ","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>evt<span class=\"k\">.</span>keyCode <span class=\"k\">==</span> <span class=\"s\">39</span><span class=\"k\">)</span>","\t\trightDown <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t<span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>evt<span class=\"k\">.</span>keyCode <span class=\"k\">==</span> <span class=\"s\">37</span><span class=\"k\">)</span>","\t\tleftDown <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\t<span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>evt<span class=\"k\">.</span>keyCode <span class=\"k\">==</span> <span class=\"s\">38</span><span class=\"k\">)</span>","\t\tupDown <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","<span class=\"k\">}</span>","","<span class=\"k\">function</span> onKeyUp<span class=\"k\">(</span>evt<span class=\"k\">)</span> ","<span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>evt<span class=\"k\">.</span>keyCode <span class=\"k\">==</span> <span class=\"s\">39</span><span class=\"k\">)</span>","\t\trightDown <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\t<span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>evt<span class=\"k\">.</span>keyCode <span class=\"k\">==</span> <span class=\"s\">37</span><span class=\"k\">)</span>","\t\tleftDown <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\t<span class=\"k\">else</span> <span class=\"k\">if</span> <span class=\"k\">(</span>evt<span class=\"k\">.</span>keyCode <span class=\"k\">==</span> <span class=\"s\">38</span><span class=\"k\">)</span>","\t\tupDown <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>\t\t\t","<span class=\"k\">}</span>","","document<span class=\"k\">.</span>addEventListener<span class=\"k\">(</span><span class=\"s\">'keydown'</span><span class=\"k\">,</span>onKeyDown<span class=\"k\">);</span>","document<span class=\"k\">.</span>addEventListener<span class=\"k\">(</span><span class=\"s\">'keyup'</span><span class=\"k\">,</span>onKeyUp<span class=\"k\">);</span>","","<span class=\"k\">var</span> ar <span class=\"k\">=</span> <span class=\"k\">new</span> Array<span class=\"k\">(</span><span class=\"s\">33</span><span class=\"k\">,</span><span class=\"s\">34</span><span class=\"k\">,</span><span class=\"s\">35</span><span class=\"k\">,</span><span class=\"s\">36</span><span class=\"k\">,</span><span class=\"s\">37</span><span class=\"k\">,</span><span class=\"s\">38</span><span class=\"k\">,</span><span class=\"s\">39</span><span class=\"k\">,</span><span class=\"s\">40</span><span class=\"k\">);</span>","<span class=\"c\">// function to disable the scrolling when pressing the arrow keys.</span>","","$<span class=\"k\">(</span>document<span class=\"k\">).</span>keydown<span class=\"k\">(</span><span class=\"k\">function</span><span class=\"k\">(</span>e<span class=\"k\">)</span> ","<span class=\"k\">{</span>","     <span class=\"k\">var</span> key <span class=\"k\">=</span> e<span class=\"k\">.</span>which<span class=\"k\">;</span>","      ","      <span class=\"k\">if</span> <span class=\"k\">(</span>$<span class=\"k\">.</span>inArray<span class=\"k\">(</span>key<span class=\"k\">,</span>ar<span class=\"k\">)</span> <span class=\"k\">&gt;</span> <span class=\"k\">-</span><span class=\"s\">1</span><span class=\"k\">)</span> <span class=\"k\">{</span>","          e<span class=\"k\">.</span>preventDefault<span class=\"k\">();</span>","          <span class=\"k\">return</span> <span class=\"k\">false</span><span class=\"k\">;</span>","      <span class=\"k\">}</span>","      <span class=\"k\">return</span> <span class=\"k\">true</span><span class=\"k\">;</span>","<span class=\"k\">}</span><span class=\"k\">);</span>","","<span class=\"c\">// body onload script</span>","<span class=\"k\">function</span> loadscript<span class=\"k\">()</span> <span class=\"k\">{</span>","\tfade<span class=\"k\">(</span><span class=\"s\">'body'</span><span class=\"k\">);</span>","\tslide2<span class=\"k\">(</span><span class=\"s\">'table.welcome'</span><span class=\"k\">);</span>","\tfadeo<span class=\"k\">(</span><span class=\"s\">'div.logo'</span><span class=\"k\">);</span>","\tfadelogo<span class=\"k\">(</span><span class=\"s\">'div.logo-en'</span><span class=\"k\">);</span>","\tstart <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\tinit<span class=\"k\">(</span><span class=\"s\">6</span><span class=\"k\">);</span> ","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but1-bg'</span><span class=\"k\">).</span>disabled \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but2-bg'</span><span class=\"k\">).</span>disabled \t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but3-bg'</span><span class=\"k\">).</span>disabled \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but1'</span><span class=\"k\">).</span>disabled \t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but2'</span><span class=\"k\">).</span>disabled \t\t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but3'</span><span class=\"k\">).</span>disabled \t\t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but1-play'</span><span class=\"k\">).</span>disabled \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but2-play'</span><span class=\"k\">).</span>disabled \t <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but3-play'</span><span class=\"k\">).</span>disabled \t <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but1-play-bg'</span><span class=\"k\">).</span>disabled <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but2-play-bg'</span><span class=\"k\">).</span>disabled <span class=\"k\">=</span> <span class=\"k\">true</span><span class=\"k\">;</span>","\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'but3-play-bg'</span><span class=\"k\">).</span>disabled <span class=\"k\">=</span> <span class=\"k\">false</span><span class=\"k\">;</span>","\tloadanime<span class=\"k\">();</span> ","<span class=\"k\">}</span>","","<span class=\"c\">// show info when user click</span>","<span class=\"k\">function</span> showinfo<span class=\"k\">()</span> <span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'info'</span><span class=\"k\">))</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'info'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">!=</span> <span class=\"s\">'none'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'info'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'none'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'info-bg'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'none'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'forus'</span><span class=\"k\">).</span>innerHTML <span class=\"k\">=</span> <span class=\"s\">'Contacts &amp;raquo;'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'forus-bg'</span><span class=\"k\">).</span>innerHTML <span class=\"k\">=</span> <span class=\"s\">'&#208;&#154;&#208;&#190;&#208;&#189;&#209;&#130;&#208;&#176;&#208;&#186;&#209;&#130;&#208;&#184; &amp;raquo;'</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t\t<span class=\"k\">else</span> <span class=\"k\">{</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'info'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'block'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'info-bg'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'block'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'forus'</span><span class=\"k\">).</span>innerHTML <span class=\"k\">=</span> <span class=\"s\">'Contacts &amp;laquo;'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'forus-bg'</span><span class=\"k\">).</span>innerHTML <span class=\"k\">=</span> <span class=\"s\">'&#208;&#154;&#208;&#190;&#208;&#189;&#209;&#130;&#208;&#176;&#208;&#186;&#209;&#130;&#208;&#184; &amp;laquo;'</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span>","<span class=\"k\">}</span>","","<span class=\"c\">// show facebook info when user click</span>","<span class=\"k\">function</span> showface<span class=\"k\">()</span> <span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'faceinfo'</span><span class=\"k\">))</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'faceinfo'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">!=</span> <span class=\"s\">'none'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'faceinfo'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'none'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'faceinfo-bg'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'none'</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t\t<span class=\"k\">else</span> <span class=\"k\">{</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'faceinfo'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'block'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'faceinfo-bg'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'block'</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span>","<span class=\"k\">}</span>","","<span class=\"c\">// show mail info when user click</span>","<span class=\"k\">function</span> showmail<span class=\"k\">()</span> <span class=\"k\">{</span>","\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'mailinfo'</span><span class=\"k\">))</span> <span class=\"k\">{</span>","\t\t<span class=\"k\">if</span> <span class=\"k\">(</span>document<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'mailinfo'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">!=</span> <span class=\"s\">'none'</span><span class=\"k\">)</span> <span class=\"k\">{</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'mailinfo'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'none'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'mailinfo-bg'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'none'</span><span class=\"k\">;</span>","\t\t<span class=\"k\">}</span>","\t\t<span class=\"k\">else</span> <span class=\"k\">{</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'mailinfo'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'block'</span><span class=\"k\">;</span>","\t\t\tdocument<span class=\"k\">.</span>getElementById<span class=\"k\">(</span><span class=\"s\">'mailinfo-bg'</span><span class=\"k\">).</span>style<span class=\"k\">.</span>display <span class=\"k\">=</span> <span class=\"s\">'block'</span><span class=\"k\">;</span>\t\t\t\t","\t\t<span class=\"k\">}</span>","\t<span class=\"k\">}</span>","<span class=\"k\">}</span>"];
+_$jscoverage['script.js'][1]++;
+var gameInterval = 0;
+_$jscoverage['script.js'][2]++;
+var canvas;
+_$jscoverage['script.js'][3]++;
+var ctx;
+_$jscoverage['script.js'][4]++;
+var width = 450;
+_$jscoverage['script.js'][5]++;
+var height = 450;
+_$jscoverage['script.js'][6]++;
+var bgColor = "black";
+_$jscoverage['script.js'][7]++;
+var objectColor = "white";
+_$jscoverage['script.js'][8]++;
+var roboX = 0;
+_$jscoverage['script.js'][9]++;
+var roboY = 0;
+_$jscoverage['script.js'][10]++;
+var roboWidth = 0;
+_$jscoverage['script.js'][11]++;
+var roboHeight = 0;
+_$jscoverage['script.js'][12]++;
+var roboColor = "red";
+_$jscoverage['script.js'][13]++;
+var radian = ((Math.PI / 180) * 0);
+_$jscoverage['script.js'][14]++;
+var degrees = 0;
+_$jscoverage['script.js'][15]++;
+var speed = 0;
+_$jscoverage['script.js'][16]++;
+var start = true;
+_$jscoverage['script.js'][17]++;
+var crash = false;
+_$jscoverage['script.js'][18]++;
+var lWheelPosX = 0;
+_$jscoverage['script.js'][19]++;
+var lWheelPosY = 0;
+_$jscoverage['script.js'][20]++;
+var rWheelPosX = 0;
+_$jscoverage['script.js'][21]++;
+var rWheelPosY = 0;
+_$jscoverage['script.js'][22]++;
+var distance = 0;
+_$jscoverage['script.js'][23]++;
+var motorA = false;
+_$jscoverage['script.js'][24]++;
+var motorB = false;
+_$jscoverage['script.js'][25]++;
+var last_step = 0;
+_$jscoverage['script.js'][26]++;
+var steps = new Array();
+_$jscoverage['script.js'][27]++;
+var get_path = false;
+_$jscoverage['script.js'][28]++;
+var pause_ = false;
+_$jscoverage['script.js'][29]++;
+var resetpos_ = false;
+_$jscoverage['script.js'][30]++;
+var resize_ = false;
+_$jscoverage['script.js'][31]++;
+var stop_ = false;
+_$jscoverage['script.js'][32]++;
+var submit_ = false;
+_$jscoverage['script.js'][33]++;
+var play_page = false;
+_$jscoverage['script.js'][34]++;
+var rightDown = false;
+_$jscoverage['script.js'][35]++;
+var leftDown = false;
+_$jscoverage['script.js'][36]++;
+var upDown = false;
+_$jscoverage['script.js'][37]++;
+var w = 0;
+_$jscoverage['script.js'][38]++;
+var lang = "e";
+_$jscoverage['script.js'][39]++;
+var change_lang_ = false;
+_$jscoverage['script.js'][41]++;
+function loadanime() {
+  _$jscoverage['script.js'][43]++;
+  $("#my_canvas").animate({width: 450, height: 450}, "slow");
+}
+_$jscoverage['script.js'][49]++;
+function init(speed_) {
+  _$jscoverage['script.js'][51]++;
+  if (start) {
+    _$jscoverage['script.js'][52]++;
+    if ((! submit_)) {
+      _$jscoverage['script.js'][53]++;
+      roboWidth = 50;
+      _$jscoverage['script.js'][54]++;
+      roboHeight = 53;
+      _$jscoverage['script.js'][55]++;
+      lWheelWidth = 7;
+      _$jscoverage['script.js'][56]++;
+      lWheelHeight = 40;
+      _$jscoverage['script.js'][57]++;
+      rWheelWidth = 7;
+      _$jscoverage['script.js'][58]++;
+      rWheelHeight = 40;
+    }
+    _$jscoverage['script.js'][60]++;
+    canvas = document.getElementById("my_canvas");
+    _$jscoverage['script.js'][61]++;
+    ctx = canvas.getContext("2d");
+    _$jscoverage['script.js'][62]++;
+    width = canvas.width;
+    _$jscoverage['script.js'][63]++;
+    height = canvas.height;
+    _$jscoverage['script.js'][64]++;
+    reset_data();
+  }
+  _$jscoverage['script.js'][66]++;
+  speed = speed_;
+  _$jscoverage['script.js'][67]++;
+  clearInterval(gameInterval);
+  _$jscoverage['script.js'][68]++;
+  if (play_page) {
+    _$jscoverage['script.js'][69]++;
+    gameInterval = setInterval(draw_PlayPage, 20);
+  }
+  else {
+    _$jscoverage['script.js'][71]++;
+    gameInterval = setInterval(draw, 20);
+  }
+}
+_$jscoverage['script.js'][76]++;
+function reset_data() {
+  _$jscoverage['script.js'][78]++;
+  roboX = (width / 2);
+  _$jscoverage['script.js'][79]++;
+  roboY = (height / 2);
+  _$jscoverage['script.js'][80]++;
+  lWheelPosX = (((- roboWidth) / 2) - lWheelWidth);
+  _$jscoverage['script.js'][81]++;
+  lWheelPosY = (((- roboHeight) / 2) + (roboHeight / 8));
+  _$jscoverage['script.js'][82]++;
+  rWheelPosX = (roboWidth / 2);
+  _$jscoverage['script.js'][83]++;
+  rWheelPosY = (((- roboHeight) / 2) + (roboHeight / 8));
+  _$jscoverage['script.js'][84]++;
+  radian = ((Math.PI / 180) * 0);
+  _$jscoverage['script.js'][85]++;
+  submit_ = false;
+  _$jscoverage['script.js'][86]++;
+  start = false;
+  _$jscoverage['script.js'][87]++;
+  motorA = false;
+  _$jscoverage['script.js'][88]++;
+  motorB = false;
+  _$jscoverage['script.js'][89]++;
+  crash = false;
+  _$jscoverage['script.js'][90]++;
+  pause_ = false;
+  _$jscoverage['script.js'][91]++;
+  resetpos_ = false;
+  _$jscoverage['script.js'][92]++;
+  stop_ = false;
+  _$jscoverage['script.js'][93]++;
+  resize_ = false;
+  _$jscoverage['script.js'][94]++;
+  last_step = 0;
+  _$jscoverage['script.js'][95]++;
+  distance = 0;
+}
+_$jscoverage['script.js'][99]++;
+function change_page() {
+  _$jscoverage['script.js'][101]++;
+  reset_data();
+  _$jscoverage['script.js'][102]++;
+  steps = 0;
+  _$jscoverage['script.js'][103]++;
+  document.getElementById("out_path").value = "";
+  _$jscoverage['script.js'][104]++;
+  document.getElementById("out_path-bg").value = "";
+  _$jscoverage['script.js'][105]++;
+  resetpos();
+}
+_$jscoverage['script.js'][109]++;
+function change_lang(val) {
+  _$jscoverage['script.js'][111]++;
+  lang = val;
+  _$jscoverage['script.js'][112]++;
+  change_lang_ = true;
+  _$jscoverage['script.js'][113]++;
+  display();
+  _$jscoverage['script.js'][114]++;
+  change_lang_ = false;
+}
+_$jscoverage['script.js'][117]++;
+function popup(message) {
+  _$jscoverage['script.js'][119]++;
+  var maskHeight = $(document).height();
+  _$jscoverage['script.js'][120]++;
+  var maskWidth = $(window).width();
+  _$jscoverage['script.js'][122]++;
+  var dialogTop = (maskHeight / 3);
+  _$jscoverage['script.js'][123]++;
+  var dialogLeft = ((maskWidth / 2) - 250);
+  _$jscoverage['script.js'][125]++;
+  $("#dialog-overlay").css({height: maskHeight, width: maskWidth}).show();
+  _$jscoverage['script.js'][129]++;
+  $("#dialog-box").css({top: dialogTop, left: dialogLeft}).show();
+  _$jscoverage['script.js'][133]++;
+  $("#dialog-box").animate({height: 0, width: 0}, 0);
+  _$jscoverage['script.js'][137]++;
+  $("#dialog-box").animate({height: 180, width: 500}, 100);
+  _$jscoverage['script.js'][142]++;
+  $("#dialog-message").html(message);
+}
+_$jscoverage['script.js'][145]++;
+function popupbg(message) {
+  _$jscoverage['script.js'][147]++;
+  var maskHeight = $(document).height();
+  _$jscoverage['script.js'][148]++;
+  var maskWidth = $(window).width();
+  _$jscoverage['script.js'][150]++;
+  var dialogTop = (maskHeight / 3);
+  _$jscoverage['script.js'][151]++;
+  var dialogLeft = ((maskWidth / 2) - 250);
+  _$jscoverage['script.js'][153]++;
+  $("#dialog-overlay-bg").css({height: maskHeight, width: maskWidth}).show();
+  _$jscoverage['script.js'][154]++;
+  $("#dialog-box-bg").css({top: dialogTop, left: dialogLeft}).show();
+  _$jscoverage['script.js'][155]++;
+  $("#dialog-box-bg").animate({height: 0, width: 0}, 0);
+  _$jscoverage['script.js'][159]++;
+  $("#dialog-box-bg").animate({height: 180, width: 500}, 100);
+  _$jscoverage['script.js'][164]++;
+  $("#dialog-message-bg").html(message);
+}
+_$jscoverage['script.js'][168]++;
+function resize() {
+  _$jscoverage['script.js'][170]++;
+  if ((lang == "e")) {
+    _$jscoverage['script.js'][171]++;
+    if (((document.getElementById("width1").value >= 150) && (document.getElementById("width1").value <= 1000) && (document.getElementById("height1").value >= 150) && (document.getElementById("height1").value <= 1000))) {
+      _$jscoverage['script.js'][173]++;
+      $("#my_canvas").animate({width: document.getElementById("width1").value, height: document.getElementById("height1").value}, "slow");
+      _$jscoverage['script.js'][177]++;
+      canvas.width = document.getElementById("width1").value;
+      _$jscoverage['script.js'][178]++;
+      width = canvas.width;
+      _$jscoverage['script.js'][179]++;
+      canvas.height = document.getElementById("height1").value;
+      _$jscoverage['script.js'][180]++;
+      height = canvas.height;
+    }
+    _$jscoverage['script.js'][183]++;
+    if (((document.getElementById("width1").value >= 150) && (document.getElementById("width1").value <= 1000))) {
+      _$jscoverage['script.js'][184]++;
+      $("#my_canvas").animate({width: document.getElementById("width1").value}, "slow");
+      _$jscoverage['script.js'][187]++;
+      canvas.width = document.getElementById("width1").value;
+      _$jscoverage['script.js'][188]++;
+      width = canvas.width;
+    }
+    _$jscoverage['script.js'][191]++;
+    if (((document.getElementById("height1").value >= 150) && (document.getElementById("height1").value <= 1000))) {
+      _$jscoverage['script.js'][192]++;
+      $("#my_canvas").animate({height: document.getElementById("height1").value}, "slow");
+      _$jscoverage['script.js'][195]++;
+      canvas.height = document.getElementById("height1").value;
+      _$jscoverage['script.js'][196]++;
+      height = canvas.height;
+    }
+    _$jscoverage['script.js'][199]++;
+    if (((document.getElementById("width1").value == 0) && (document.getElementById("height1").value == 0))) {
+      _$jscoverage['script.js'][200]++;
+      popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter something!");
+    }
+    else {
+      _$jscoverage['script.js'][201]++;
+      if (((document.getElementById("width1").value < 150) && (document.getElementById("height1").value < 150))) {
+        _$jscoverage['script.js'][202]++;
+        popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter width and height higher than 150");
+      }
+      else {
+        _$jscoverage['script.js'][203]++;
+        if (((document.getElementById("width1").value == 0) && (document.getElementById("height1").value >= 150) && (document.getElementById("height1").value <= 1000))) {
+        }
+        else {
+          _$jscoverage['script.js'][206]++;
+          if (((document.getElementById("height1").value == 0) && (document.getElementById("width1").value >= 150) && (document.getElementById("width1").value <= 1000))) {
+          }
+          else {
+            _$jscoverage['script.js'][209]++;
+            if (((document.getElementById("width1").value > 1000) && (document.getElementById("height1").value > 1000))) {
+              _$jscoverage['script.js'][210]++;
+              popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter width and height less than 1000");
+            }
+            else {
+              _$jscoverage['script.js'][211]++;
+              if ((document.getElementById("width1").value > 1000)) {
+                _$jscoverage['script.js'][212]++;
+                popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter width less than 1000");
+              }
+              else {
+                _$jscoverage['script.js'][213]++;
+                if ((document.getElementById("height1").value > 1000)) {
+                  _$jscoverage['script.js'][214]++;
+                  popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter height less than 1000");
+                }
+                else {
+                  _$jscoverage['script.js'][215]++;
+                  if ((document.getElementById("width1").value < 150)) {
+                    _$jscoverage['script.js'][216]++;
+                    popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter width higher than 150.");
+                  }
+                  else {
+                    _$jscoverage['script.js'][217]++;
+                    if ((document.getElementById("height1").value < 150)) {
+                      _$jscoverage['script.js'][218]++;
+                      popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter height higher than 150.");
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  else {
+    _$jscoverage['script.js'][220]++;
+    if ((lang == "b")) {
+      _$jscoverage['script.js'][222]++;
+      if (((document.getElementById("width1-bg").value >= 150) && (document.getElementById("width1-bg").value <= 1000) && (document.getElementById("height1-bg").value >= 150) && (document.getElementById("height1-bg").value <= 1000))) {
+        _$jscoverage['script.js'][224]++;
+        $("#my_canvas").animate({width: document.getElementById("width1-bg").value, height: document.getElementById("height1-bg").value}, "slow");
+        _$jscoverage['script.js'][228]++;
+        canvas.width = document.getElementById("width1-bg").value;
+        _$jscoverage['script.js'][229]++;
+        width = canvas.width;
+        _$jscoverage['script.js'][230]++;
+        canvas.height = document.getElementById("height1-bg").value;
+        _$jscoverage['script.js'][231]++;
+        height = canvas.height;
+      }
+      _$jscoverage['script.js'][234]++;
+      if (((document.getElementById("width1-bg").value >= 150) && (document.getElementById("width1-bg").value <= 1000))) {
+        _$jscoverage['script.js'][235]++;
+        $("#my_canvas").animate({width: document.getElementById("width1-bg").value}, "slow");
+        _$jscoverage['script.js'][238]++;
+        canvas.width = document.getElementById("width1-bg").value;
+        _$jscoverage['script.js'][239]++;
+        width = canvas.width;
+      }
+      _$jscoverage['script.js'][242]++;
+      if (((document.getElementById("height1-bg").value >= 150) && (document.getElementById("height1-bg").value <= 1000))) {
+        _$jscoverage['script.js'][243]++;
+        $("#my_canvas").animate({height: document.getElementById("height1-bg").value}, "slow");
+        _$jscoverage['script.js'][246]++;
+        canvas.height = document.getElementById("height1-bg").value;
+        _$jscoverage['script.js'][247]++;
+        height = canvas.height;
+      }
+      _$jscoverage['script.js'][250]++;
+      if (((document.getElementById("width1-bg").value == 0) && (document.getElementById("height1-bg").value == 0))) {
+        _$jscoverage['script.js'][251]++;
+        popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d0\u00bd\u00d0\u00b5\u00d1\u0089\u00d0\u00be!");
+      }
+      else {
+        _$jscoverage['script.js'][252]++;
+        if (((document.getElementById("width1-bg").value < 150) && (document.getElementById("height1-bg").value < 150))) {
+          _$jscoverage['script.js'][253]++;
+          popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d0\u00b2\u00d0\u00b8\u00d1\u0081\u00d0\u00be\u00d1\u0087\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b8 \u00d1\u0088\u00d0\u00b8\u00d1\u0080\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00b3\u00d0\u00be\u00d0\u00bb\u00d0\u00b5\u00d0\u00bc\u00d0\u00b8 \u00d0\u00be\u00d1\u0082 150");
+        }
+        else {
+          _$jscoverage['script.js'][254]++;
+          if (((document.getElementById("width1-bg").value == 0) && (document.getElementById("height1-bg").value >= 150) && (document.getElementById("height1-bg").value <= 1000))) {
+          }
+          else {
+            _$jscoverage['script.js'][257]++;
+            if (((document.getElementById("height1-bg").value == 0) && (document.getElementById("width1-bg").value >= 150) && (document.getElementById("width1-bg").value <= 1000))) {
+            }
+            else {
+              _$jscoverage['script.js'][260]++;
+              if (((document.getElementById("width1-bg").value > 1000) && (document.getElementById("height1-bg").value > 1000))) {
+                _$jscoverage['script.js'][261]++;
+                popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d0\u00b2\u00d0\u00b8\u00d1\u0081\u00d0\u00be\u00d1\u0087\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b8 \u00d1\u0088\u00d0\u00b8\u00d1\u0080\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00bc\u00d0\u00b0\u00d0\u00bb\u00d0\u00ba\u00d0\u00b8 \u00d0\u00be\u00d1\u0082 1000");
+              }
+              else {
+                _$jscoverage['script.js'][262]++;
+                if ((document.getElementById("width1-bg").value > 1000)) {
+                  _$jscoverage['script.js'][263]++;
+                  popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d1\u0088\u00d0\u00b8\u00d1\u0080\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00bc\u00d0\u00b0\u00d0\u00bb\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 1000");
+                }
+                else {
+                  _$jscoverage['script.js'][264]++;
+                  if ((document.getElementById("height1-bg").value > 1000)) {
+                    _$jscoverage['script.js'][265]++;
+                    popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d0\u00b2\u00d0\u00b8\u00d1\u0081\u00d0\u00be\u00d1\u0087\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00bc\u00d0\u00b0\u00d0\u00bb\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 1000");
+                  }
+                  else {
+                    _$jscoverage['script.js'][266]++;
+                    if ((document.getElementById("width1-bg").value < 150)) {
+                      _$jscoverage['script.js'][267]++;
+                      popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d1\u0088\u00d0\u00b8\u00d1\u0080\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00b2\u00d0\u00b8\u00d1\u0081\u00d0\u00be\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 150.");
+                    }
+                    else {
+                      _$jscoverage['script.js'][268]++;
+                      if ((document.getElementById("height1-bg").value < 150)) {
+                        _$jscoverage['script.js'][269]++;
+                        popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d0\u00b2\u00d0\u00b8\u00d1\u0081\u00d0\u00be\u00d1\u0087\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00b2\u00d0\u00b8\u00d1\u0081\u00d0\u00be\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 150.");
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  _$jscoverage['script.js'][272]++;
+  resize_ = true;
+  _$jscoverage['script.js'][273]++;
+  roboX = (width / 2);
+  _$jscoverage['script.js'][274]++;
+  roboY = (height / 2);
+  _$jscoverage['script.js'][275]++;
+  radian = ((Math.PI / 180) * 0);
+  _$jscoverage['script.js'][276]++;
+  resetpos();
+}
+_$jscoverage['script.js'][280]++;
+function reset() {
+  _$jscoverage['script.js'][282]++;
+  resize_ = true;
+  _$jscoverage['script.js'][283]++;
+  $("#my_canvas").animate({width: 450, height: 450}, "slow");
+  _$jscoverage['script.js'][287]++;
+  width = 450;
+  _$jscoverage['script.js'][288]++;
+  canvas.width = width;
+  _$jscoverage['script.js'][289]++;
+  height = 450;
+  _$jscoverage['script.js'][290]++;
+  canvas.height = height;
+  _$jscoverage['script.js'][292]++;
+  if (start) {
+    _$jscoverage['script.js'][293]++;
+    roboX = (width / 2);
+    _$jscoverage['script.js'][294]++;
+    roboY = (height / 2);
+    _$jscoverage['script.js'][295]++;
+    radian = ((Math.PI / 180) * 0);
+  }
+  _$jscoverage['script.js'][297]++;
+  document.getElementById("width1").value = "";
+  _$jscoverage['script.js'][298]++;
+  document.getElementById("height1").value = "";
+  _$jscoverage['script.js'][299]++;
+  document.getElementById("width1-bg").value = "";
+  _$jscoverage['script.js'][300]++;
+  document.getElementById("height1-bg").value = "";
+  _$jscoverage['script.js'][301]++;
+  resetpos();
+}
+_$jscoverage['script.js'][305]++;
+function resetpos() {
+  _$jscoverage['script.js'][307]++;
+  roboX = (width / 2);
+  _$jscoverage['script.js'][308]++;
+  roboY = (height / 2);
+  _$jscoverage['script.js'][309]++;
+  radian = ((Math.PI / 180) * 0);
+  _$jscoverage['script.js'][310]++;
+  init(speed);
+  _$jscoverage['script.js'][311]++;
+  resetpos_ = true;
+  _$jscoverage['script.js'][312]++;
+  if (crash) {
+    _$jscoverage['script.js'][313]++;
+    crash = false;
+    _$jscoverage['script.js'][314]++;
+    display();
+  }
+}
+_$jscoverage['script.js'][319]++;
+function robo_resize() {
+  _$jscoverage['script.js'][321]++;
+  resize_ = true;
+  _$jscoverage['script.js'][322]++;
+  if ((lang == "e")) {
+    _$jscoverage['script.js'][323]++;
+    if (((document.getElementById("width_r").value >= 20) || (document.getElementById("height_r").value >= 20))) {
+      _$jscoverage['script.js'][324]++;
+      if (((document.getElementById("width_r").value >= 20) && (document.getElementById("width_r").value <= 100))) {
+        _$jscoverage['script.js'][325]++;
+        roboWidth = document.getElementById("width_r").value;
+        _$jscoverage['script.js'][326]++;
+        lWheelPosX = (((- roboWidth) / 2) - 7);
+        _$jscoverage['script.js'][327]++;
+        rWheelPosX = (roboWidth / 2);
+      }
+      _$jscoverage['script.js'][329]++;
+      if (((document.getElementById("height_r").value >= 20) && (document.getElementById("height_r").value <= 150))) {
+        _$jscoverage['script.js'][330]++;
+        roboHeight = document.getElementById("height_r").value;
+      }
+      _$jscoverage['script.js'][333]++;
+      if (((document.getElementById("height_r").value > 150) && (document.getElementById("width_r").value > 100))) {
+        _$jscoverage['script.js'][334]++;
+        popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter height and width for the robot less than 100");
+      }
+      else {
+        _$jscoverage['script.js'][335]++;
+        if ((document.getElementById("height_r").value > 150)) {
+          _$jscoverage['script.js'][336]++;
+          popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter height for the robot less than 150");
+        }
+        else {
+          _$jscoverage['script.js'][337]++;
+          if ((document.getElementById("width_r").value > 100)) {
+            _$jscoverage['script.js'][338]++;
+            popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter width for the robot less than 100");
+          }
+        }
+      }
+    }
+    else {
+      _$jscoverage['script.js'][341]++;
+      if ((start == false)) {
+        _$jscoverage['script.js'][342]++;
+        popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter width/height for the robot <br/>(higher than 20)");
+      }
+    }
+  }
+  else {
+    _$jscoverage['script.js'][345]++;
+    if ((lang == "b")) {
+      _$jscoverage['script.js'][347]++;
+      if (((document.getElementById("width_r-bg").value >= 20) || (document.getElementById("height_r-bg").value >= 20))) {
+        _$jscoverage['script.js'][348]++;
+        if (((document.getElementById("width_r-bg").value >= 20) && (document.getElementById("width_r-bg").value <= 100))) {
+          _$jscoverage['script.js'][349]++;
+          roboWidth = document.getElementById("width_r-bg").value;
+          _$jscoverage['script.js'][350]++;
+          lWheelPosX = (((- roboWidth) / 2) - 7);
+          _$jscoverage['script.js'][351]++;
+          rWheelPosX = (roboWidth / 2);
+        }
+        _$jscoverage['script.js'][353]++;
+        if (((document.getElementById("height_r-bg").value >= 20) && (document.getElementById("height_r-bg").value <= 150))) {
+          _$jscoverage['script.js'][354]++;
+          roboHeight = document.getElementById("height_r-bg").value;
+        }
+        _$jscoverage['script.js'][357]++;
+        if (((document.getElementById("height_r-bg").value > 150) && (document.getElementById("width_r-bg").value > 100))) {
+          _$jscoverage['script.js'][358]++;
+          popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d0\u00b2\u00d0\u00b8\u00d1\u0081\u00d0\u00be\u00d1\u0087\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b8 \u00d1\u0088\u00d0\u00b8\u00d1\u0080\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b7\u00d0\u00b0 \u00d1\u0080\u00d0\u00be\u00d0\u00b1\u00d0\u00be\u00d1\u0082\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00bc\u00d0\u00b0\u00d0\u00bb\u00d0\u00ba\u00d0\u00b8 \u00d0\u00be\u00d1\u0082 100");
+        }
+        else {
+          _$jscoverage['script.js'][359]++;
+          if ((document.getElementById("height_r-bg").value > 150)) {
+            _$jscoverage['script.js'][360]++;
+            popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d0\u00b2\u00d0\u00b8\u00d1\u0081\u00d0\u00be\u00d1\u0087\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b7\u00d0\u00b0 \u00d1\u0080\u00d0\u00be\u00d0\u00b1\u00d0\u00be\u00d1\u0082\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00bc\u00d0\u00b0\u00d0\u00bb\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 150");
+          }
+          else {
+            _$jscoverage['script.js'][361]++;
+            if ((document.getElementById("width_r-bg").value > 100)) {
+              _$jscoverage['script.js'][362]++;
+              popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d1\u0088\u00d0\u00b8\u00d1\u0080\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b7\u00d0\u00b0 \u00d1\u0080\u00d0\u00be\u00d0\u00b1\u00d0\u00be\u00d1\u0082\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00bc\u00d0\u00b0\u00d0\u00bb\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 100");
+            }
+          }
+        }
+      }
+      else {
+        _$jscoverage['script.js'][365]++;
+        if ((start == false)) {
+          _$jscoverage['script.js'][366]++;
+          popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d0\u00b2\u00d0\u00b8\u00d1\u0081\u00d0\u00be\u00d1\u0087\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0/\u00d1\u0088\u00d0\u00b8\u00d1\u0080\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b7\u00d0\u00b0 \u00d1\u0080\u00d0\u00be\u00d0\u00b1\u00d0\u00be\u00d1\u0082\u00d0\u00b0 <br/>(\u00d0\u00bf\u00d0\u00be-\u00d0\u00b3\u00d0\u00be\u00d0\u00bb\u00d1\u008f\u00d0\u00bc\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 20)");
+        }
+      }
+    }
+  }
+  _$jscoverage['script.js'][369]++;
+  robo_data_reset();
+}
+_$jscoverage['script.js'][373]++;
+function robo_data_reset() {
+  _$jscoverage['script.js'][375]++;
+  if (((! pause_) && (! stop_))) {
+    _$jscoverage['script.js'][376]++;
+    roboX = (width / 2);
+    _$jscoverage['script.js'][377]++;
+    roboY = (height / 2);
+    _$jscoverage['script.js'][378]++;
+    radian = ((Math.PI / 180) * 0);
+  }
+  _$jscoverage['script.js'][381]++;
+  start = false;
+  _$jscoverage['script.js'][382]++;
+  display();
+}
+_$jscoverage['script.js'][386]++;
+function robo_reset() {
+  _$jscoverage['script.js'][388]++;
+  resize_ = true;
+  _$jscoverage['script.js'][389]++;
+  roboWidth = 50;
+  _$jscoverage['script.js'][390]++;
+  roboHeight = 53;
+  _$jscoverage['script.js'][391]++;
+  robo_data_reset();
+  _$jscoverage['script.js'][392]++;
+  document.getElementById("width_r").value = "";
+  _$jscoverage['script.js'][393]++;
+  document.getElementById("height_r").value = "";
+}
+_$jscoverage['script.js'][397]++;
+function wheel_resize() {
+  _$jscoverage['script.js'][399]++;
+  resize_ = true;
+  _$jscoverage['script.js'][400]++;
+  if ((lang == "e")) {
+    _$jscoverage['script.js'][401]++;
+    if (((document.getElementById("width_w").value >= 5) || (document.getElementById("height_w").value >= 10))) {
+      _$jscoverage['script.js'][402]++;
+      if (((document.getElementById("width_w").value >= 5) && (document.getElementById("width_w").value <= 15))) {
+        _$jscoverage['script.js'][403]++;
+        lWheelWidth = document.getElementById("width_w").value;
+        _$jscoverage['script.js'][404]++;
+        lWheelPosX = (((- roboWidth) / 2) - lWheelWidth);
+        _$jscoverage['script.js'][405]++;
+        rWheelWidth = document.getElementById("width_w").value;
+      }
+      _$jscoverage['script.js'][407]++;
+      if (((document.getElementById("height_w").value >= 10) && (document.getElementById("height_w").value <= 100))) {
+        _$jscoverage['script.js'][408]++;
+        lWheelHeight = document.getElementById("height_w").value;
+        _$jscoverage['script.js'][409]++;
+        rWheelHeight = document.getElementById("height_w").value;
+      }
+      _$jscoverage['script.js'][411]++;
+      if (((document.getElementById("height_w").value > 100) && (document.getElementById("width_w").value > 15))) {
+        _$jscoverage['script.js'][412]++;
+        popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter height less than 100 and width for the robot wheels less than 15");
+      }
+      else {
+        _$jscoverage['script.js'][413]++;
+        if ((document.getElementById("width_w").value > 15)) {
+          _$jscoverage['script.js'][414]++;
+          popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter width for the robot wheels less than 15");
+        }
+        else {
+          _$jscoverage['script.js'][415]++;
+          if ((document.getElementById("height_w").value > 100)) {
+            _$jscoverage['script.js'][416]++;
+            popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter height for the robot less than 100");
+          }
+        }
+      }
+    }
+    else {
+      _$jscoverage['script.js'][418]++;
+      if (((document.getElementById("width_w").value == 0) || (document.getElementById("height_w").value == 0))) {
+        _$jscoverage['script.js'][419]++;
+        popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter something and then resize");
+      }
+      else {
+        _$jscoverage['script.js'][421]++;
+        popup("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> Please enter width for the wheels higher than 5 and height, higher than 10");
+      }
+    }
+  }
+  else {
+    _$jscoverage['script.js'][423]++;
+    if ((lang == "b")) {
+      _$jscoverage['script.js'][424]++;
+      if (((document.getElementById("width_w-bg").value >= 5) || (document.getElementById("height_w-bg").value >= 10))) {
+        _$jscoverage['script.js'][425]++;
+        if (((document.getElementById("width_w-bg").value >= 5) && (document.getElementById("width_w-bg").value <= 15))) {
+          _$jscoverage['script.js'][426]++;
+          lWheelWidth = document.getElementById("width_w-bg").value;
+          _$jscoverage['script.js'][427]++;
+          lWheelPosX = (((- roboWidth) / 2) - lWheelWidth);
+          _$jscoverage['script.js'][428]++;
+          rWheelWidth = document.getElementById("width_w-bg").value;
+        }
+        _$jscoverage['script.js'][430]++;
+        if (((document.getElementById("height_w-bg").value >= 10) && (document.getElementById("height_w-bg").value <= 100))) {
+          _$jscoverage['script.js'][431]++;
+          lWheelHeight = document.getElementById("height_w-bg").value;
+          _$jscoverage['script.js'][432]++;
+          rWheelHeight = document.getElementById("height_w-bg").value;
+        }
+        _$jscoverage['script.js'][434]++;
+        if (((document.getElementById("height_w-bg").value > 100) && (document.getElementById("width_w-bg").value > 15))) {
+          _$jscoverage['script.js'][435]++;
+          popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d0\u00b4\u00d1\u008a\u00d0\u00bb\u00d0\u00b6\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00bc\u00d0\u00b0\u00d0\u00bb\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 100 \u00d0\u00b8 \u00d1\u0088\u00d0\u00b8\u00d1\u0080\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0  \u00d0\u00b7\u00d0\u00b0 \u00d0\u00b3\u00d1\u0083\u00d0\u00bc\u00d0\u00b8\u00d1\u0082\u00d0\u00b5 \u00d0\u00bd\u00d0\u00b0 \u00d1\u0080\u00d0\u00be\u00d0\u00b1\u00d0\u00be\u00d1\u0082\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00bc\u00d0\u00b0\u00d0\u00bb\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 15");
+        }
+        else {
+          _$jscoverage['script.js'][436]++;
+          if ((document.getElementById("width_w-bg").value > 15)) {
+            _$jscoverage['script.js'][437]++;
+            popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d1\u0088\u00d0\u00b8\u00d1\u0080\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b7\u00d0\u00b0 \u00d0\u00b3\u00d1\u0083\u00d0\u00bc\u00d0\u00b8\u00d1\u0082\u00d0\u00b5 \u00d0\u00bd\u00d0\u00b0 \u00d1\u0080\u00d0\u00be\u00d0\u00b1\u00d0\u00be\u00d1\u0082\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00bc\u00d0\u00b0\u00d0\u00bb\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 15");
+          }
+          else {
+            _$jscoverage['script.js'][438]++;
+            if ((document.getElementById("height_w-bg").value > 100)) {
+              _$jscoverage['script.js'][439]++;
+              popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d0\u00b4\u00d1\u008a\u00d0\u00bb\u00d0\u00b6\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b7\u00d0\u00b0 \u00d0\u00b3\u00d1\u0083\u00d0\u00bc\u00d0\u00b8\u00d1\u0082\u00d0\u00b5 \u00d0\u00bd\u00d0\u00b0 \u00d1\u0080\u00d0\u00be\u00d0\u00b1\u00d0\u00be\u00d1\u0082\u00d0\u00b0 \u00d0\u00bf\u00d0\u00be-\u00d0\u00bc\u00d0\u00b0\u00d0\u00bb\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 100");
+            }
+          }
+        }
+      }
+      else {
+        _$jscoverage['script.js'][441]++;
+        if (((document.getElementById("width_w").value == 0) || (document.getElementById("height_w").value == 0))) {
+          _$jscoverage['script.js'][442]++;
+          popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d0\u00bd\u00d0\u00b5\u00d1\u0089\u00d0\u00be \u00d0\u00bf\u00d1\u0080\u00d0\u00b5\u00d0\u00b4\u00d0\u00b8 \u00d0\u00b4\u00d0\u00b0 \u00d0\u00bf\u00d1\u0080\u00d0\u00b5\u00d0\u00be\u00d1\u0080\u00d0\u00b0\u00d0\u00b7\u00d0\u00bc\u00d0\u00b5\u00d1\u0080\u00d1\u008f\u00d0\u00b2\u00d0\u00b0\u00d1\u0082\u00d0\u00b5");
+        }
+        else {
+          _$jscoverage['script.js'][444]++;
+          popupbg("<img class = \"pop\" src=\"img/w.png\" height=\"60\" width=\"60\"/> <br/> \u00d0\u009c\u00d0\u00be\u00d0\u00bb\u00d1\u008f \u00d0\u00b2\u00d1\u008a\u00d0\u00b2\u00d0\u00b5\u00d0\u00b4\u00d0\u00b5\u00d1\u0082\u00d0\u00b5 \u00d1\u0088\u00d0\u00b8\u00d1\u0080\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0 \u00d0\u00b7\u00d0\u00b0 \u00d0\u00b3\u00d1\u0083\u00d0\u00bc\u00d0\u00b8\u00d1\u0082\u00d0\u00b5 \u00d0\u00bf\u00d0\u00be-\u00d0\u00b2\u00d0\u00b8\u00d1\u0081\u00d0\u00be\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 5 \u00d0\u00b8 \u00d0\u00b4\u00d1\u008a\u00d0\u00bb\u00d0\u00b6\u00d0\u00b8\u00d0\u00bd\u00d0\u00b0, \u00d0\u00bf\u00d0\u00be-\u00d0\u00b2\u00d0\u00b8\u00d1\u0081\u00d0\u00be\u00d0\u00ba\u00d0\u00b0 \u00d0\u00be\u00d1\u0082 10");
+        }
+      }
+    }
+  }
+  _$jscoverage['script.js'][447]++;
+  if (((! pause_) && (! stop_))) {
+    _$jscoverage['script.js'][448]++;
+    roboX = (width / 2);
+    _$jscoverage['script.js'][449]++;
+    roboY = (height / 2);
+  }
+  _$jscoverage['script.js'][451]++;
+  display();
+}
+_$jscoverage['script.js'][455]++;
+function wheel_reset() {
+  _$jscoverage['script.js'][457]++;
+  resize_ = true;
+  _$jscoverage['script.js'][458]++;
+  lWheelWidth = 7;
+  _$jscoverage['script.js'][459]++;
+  lWheelHeight = 40;
+  _$jscoverage['script.js'][460]++;
+  rWheelWidth = 7;
+  _$jscoverage['script.js'][461]++;
+  rWheelHeight = 40;
+  _$jscoverage['script.js'][462]++;
+  lWheelPosX = (((- roboWidth) / 2) - 7);
+  _$jscoverage['script.js'][463]++;
+  lWheelPosX -= (lWheelWidth - 7);
+  _$jscoverage['script.js'][464]++;
+  rWheelPosX = (roboWidth / 2);
+  _$jscoverage['script.js'][465]++;
+  document.getElementById("width_w").value = "";
+  _$jscoverage['script.js'][466]++;
+  document.getElementById("height_w").value = "";
+  _$jscoverage['script.js'][467]++;
+  display();
+}
+_$jscoverage['script.js'][471]++;
+function draw() {
+  _$jscoverage['script.js'][473]++;
+  if (((! pause_) && (! stop_))) {
+    _$jscoverage['script.js'][475]++;
+    check_rect_angles();
+    _$jscoverage['script.js'][476]++;
+    calc_new_coords_for_draw();
+    _$jscoverage['script.js'][477]++;
+    display();
+  }
+  _$jscoverage['script.js'][479]++;
+  if (((pause_ || stop_) && resetpos_)) {
+    _$jscoverage['script.js'][480]++;
+    resetpos_ = false;
+    _$jscoverage['script.js'][481]++;
+    display();
+  }
+  _$jscoverage['script.js'][483]++;
+  if (resize_) {
+    _$jscoverage['script.js'][484]++;
+    resize_ = false;
+    _$jscoverage['script.js'][485]++;
+    display();
+  }
+}
+_$jscoverage['script.js'][490]++;
+function draw_PlayPage() {
+  _$jscoverage['script.js'][492]++;
+  display();
+  _$jscoverage['script.js'][493]++;
+  check_rect_angles();
+  _$jscoverage['script.js'][494]++;
+  check_LeftRight_key();
+  _$jscoverage['script.js'][495]++;
+  check_Up_key();
+}
+_$jscoverage['script.js'][499]++;
+function check_LeftRight_key() {
+  _$jscoverage['script.js'][501]++;
+  if ((((roboX + (roboWidth / 2)) < width) && (roboX > (roboWidth / 2)))) {
+    _$jscoverage['script.js'][502]++;
+    if (rightDown) {
+      _$jscoverage['script.js'][503]++;
+      radian += ((Math.PI / 180) * speed);
+    }
+    else {
+      _$jscoverage['script.js'][504]++;
+      if (leftDown) {
+        _$jscoverage['script.js'][505]++;
+        radian -= ((Math.PI / 180) * speed);
+      }
+    }
+  }
+}
+_$jscoverage['script.js'][511]++;
+function check_Up_key() {
+  _$jscoverage['script.js'][513]++;
+  if ((((roboY + (roboHeight / 2)) < height) && (roboY > (roboHeight / 2)))) {
+    _$jscoverage['script.js'][514]++;
+    if (upDown) {
+      _$jscoverage['script.js'][515]++;
+      calc_coord_play_page();
+      _$jscoverage['script.js'][516]++;
+      if (((roboX + (roboWidth / 2)) > width)) {
+        _$jscoverage['script.js'][517]++;
+        crash = true;
+        _$jscoverage['script.js'][518]++;
+        roboX -= (speed + 2);
+      }
+      _$jscoverage['script.js'][520]++;
+      if ((roboX < (roboWidth / 2))) {
+        _$jscoverage['script.js'][521]++;
+        crash = true;
+        _$jscoverage['script.js'][522]++;
+        roboX += (speed + 2);
+      }
+    }
+  }
+  else {
+    _$jscoverage['script.js'][525]++;
+    if ((((roboHeight / 2) + roboY) < height)) {
+      _$jscoverage['script.js'][526]++;
+      roboY += (speed + 2);
+      _$jscoverage['script.js'][527]++;
+      crash = true;
+    }
+    else {
+      _$jscoverage['script.js'][529]++;
+      roboY -= (speed + 2);
+      _$jscoverage['script.js'][530]++;
+      crash = true;
+    }
+  }
+}
+_$jscoverage['script.js'][535]++;
+function calc_new_coords_for_draw() {
+  _$jscoverage['script.js'][537]++;
+  if ((((roboX + (roboWidth / 2)) < width) && (roboX > (roboWidth / 2)))) {
+    _$jscoverage['script.js'][538]++;
+    if ((motorA && (! motorB) && (distance > 0))) {
+      _$jscoverage['script.js'][539]++;
+      radian += ((Math.PI / 180) * speed);
+      _$jscoverage['script.js'][540]++;
+      recalc_distance();
+    }
+    else {
+      _$jscoverage['script.js'][541]++;
+      if (((! motorA) && motorB && (distance > 0))) {
+        _$jscoverage['script.js'][542]++;
+        radian -= ((Math.PI / 180) * speed);
+        _$jscoverage['script.js'][543]++;
+        recalc_distance();
+      }
+    }
+  }
+  _$jscoverage['script.js'][546]++;
+  if ((((roboY + (roboHeight / 2)) < height) && (roboY > (roboHeight / 2)))) {
+    _$jscoverage['script.js'][547]++;
+    if ((motorA && motorB && (distance > 0))) {
+      _$jscoverage['script.js'][548]++;
+      recalc_distance();
+      _$jscoverage['script.js'][549]++;
+      calc_coord();
+      _$jscoverage['script.js'][550]++;
+      if (((roboX + (roboWidth / 2)) > width)) {
+        _$jscoverage['script.js'][551]++;
+        crash = true;
+      }
+      _$jscoverage['script.js'][553]++;
+      if ((roboX < (roboWidth / 2))) {
+        _$jscoverage['script.js'][554]++;
+        crash = true;
+      }
+    }
+  }
+  else {
+    _$jscoverage['script.js'][557]++;
+    if ((((roboHeight / 2) + roboY) < height)) {
+      _$jscoverage['script.js'][558]++;
+      crash = true;
+    }
+    else {
+      _$jscoverage['script.js'][560]++;
+      crash = true;
+    }
+  }
+}
+_$jscoverage['script.js'][565]++;
+function recalc_distance() {
+  _$jscoverage['script.js'][567]++;
+  if ((distance > speed)) {
+    _$jscoverage['script.js'][568]++;
+    distance -= speed;
+  }
+  else {
+    _$jscoverage['script.js'][570]++;
+    distance = 0;
+  }
+}
+_$jscoverage['script.js'][575]++;
+function check_rect_angles() {
+  _$jscoverage['script.js'][577]++;
+  if ((((roboX + check_angleX(1)) > width) || ((roboX + check_angleX(2)) > width) || ((roboX + check_angleX(3)) > width) || ((roboX + check_angleX(4)) > width) || ((roboX + check_angleX(1)) < 0) || ((roboX + check_angleX(2)) < 0) || ((roboX + check_angleX(3)) < 0) || ((roboX + check_angleX(4)) < 0) || ((roboY + check_angleY(1)) > height) || ((roboY + check_angleY(2)) > height) || ((roboY + check_angleY(3)) > height) || ((roboY + check_angleY(4)) > height) || ((roboY + check_angleY(1)) < 0) || ((roboY + check_angleY(2)) < 0) || ((roboY + check_angleY(3)) < 0) || ((roboY + check_angleY(4)) < 0))) {
+    _$jscoverage['script.js'][585]++;
+    crash = true;
+  }
+  else {
+    _$jscoverage['script.js'][587]++;
+    crash = false;
+  }
+}
+_$jscoverage['script.js'][592]++;
+function check_angleX(angle) {
+  _$jscoverage['script.js'][594]++;
+  var x = 0;
+  _$jscoverage['script.js'][595]++;
+  degrees = make_degrees();
+  _$jscoverage['script.js'][597]++;
+  if ((angle == 1)) {
+    _$jscoverage['script.js'][598]++;
+    x = ((Math.cos((((Math.PI / 180) * 90) - ((Math.PI / 180) * degrees))) * roboHeight) / 2);
+    _$jscoverage['script.js'][599]++;
+    return (x - ((Math.cos(((Math.PI / 180) * degrees)) * roboWidth) / 2));
+  }
+  else {
+    _$jscoverage['script.js'][600]++;
+    if ((angle == 2)) {
+      _$jscoverage['script.js'][601]++;
+      x = ((Math.cos((((Math.PI / 180) * 90) - ((Math.PI / 180) * degrees))) * roboHeight) / 2);
+      _$jscoverage['script.js'][602]++;
+      return (x + ((Math.cos(((Math.PI / 180) * degrees)) * roboWidth) / 2));
+    }
+    else {
+      _$jscoverage['script.js'][603]++;
+      if ((angle == 3)) {
+        _$jscoverage['script.js'][604]++;
+        x = (((- Math.sin(((Math.PI / 180) * degrees))) * roboHeight) / 2);
+        _$jscoverage['script.js'][605]++;
+        return (x + ((Math.cos(((Math.PI / 180) * degrees)) * roboWidth) / 2));
+      }
+      else {
+        _$jscoverage['script.js'][606]++;
+        if ((angle == 4)) {
+          _$jscoverage['script.js'][607]++;
+          x = ((Math.sin(((Math.PI / 180) * degrees)) * roboHeight) / 2);
+          _$jscoverage['script.js'][608]++;
+          return (- (x + ((Math.sin((((Math.PI / 180) * 90) - ((Math.PI / 180) * degrees))) * roboWidth) / 2)));
+        }
+      }
+    }
+  }
+}
+_$jscoverage['script.js'][613]++;
+function check_angleY(angle) {
+  _$jscoverage['script.js'][615]++;
+  var y = 0;
+  _$jscoverage['script.js'][616]++;
+  degrees = make_degrees();
+  _$jscoverage['script.js'][618]++;
+  if ((angle == 1)) {
+    _$jscoverage['script.js'][619]++;
+    y = (((- Math.sin((((Math.PI / 180) * 90) - ((Math.PI / 180) * degrees)))) * roboHeight) / 2);
+    _$jscoverage['script.js'][620]++;
+    return (y - ((Math.sin(((Math.PI / 180) * degrees)) * roboWidth) / 2));
+  }
+  else {
+    _$jscoverage['script.js'][621]++;
+    if ((angle == 2)) {
+      _$jscoverage['script.js'][622]++;
+      y = (((- Math.sin((((Math.PI / 180) * 90) - ((Math.PI / 180) * degrees)))) * roboHeight) / 2);
+      _$jscoverage['script.js'][623]++;
+      return (y + ((Math.sin(((Math.PI / 180) * degrees)) * roboWidth) / 2));
+    }
+    else {
+      _$jscoverage['script.js'][624]++;
+      if ((angle == 3)) {
+        _$jscoverage['script.js'][625]++;
+        y = ((Math.cos(((Math.PI / 180) * degrees)) * roboHeight) / 2);
+        _$jscoverage['script.js'][626]++;
+        return (y + ((Math.sin(((Math.PI / 180) * degrees)) * roboWidth) / 2));
+      }
+      else {
+        _$jscoverage['script.js'][627]++;
+        if ((angle == 4)) {
+          _$jscoverage['script.js'][628]++;
+          y = (((- Math.cos(((Math.PI / 180) * degrees))) * roboHeight) / 2);
+          _$jscoverage['script.js'][629]++;
+          return (- (y + ((Math.cos((((Math.PI / 180) * 90) - ((Math.PI / 180) * degrees))) * roboWidth) / 2)));
+        }
+      }
+    }
+  }
+}
+_$jscoverage['script.js'][634]++;
+function calc_coord() {
+  _$jscoverage['script.js'][636]++;
+  degrees = make_degrees();
+  _$jscoverage['script.js'][638]++;
+  if (((degrees >= 0) && (degrees <= 90))) {
+    _$jscoverage['script.js'][639]++;
+    if ((motorA && motorB)) {
+      _$jscoverage['script.js'][640]++;
+      roboX += calc_distance_cos(90);
+      _$jscoverage['script.js'][641]++;
+      roboY -= calc_distance_sin(90);
+    }
+  }
+  else {
+    _$jscoverage['script.js'][643]++;
+    if (((degrees > 90) && (degrees <= 180))) {
+      _$jscoverage['script.js'][644]++;
+      if ((motorA && motorB)) {
+        _$jscoverage['script.js'][645]++;
+        roboX += calc_distance_sin(180);
+        _$jscoverage['script.js'][646]++;
+        roboY += calc_distance_cos(180);
+      }
+    }
+    else {
+      _$jscoverage['script.js'][648]++;
+      if (((degrees > 180) && (degrees <= 270))) {
+        _$jscoverage['script.js'][649]++;
+        if ((motorA && motorB)) {
+          _$jscoverage['script.js'][650]++;
+          roboX -= calc_distance_cos(270);
+          _$jscoverage['script.js'][651]++;
+          roboY += calc_distance_sin(270);
+        }
+      }
+      else {
+        _$jscoverage['script.js'][653]++;
+        if (((degrees > 270) && (degrees <= 360))) {
+          _$jscoverage['script.js'][654]++;
+          if ((motorA && motorB)) {
+            _$jscoverage['script.js'][655]++;
+            roboX -= calc_distance_sin(360);
+            _$jscoverage['script.js'][656]++;
+            roboY -= calc_distance_cos(360);
+          }
+        }
+      }
+    }
+  }
+}
+_$jscoverage['script.js'][662]++;
+function calc_coord_play_page() {
+  _$jscoverage['script.js'][664]++;
+  degrees = make_degrees();
+  _$jscoverage['script.js'][666]++;
+  if (((degrees >= 0) && (degrees <= 90))) {
+    _$jscoverage['script.js'][667]++;
+    if (upDown) {
+      _$jscoverage['script.js'][668]++;
+      roboX += calc_distance_cos(90);
+      _$jscoverage['script.js'][669]++;
+      roboY -= calc_distance_sin(90);
+    }
+  }
+  else {
+    _$jscoverage['script.js'][671]++;
+    if (((degrees > 90) && (degrees <= 180))) {
+      _$jscoverage['script.js'][672]++;
+      if (upDown) {
+        _$jscoverage['script.js'][673]++;
+        roboX += calc_distance_sin(180);
+        _$jscoverage['script.js'][674]++;
+        roboY += calc_distance_cos(180);
+      }
+    }
+    else {
+      _$jscoverage['script.js'][676]++;
+      if (((degrees > 180) && (degrees <= 270))) {
+        _$jscoverage['script.js'][677]++;
+        if (upDown) {
+          _$jscoverage['script.js'][678]++;
+          roboX -= calc_distance_cos(270);
+          _$jscoverage['script.js'][679]++;
+          roboY += calc_distance_sin(270);
+        }
+      }
+      else {
+        _$jscoverage['script.js'][681]++;
+        if (((degrees > 270) && (degrees <= 360))) {
+          _$jscoverage['script.js'][682]++;
+          if (upDown) {
+            _$jscoverage['script.js'][683]++;
+            roboX -= calc_distance_sin(360);
+            _$jscoverage['script.js'][684]++;
+            roboY -= calc_distance_cos(360);
+          }
+        }
+      }
+    }
+  }
+}
+_$jscoverage['script.js'][690]++;
+function calc_distance_sin(val) {
+  _$jscoverage['script.js'][692]++;
+  return (Math.sin((((Math.PI / 180) * val) - ((Math.PI / 180) * degrees))) * speed);
+}
+_$jscoverage['script.js'][696]++;
+function calc_distance_cos(val) {
+  _$jscoverage['script.js'][698]++;
+  return (Math.cos((((Math.PI / 180) * val) - ((Math.PI / 180) * degrees))) * speed);
+}
+_$jscoverage['script.js'][702]++;
+function make_degrees() {
+  _$jscoverage['script.js'][704]++;
+  var val = (radian / (Math.PI / 180));
+  _$jscoverage['script.js'][706]++;
+  while (((val > 360) || (val < -360))) {
+    _$jscoverage['script.js'][707]++;
+    if ((val > 360)) {
+      _$jscoverage['script.js'][708]++;
+      val -= 360;
+    }
+    else {
+      _$jscoverage['script.js'][710]++;
+      val += 360;
+    }
+}
+  _$jscoverage['script.js'][713]++;
+  if ((val < 0)) {
+    _$jscoverage['script.js'][714]++;
+    val = (360 + val);
+  }
+  _$jscoverage['script.js'][717]++;
+  return val;
+}
+_$jscoverage['script.js'][721]++;
+function check_inpath_free_space() {
+  _$jscoverage['script.js'][723]++;
+  temp_input = "";
+  _$jscoverage['script.js'][724]++;
+  if ((lang == "e")) {
+    _$jscoverage['script.js'][725]++;
+    temp = document.getElementById("robo_path").value;
+    _$jscoverage['script.js'][726]++;
+    document.getElementById("robo_path-bg").value = document.getElementById("robo_path").value;
+  }
+  else {
+    _$jscoverage['script.js'][727]++;
+    if ((lang == "b")) {
+      _$jscoverage['script.js'][728]++;
+      temp = document.getElementById("robo_path-bg").value;
+      _$jscoverage['script.js'][729]++;
+      document.getElementById("robo_path").value = document.getElementById("robo_path-bg").value;
+    }
+    else {
+      _$jscoverage['script.js'][731]++;
+      alert("Something went wrong. Please refresh the page and try again.");
+      _$jscoverage['script.js'][732]++;
+      return;
+    }
+  }
+  _$jscoverage['script.js'][734]++;
+  for (var k = 0; (k < temp.length); (k++)) {
+    _$jscoverage['script.js'][735]++;
+    if (((temp[k] != " ") && (temp[k] != "\n"))) {
+      _$jscoverage['script.js'][736]++;
+      temp_input += temp[k];
+    }
+    else {
+      _$jscoverage['script.js'][737]++;
+      if ((((temp[k] == " ") || (temp[k] == "\n")) && (k != 0))) {
+        _$jscoverage['script.js'][738]++;
+        if (((temp[(k - 1)] != " ") && (temp[(k - 1)] != "\n"))) {
+          _$jscoverage['script.js'][739]++;
+          temp_input += temp[k];
+        }
+      }
+    }
+}
+  _$jscoverage['script.js'][743]++;
+  steps = temp_input.split(/\r\n|\r|\n|\s/);
+}
+_$jscoverage['script.js'][747]++;
+function generate_path() {
+  _$jscoverage['script.js'][749]++;
+  document.getElementById("out_path").value = "";
+  _$jscoverage['script.js'][750]++;
+  document.getElementById("out_path-bg").value = "";
+  _$jscoverage['script.js'][751]++;
+  check_inpath_free_space();
+  _$jscoverage['script.js'][752]++;
+  document.getElementById("path").disabled = true;
+  _$jscoverage['script.js'][753]++;
+  document.getElementById("replace_path").disabled = true;
+  _$jscoverage['script.js'][754]++;
+  document.getElementById("clear_text").disabled = true;
+  _$jscoverage['script.js'][755]++;
+  document.getElementById("clear_text-bg").disabled = true;
+  _$jscoverage['script.js'][756]++;
+  document.getElementById("path-bg").disabled = true;
+  _$jscoverage['script.js'][757]++;
+  document.getElementById("replace_path-bg").disabled = true;
+  _$jscoverage['script.js'][758]++;
+  document.getElementById("out_path").style.color = "green";
+  _$jscoverage['script.js'][759]++;
+  document.getElementById("out_path-bg").style.color = "green";
+  _$jscoverage['script.js'][760]++;
+  get_path = true;
+  _$jscoverage['script.js'][761]++;
+  start = true;
+  _$jscoverage['script.js'][762]++;
+  submit_ = true;
+  _$jscoverage['script.js'][763]++;
+  init(speed);
+}
+_$jscoverage['script.js'][767]++;
+function calc_distance() {
+  _$jscoverage['script.js'][769]++;
+  distance = (((rWheelHeight * 3.1400000000000001) / 360) * distance);
+}
+_$jscoverage['script.js'][773]++;
+function get_new_step() {
+  _$jscoverage['script.js'][775]++;
+  if (((steps[(last_step + 1)] * 1) > 0)) {
+    _$jscoverage['script.js'][776]++;
+    motorA = false;
+    _$jscoverage['script.js'][777]++;
+    motorB = false;
+    _$jscoverage['script.js'][778]++;
+    if ((steps[last_step] == "A")) {
+      _$jscoverage['script.js'][779]++;
+      motorA = true;
+    }
+    else {
+      _$jscoverage['script.js'][780]++;
+      if ((steps[last_step] == "B")) {
+        _$jscoverage['script.js'][781]++;
+        motorB = true;
+      }
+      else {
+        _$jscoverage['script.js'][782]++;
+        if ((steps[last_step] == "AB")) {
+          _$jscoverage['script.js'][783]++;
+          motorA = true;
+          _$jscoverage['script.js'][784]++;
+          motorB = true;
+        }
+        else {
+          _$jscoverage['script.js'][786]++;
+          document.getElementById("out_path").value += ("Wrong Input - " + steps[last_step] + " " + steps[(last_step + 1)] + "\n");
+          _$jscoverage['script.js'][788]++;
+          document.getElementById("out_path-bg").value += ("\u00d0\u0093\u00d1\u0080\u00d0\u00b5\u00d1\u0088\u00d0\u00bd\u00d0\u00b8 \u00d0\u00b4\u00d0\u00b0\u00d0\u00bd\u00d0\u00bd\u00d0\u00b8 - " + steps[last_step] + " " + steps[(last_step + 1)] + "\n");
+          _$jscoverage['script.js'][790]++;
+          stop_simulation();
+          _$jscoverage['script.js'][791]++;
+          return;
+        }
+      }
+    }
+    _$jscoverage['script.js'][794]++;
+    distance = (steps[(last_step + 1)] * 1);
+    _$jscoverage['script.js'][795]++;
+    w = 3;
+    _$jscoverage['script.js'][796]++;
+    calc_distance();
+    _$jscoverage['script.js'][797]++;
+    document.getElementById("out_path").value += (steps[last_step] + " " + steps[(last_step + 1)] + "\n");
+    _$jscoverage['script.js'][799]++;
+    document.getElementById("out_path-bg").value += (steps[last_step] + " " + steps[(last_step + 1)] + "\n");
+    _$jscoverage['script.js'][801]++;
+    last_step += 2;
+  }
+  else {
+    _$jscoverage['script.js'][802]++;
+    if (((isCoord(steps[last_step]) || (steps[last_step] == "\n") || (steps[last_step] == "") || (steps[(last_step + 1)] == undefined) || (last_step == 1)) && (steps[(last_step - 1)] != undefined))) {
+      _$jscoverage['script.js'][805]++;
+      stop_simulation();
+    }
+    else {
+      _$jscoverage['script.js'][807]++;
+      if (((steps[(last_step + 1)] != undefined) && (! isCoord(steps[(last_step + 1)])))) {
+        _$jscoverage['script.js'][808]++;
+        document.getElementById("out_path").value += "Wrong Input  ";
+        _$jscoverage['script.js'][809]++;
+        document.getElementById("out_path-bg").value += "\u00d0\u0093\u00d1\u0080\u00d0\u00b5\u00d1\u0088\u00d0\u00bd\u00d0\u00b8 \u00d0\u00b4\u00d0\u00b0\u00d0\u00bd\u00d0\u00bd\u00d0\u00b8  ";
+        _$jscoverage['script.js'][810]++;
+        for (i = 0; ((steps[(last_step + i)] != undefined) && (! isCoord(steps[(last_step + i)]))); (i++)) {
+          _$jscoverage['script.js'][811]++;
+          document.getElementById("out_path").value += (steps[(last_step + i)] + " ");
+          _$jscoverage['script.js'][812]++;
+          document.getElementById("out_path-bg").value += (steps[(last_step + i)] + " ");
+}
+        _$jscoverage['script.js'][814]++;
+        document.getElementById("out_path").value += "\n";
+        _$jscoverage['script.js'][815]++;
+        document.getElementById("out_path-bg").value += "\n";
+      }
+      else {
+        _$jscoverage['script.js'][817]++;
+        document.getElementById("out_path").value += ("Wrong Input  " + steps[last_step] + "\n");
+        _$jscoverage['script.js'][819]++;
+        document.getElementById("out_path-bg").value += ("\u00d0\u0093\u00d1\u0080\u00d0\u00b5\u00d1\u0088\u00d0\u00bd\u00d0\u00b8 \u00d0\u00b4\u00d0\u00b0\u00d0\u00bd\u00d0\u00bd\u00d0\u00b8  " + steps[last_step] + "\n");
+      }
+      _$jscoverage['script.js'][822]++;
+      stop_simulation();
+      _$jscoverage['script.js'][823]++;
+      return;
+    }
+  }
+}
+_$jscoverage['script.js'][828]++;
+function isCoord(val) {
+  _$jscoverage['script.js'][830]++;
+  return ((val == "A") || (val == "B") || (val == "AB"));
+}
+_$jscoverage['script.js'][834]++;
+function display() {
+  _$jscoverage['script.js'][836]++;
+  ctx.beginPath();
+  _$jscoverage['script.js'][837]++;
+  ctx.fillStyle = bgColor;
+  _$jscoverage['script.js'][838]++;
+  clear();
+  _$jscoverage['script.js'][839]++;
+  ctx.fillStyle = objectColor;
+  _$jscoverage['script.js'][840]++;
+  ctx.save();
+  _$jscoverage['script.js'][841]++;
+  ctx.translate(roboX, roboY);
+  _$jscoverage['script.js'][842]++;
+  ctx.rotate(radian);
+  _$jscoverage['script.js'][843]++;
+  ctx.rect(((- roboWidth) / 2), ((- roboHeight) / 2), roboWidth, roboHeight);
+  _$jscoverage['script.js'][844]++;
+  ctx.font = "bold 19pt Calibri,Times New Roman";
+  _$jscoverage['script.js'][845]++;
+  if ((get_path && (distance == 0) && (! play_page))) {
+    _$jscoverage['script.js'][846]++;
+    get_new_step();
+  }
+  _$jscoverage['script.js'][848]++;
+  if (((! change_lang_) && (! play_page))) {
+    _$jscoverage['script.js'][849]++;
+    w = (- w);
+  }
+  _$jscoverage['script.js'][851]++;
+  display_robo_and_wheels();
+  _$jscoverage['script.js'][852]++;
+  ctx.font = "bold 30pt Calibri";
+  _$jscoverage['script.js'][853]++;
+  ctx.restore();
+  _$jscoverage['script.js'][854]++;
+  ctx.fillStyle = "white";
+  _$jscoverage['script.js'][855]++;
+  ctx.fill();
+  _$jscoverage['script.js'][856]++;
+  ctx.lineWidth = 3;
+  _$jscoverage['script.js'][857]++;
+  ctx.strokeStyle = "black";
+  _$jscoverage['script.js'][858]++;
+  ctx.stroke();
+  _$jscoverage['script.js'][859]++;
+  if (crash) {
+    _$jscoverage['script.js'][860]++;
+    crash_mess();
+  }
+}
+_$jscoverage['script.js'][865]++;
+function display_robo_and_wheels() {
+  _$jscoverage['script.js'][867]++;
+  ctx.rect(lWheelPosX, lWheelPosY, lWheelWidth, lWheelHeight);
+  _$jscoverage['script.js'][868]++;
+  ctx.rect(rWheelPosX, rWheelPosY, rWheelWidth, rWheelHeight);
+  _$jscoverage['script.js'][869]++;
+  ctx.rect(((- roboWidth) / 2), ((- roboHeight) / 2), roboWidth, 10);
+  _$jscoverage['script.js'][870]++;
+  ctx.rect(((- roboWidth) / 2), ((- roboHeight) / 2), (roboWidth / 2), 10);
+  _$jscoverage['script.js'][874]++;
+  for (i = 10; (i <= 90); (i += 10)) {
+    _$jscoverage['script.js'][875]++;
+    drawWheelLines(i);
+}
+}
+_$jscoverage['script.js'][881]++;
+function drawWheelLines(hei) {
+  _$jscoverage['script.js'][883]++;
+  ctx.moveTo(rWheelPosX, ((rWheelPosY + hei) - w));
+  _$jscoverage['script.js'][884]++;
+  ctx.lineTo((rWheelPosX + 35), ((rWheelPosY + hei) - w));
+  _$jscoverage['script.js'][885]++;
+  ctx.moveTo(((- roboWidth) / 2), ((lWheelPosY + hei) - w));
+  _$jscoverage['script.js'][886]++;
+  ctx.lineTo((lWheelPosX - 35), ((lWheelPosY + hei) - w));
+}
+_$jscoverage['script.js'][890]++;
+function clear() {
+  _$jscoverage['script.js'][892]++;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  _$jscoverage['script.js'][893]++;
+  ctx.beginPath();
+  _$jscoverage['script.js'][894]++;
+  ctx.fillRect(0, 0, width, height);
+  _$jscoverage['script.js'][895]++;
+  ctx.closePath();
+}
+_$jscoverage['script.js'][899]++;
+function clear_textareas() {
+  _$jscoverage['script.js'][901]++;
+  document.getElementById("robo_path").value = "";
+  _$jscoverage['script.js'][902]++;
+  document.getElementById("robo_path-bg").value = "";
+  _$jscoverage['script.js'][903]++;
+  document.getElementById("out_path").value = "";
+  _$jscoverage['script.js'][904]++;
+  document.getElementById("out_path-bg").value = "";
+}
+_$jscoverage['script.js'][908]++;
+function replace_path() {
+  _$jscoverage['script.js'][910]++;
+  document.getElementById("robo_path").value = document.getElementById("out_path").value;
+  _$jscoverage['script.js'][911]++;
+  document.getElementById("robo_path-bg").value = document.getElementById("out_path-bg").value;
+}
+_$jscoverage['script.js'][915]++;
+function crash_mess() {
+  _$jscoverage['script.js'][917]++;
+  ctx.fillStyle = "white";
+  _$jscoverage['script.js'][918]++;
+  if ((lang == "e")) {
+    _$jscoverage['script.js'][919]++;
+    if ((width < 200)) {
+      _$jscoverage['script.js'][920]++;
+      ctx.font = "bold 30pt Calibri,Times New Roman";
+      _$jscoverage['script.js'][921]++;
+      ctx.fillText("CRASH!", ((width / 2) - 65), ((height / 2) + 10));
+    }
+    else {
+      _$jscoverage['script.js'][923]++;
+      ctx.font = "bold 50pt Calibri,Times New Roman";
+      _$jscoverage['script.js'][924]++;
+      ctx.fillText("CRASH!", ((width / 2) - 100), ((height / 2) + 10));
+    }
+  }
+  else {
+    _$jscoverage['script.js'][926]++;
+    if ((lang == "b")) {
+      _$jscoverage['script.js'][927]++;
+      if ((width < 200)) {
+        _$jscoverage['script.js'][928]++;
+        ctx.font = "bold 30pt Calibri,Times New Roman";
+        _$jscoverage['script.js'][929]++;
+        ctx.fillText("\u00d0\u00a1\u00d0\u00b1\u00d0\u00bb\u00d1\u008a\u00d1\u0081\u00d1\u008a\u00d0\u00ba!", ((width / 2) - 55), ((height / 2) + 10));
+      }
+      else {
+        _$jscoverage['script.js'][931]++;
+        ctx.font = "bold 50pt Calibri,Times New Roman";
+        _$jscoverage['script.js'][932]++;
+        ctx.fillText("\u00d0\u00a1\u00d0\u00b1\u00d0\u00bb\u00d1\u008a\u00d1\u0081\u00d1\u008a\u00d0\u00ba!", ((width / 2) - 125), ((height / 2) + 10));
+      }
+    }
+  }
+  _$jscoverage['script.js'][935]++;
+  if ((! play_page)) {
+    _$jscoverage['script.js'][936]++;
+    if ((! stop_)) {
+      _$jscoverage['script.js'][937]++;
+      document.getElementById("out_path").value += ("Crash on line " + ((last_step / 2) + 1) + " (" + steps[(last_step - 2)] + " " + steps[(last_step - 1)] + ")" + "\n");
+      _$jscoverage['script.js'][938]++;
+      document.getElementById("out_path-bg").value += ("\u00d0\u00a1\u00d0\u00b1\u00d0\u00bb\u00d1\u008a\u00d1\u0081\u00d1\u008a\u00d0\u00ba \u00d0\u00bd\u00d0\u00b0 \u00d1\u0080\u00d0\u00b5\u00d0\u00b4 " + ((last_step / 2) + 1) + " (" + steps[(last_step - 2)] + " " + steps[(last_step - 1)] + ")" + "\n");
+    }
+    _$jscoverage['script.js'][940]++;
+    for (; ((steps[(last_step + 1)] * 1) > 0); (last_step += 2)) {
+      _$jscoverage['script.js'][941]++;
+      document.getElementById("out_path").value += (steps[last_step] + " " + steps[(last_step + 1)] + "\n");
+      _$jscoverage['script.js'][942]++;
+      document.getElementById("out_path-bg").value += (steps[last_step] + " " + steps[(last_step + 1)] + "\n");
+}
+    _$jscoverage['script.js'][944]++;
+    stop_simulation();
+  }
+}
+_$jscoverage['script.js'][949]++;
+function stopgen() {
+  _$jscoverage['script.js'][951]++;
+  document.getElementById("out_path").value += "\nStoped!";
+  _$jscoverage['script.js'][952]++;
+  document.getElementById("out_path-bg").value += "\n\u00d0\u00a1\u00d0\u00bf\u00d1\u0080\u00d1\u008f\u00d0\u00bd\u00d0\u00be!";
+  _$jscoverage['script.js'][953]++;
+  stop_simulation();
+}
+_$jscoverage['script.js'][957]++;
+function stop_simulation() {
+  _$jscoverage['script.js'][959]++;
+  w = 0;
+  _$jscoverage['script.js'][960]++;
+  document.getElementById("path").disabled = false;
+  _$jscoverage['script.js'][961]++;
+  document.getElementById("path-bg").disabled = false;
+  _$jscoverage['script.js'][962]++;
+  document.getElementById("replace_path").disabled = false;
+  _$jscoverage['script.js'][963]++;
+  document.getElementById("replace_path-bg").disabled = false;
+  _$jscoverage['script.js'][964]++;
+  document.getElementById("clear_text").disabled = false;
+  _$jscoverage['script.js'][965]++;
+  document.getElementById("clear_text-bg").disabled = false;
+  _$jscoverage['script.js'][966]++;
+  document.getElementById("play").disabled = true;
+  _$jscoverage['script.js'][967]++;
+  document.getElementById("pause").disabled = true;
+  _$jscoverage['script.js'][968]++;
+  document.getElementById("stop").disabled = true;
+  _$jscoverage['script.js'][969]++;
+  document.getElementById("play-bg").disabled = true;
+  _$jscoverage['script.js'][970]++;
+  document.getElementById("pause-bg").disabled = true;
+  _$jscoverage['script.js'][971]++;
+  document.getElementById("stop-bg").disabled = true;
+  _$jscoverage['script.js'][972]++;
+  get_path = false;
+  _$jscoverage['script.js'][973]++;
+  distance = 0;
+  _$jscoverage['script.js'][974]++;
+  pause_ = false;
+  _$jscoverage['script.js'][975]++;
+  stop_ = true;
+  _$jscoverage['script.js'][976]++;
+  clearInterval(gameInterval);
+}
+_$jscoverage['script.js'][979]++;
+function showing(obj) {
+  _$jscoverage['script.js'][981]++;
+  $(obj).show(500);
+}
+_$jscoverage['script.js'][982]++;
+;
+_$jscoverage['script.js'][984]++;
+function fade(obj) {
+  _$jscoverage['script.js'][986]++;
+  $(obj).fadeIn(500);
+}
+_$jscoverage['script.js'][987]++;
+;
+_$jscoverage['script.js'][989]++;
+function fadelogo(obj) {
+  _$jscoverage['script.js'][991]++;
+  $(obj).fadeIn(2000);
+}
+_$jscoverage['script.js'][992]++;
+;
+_$jscoverage['script.js'][994]++;
+function fadeo(obj) {
+  _$jscoverage['script.js'][996]++;
+  $(obj).fadeOut(1);
+}
+_$jscoverage['script.js'][997]++;
+;
+_$jscoverage['script.js'][999]++;
+function slide(obj) {
+  _$jscoverage['script.js'][1001]++;
+  $(obj).slideDown(1000);
+}
+_$jscoverage['script.js'][1002]++;
+;
+_$jscoverage['script.js'][1004]++;
+function slide2(obj) {
+  _$jscoverage['script.js'][1006]++;
+  $(obj).slideDown(1);
+}
+_$jscoverage['script.js'][1007]++;
+;
+_$jscoverage['script.js'][1009]++;
+function hiding(obj) {
+  _$jscoverage['script.js'][1011]++;
+  $(obj).hide(500);
+}
+_$jscoverage['script.js'][1012]++;
+;
+_$jscoverage['script.js'][1014]++;
+var cX = 0;
+_$jscoverage['script.js'][1015]++;
+var cY = 0;
+_$jscoverage['script.js'][1016]++;
+var rX = 0;
+_$jscoverage['script.js'][1017]++;
+var rY = 0;
+_$jscoverage['script.js'][1019]++;
+function UpdateCursorPosition(e) {
+  _$jscoverage['script.js'][1021]++;
+  cX = e.pageX;
+  _$jscoverage['script.js'][1021]++;
+  cY = e.pageY;
+}
+_$jscoverage['script.js'][1024]++;
+function UpdateCursorPositionDocAll(e) {
+  _$jscoverage['script.js'][1026]++;
+  cX = event.clientX;
+  _$jscoverage['script.js'][1026]++;
+  cY = event.clientY;
+}
+_$jscoverage['script.js'][1029]++;
+if (document.all) {
+  _$jscoverage['script.js'][1030]++;
+  document.onmousemove = UpdateCursorPositionDocAll;
+}
+else {
+  _$jscoverage['script.js'][1032]++;
+  document.onmousemove = UpdateCursorPosition;
+}
+_$jscoverage['script.js'][1035]++;
+function AssignPosition(d) {
+  _$jscoverage['script.js'][1037]++;
+  if (self.pageYOffset) {
+    _$jscoverage['script.js'][1038]++;
+    rX = self.pageXOffset;
+    _$jscoverage['script.js'][1039]++;
+    rY = self.pageYOffset;
+  }
+  else {
+    _$jscoverage['script.js'][1041]++;
+    if ((document.documentElement && document.documentElement.scrollTop)) {
+      _$jscoverage['script.js'][1042]++;
+      rX = document.documentElement.scrollLeft;
+      _$jscoverage['script.js'][1043]++;
+      rY = document.documentElement.scrollTop;
+    }
+    else {
+      _$jscoverage['script.js'][1045]++;
+      if (document.body) {
+        _$jscoverage['script.js'][1046]++;
+        rX = document.body.scrollLeft;
+        _$jscoverage['script.js'][1047]++;
+        rY = document.body.scrollTop;
+      }
+    }
+  }
+  _$jscoverage['script.js'][1049]++;
+  if (document.all) {
+    _$jscoverage['script.js'][1050]++;
+    cX += rX;
+    _$jscoverage['script.js'][1051]++;
+    cY += rY;
+  }
+  _$jscoverage['script.js'][1053]++;
+  d.style.left = (cX + 10 + "px");
+  _$jscoverage['script.js'][1054]++;
+  d.style.top = (cY + 10 + "px");
+}
+_$jscoverage['script.js'][1057]++;
+function HideText(d) {
+  _$jscoverage['script.js'][1059]++;
+  if ((d.length < 1)) {
+    _$jscoverage['script.js'][1060]++;
+    return;
+  }
+  _$jscoverage['script.js'][1062]++;
+  document.getElementById(d).style.display = "none";
+}
+_$jscoverage['script.js'][1065]++;
+function ShowText(d) {
+  _$jscoverage['script.js'][1067]++;
+  if ((d.length < 1)) {
+    _$jscoverage['script.js'][1068]++;
+    return;
+  }
+  _$jscoverage['script.js'][1070]++;
+  var dd = document.getElementById(d);
+  _$jscoverage['script.js'][1071]++;
+  AssignPosition(dd);
+  _$jscoverage['script.js'][1072]++;
+  dd.style.display = "block";
+}
+_$jscoverage['script.js'][1075]++;
+function ReverseContentDisplay(d) {
+  _$jscoverage['script.js'][1077]++;
+  if ((d.length < 1)) {
+    _$jscoverage['script.js'][1078]++;
+    return;
+  }
+  _$jscoverage['script.js'][1080]++;
+  var dd = document.getElementById(d);
+  _$jscoverage['script.js'][1081]++;
+  AssignPosition(dd);
+  _$jscoverage['script.js'][1082]++;
+  if ((dd.style.display == "none")) {
+    _$jscoverage['script.js'][1083]++;
+    dd.style.display = "block";
+  }
+  else {
+    _$jscoverage['script.js'][1085]++;
+    dd.style.display = "none";
+  }
+}
+_$jscoverage['script.js'][1089]++;
+function onKeyDown(evt) {
+  _$jscoverage['script.js'][1091]++;
+  if ((evt.keyCode == 39)) {
+    _$jscoverage['script.js'][1092]++;
+    rightDown = true;
+  }
+  else {
+    _$jscoverage['script.js'][1093]++;
+    if ((evt.keyCode == 37)) {
+      _$jscoverage['script.js'][1094]++;
+      leftDown = true;
+    }
+    else {
+      _$jscoverage['script.js'][1095]++;
+      if ((evt.keyCode == 38)) {
+        _$jscoverage['script.js'][1096]++;
+        upDown = true;
+      }
+    }
+  }
+}
+_$jscoverage['script.js'][1099]++;
+function onKeyUp(evt) {
+  _$jscoverage['script.js'][1101]++;
+  if ((evt.keyCode == 39)) {
+    _$jscoverage['script.js'][1102]++;
+    rightDown = false;
+  }
+  else {
+    _$jscoverage['script.js'][1103]++;
+    if ((evt.keyCode == 37)) {
+      _$jscoverage['script.js'][1104]++;
+      leftDown = false;
+    }
+    else {
+      _$jscoverage['script.js'][1105]++;
+      if ((evt.keyCode == 38)) {
+        _$jscoverage['script.js'][1106]++;
+        upDown = false;
+      }
+    }
+  }
+}
+_$jscoverage['script.js'][1109]++;
+document.addEventListener("keydown", onKeyDown);
+_$jscoverage['script.js'][1110]++;
+document.addEventListener("keyup", onKeyUp);
+_$jscoverage['script.js'][1112]++;
+var ar = new Array(33, 34, 35, 36, 37, 38, 39, 40);
+_$jscoverage['script.js'][1115]++;
+$(document).keydown((function (e) {
+  _$jscoverage['script.js'][1117]++;
+  var key = e.which;
+  _$jscoverage['script.js'][1119]++;
+  if (($.inArray(key, ar) > -1)) {
+    _$jscoverage['script.js'][1120]++;
+    e.preventDefault();
+    _$jscoverage['script.js'][1121]++;
+    return false;
+  }
+  _$jscoverage['script.js'][1123]++;
+  return true;
+}));
+_$jscoverage['script.js'][1127]++;
+function loadscript() {
+  _$jscoverage['script.js'][1128]++;
+  fade("body");
+  _$jscoverage['script.js'][1129]++;
+  slide2("table.welcome");
+  _$jscoverage['script.js'][1130]++;
+  fadeo("div.logo");
+  _$jscoverage['script.js'][1131]++;
+  fadelogo("div.logo-en");
+  _$jscoverage['script.js'][1132]++;
+  start = true;
+  _$jscoverage['script.js'][1133]++;
+  init(6);
+  _$jscoverage['script.js'][1134]++;
+  document.getElementById("but1-bg").disabled = false;
+  _$jscoverage['script.js'][1135]++;
+  document.getElementById("but2-bg").disabled = true;
+  _$jscoverage['script.js'][1136]++;
+  document.getElementById("but3-bg").disabled = false;
+  _$jscoverage['script.js'][1137]++;
+  document.getElementById("but1").disabled = false;
+  _$jscoverage['script.js'][1138]++;
+  document.getElementById("but2").disabled = true;
+  _$jscoverage['script.js'][1139]++;
+  document.getElementById("but3").disabled = false;
+  _$jscoverage['script.js'][1140]++;
+  document.getElementById("but1-play").disabled = false;
+  _$jscoverage['script.js'][1141]++;
+  document.getElementById("but2-play").disabled = true;
+  _$jscoverage['script.js'][1142]++;
+  document.getElementById("but3-play").disabled = false;
+  _$jscoverage['script.js'][1143]++;
+  document.getElementById("but1-play-bg").disabled = false;
+  _$jscoverage['script.js'][1144]++;
+  document.getElementById("but2-play-bg").disabled = true;
+  _$jscoverage['script.js'][1145]++;
+  document.getElementById("but3-play-bg").disabled = false;
+  _$jscoverage['script.js'][1146]++;
+  loadanime();
+}
+_$jscoverage['script.js'][1150]++;
+function showinfo() {
+  _$jscoverage['script.js'][1151]++;
+  if (document.getElementById("info")) {
+    _$jscoverage['script.js'][1152]++;
+    if ((document.getElementById("info").style.display != "none")) {
+      _$jscoverage['script.js'][1153]++;
+      document.getElementById("info").style.display = "none";
+      _$jscoverage['script.js'][1154]++;
+      document.getElementById("info-bg").style.display = "none";
+      _$jscoverage['script.js'][1155]++;
+      document.getElementById("forus").innerHTML = "Contacts &raquo;";
+      _$jscoverage['script.js'][1156]++;
+      document.getElementById("forus-bg").innerHTML = "\u00d0\u009a\u00d0\u00be\u00d0\u00bd\u00d1\u0082\u00d0\u00b0\u00d0\u00ba\u00d1\u0082\u00d0\u00b8 &raquo;";
+    }
+    else {
+      _$jscoverage['script.js'][1159]++;
+      document.getElementById("info").style.display = "block";
+      _$jscoverage['script.js'][1160]++;
+      document.getElementById("info-bg").style.display = "block";
+      _$jscoverage['script.js'][1161]++;
+      document.getElementById("forus").innerHTML = "Contacts &laquo;";
+      _$jscoverage['script.js'][1162]++;
+      document.getElementById("forus-bg").innerHTML = "\u00d0\u009a\u00d0\u00be\u00d0\u00bd\u00d1\u0082\u00d0\u00b0\u00d0\u00ba\u00d1\u0082\u00d0\u00b8 &laquo;";
+    }
+  }
+}
+_$jscoverage['script.js'][1168]++;
+function showface() {
+  _$jscoverage['script.js'][1169]++;
+  if (document.getElementById("faceinfo")) {
+    _$jscoverage['script.js'][1170]++;
+    if ((document.getElementById("faceinfo").style.display != "none")) {
+      _$jscoverage['script.js'][1171]++;
+      document.getElementById("faceinfo").style.display = "none";
+      _$jscoverage['script.js'][1172]++;
+      document.getElementById("faceinfo-bg").style.display = "none";
+    }
+    else {
+      _$jscoverage['script.js'][1175]++;
+      document.getElementById("faceinfo").style.display = "block";
+      _$jscoverage['script.js'][1176]++;
+      document.getElementById("faceinfo-bg").style.display = "block";
+    }
+  }
+}
+_$jscoverage['script.js'][1182]++;
+function showmail() {
+  _$jscoverage['script.js'][1183]++;
+  if (document.getElementById("mailinfo")) {
+    _$jscoverage['script.js'][1184]++;
+    if ((document.getElementById("mailinfo").style.display != "none")) {
+      _$jscoverage['script.js'][1185]++;
+      document.getElementById("mailinfo").style.display = "none";
+      _$jscoverage['script.js'][1186]++;
+      document.getElementById("mailinfo-bg").style.display = "none";
+    }
+    else {
+      _$jscoverage['script.js'][1189]++;
+      document.getElementById("mailinfo").style.display = "block";
+      _$jscoverage['script.js'][1190]++;
+      document.getElementById("mailinfo-bg").style.display = "block";
+    }
+  }
+}

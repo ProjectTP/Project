@@ -1123,7 +1123,7 @@ $(document).keydown(function(e)
       return true;
 });
 
-
+// body onload script
 function loadscript() {
 	fade('body');
 	slide2('table.welcome');
@@ -1144,4 +1144,50 @@ function loadscript() {
 	document.getElementById('but2-play-bg').disabled = true;
 	document.getElementById('but3-play-bg').disabled = false;
 	loadanime(); 
+}
+
+// show info when user click
+function showinfo() {
+	if (document.getElementById('info')) {
+		if (document.getElementById('info').style.display != 'none') {
+			document.getElementById('info').style.display = 'none';
+			document.getElementById('info-bg').style.display = 'none';
+			document.getElementById('forus').innerHTML = 'Contacts &raquo;';
+			document.getElementById('forus-bg').innerHTML = 'Контакти &raquo;';
+		}
+		else {
+			document.getElementById('info').style.display = 'block';
+			document.getElementById('info-bg').style.display = 'block';
+			document.getElementById('forus').innerHTML = 'Contacts &laquo;';
+			document.getElementById('forus-bg').innerHTML = 'Контакти &laquo;';
+		}
+	}
+}
+
+// show facebook info when user click
+function showface() {
+	if (document.getElementById('faceinfo')) {
+		if (document.getElementById('faceinfo').style.display != 'none') {
+			document.getElementById('faceinfo').style.display = 'none';
+			document.getElementById('faceinfo-bg').style.display = 'none';
+		}
+		else {
+			document.getElementById('faceinfo').style.display = 'block';
+			document.getElementById('faceinfo-bg').style.display = 'block';
+		}
+	}
+}
+
+// show mail info when user click
+function showmail() {
+	if (document.getElementById('mailinfo')) {
+		if (document.getElementById('mailinfo').style.display != 'none') {
+			document.getElementById('mailinfo').style.display = 'none';
+			document.getElementById('mailinfo-bg').style.display = 'none';
+		}
+		else {
+			document.getElementById('mailinfo').style.display = 'block';
+			document.getElementById('mailinfo-bg').style.display = 'block';				
+		}
+	}
 }
