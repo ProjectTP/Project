@@ -1,0 +1,545 @@
+body 
+{ 
+	background-color: #B4C9D6;
+} 
+
+/* --------------------- Canvas Decorations --------------------- */
+
+canvas 
+{ 
+	border: 12px solid rgba(255,255,255,1);
+    border-top: 12px solid rgba(117,117,117,0.9);
+    border-right: 12px solid rgba(117,117,117,0.9);
+	background-color: black;
+}
+
+/* --------------------- Output canvas Decorations --------------------- */
+#output 
+{ 
+    border: 2px solid white;
+    background-color: black;
+    border-radius: 3px;
+    box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.5), 0px 0px 5px 5px #400000;
+}
+
+/* --------------------- Header Decorations --------------------- */
+
+h1.showw, a.logo, h1.en
+{ 
+	font: 65px/75px Ruthie,Georgia, serif;
+	color: rgb(200,10,10);
+	text-decoration: none;
+    text-shadow:  1px 1px rgba(255,255,255,0.8);
+    -webkit-transition: color 1s ease-out, -webkit-box-shadow 1s;
+    -moz-transition: color 1s ease-out, -moz-box-shadow 1s;
+    -o-transition: color 1s ease-out, box-shadow 1s;
+}
+
+a.logo:hover
+{
+    color: rgba(250,10,10,0.5);
+}
+
+h3
+{
+	color: black;
+	padding: none;
+	font-weight: bold;
+}
+
+/* --------------------- Footer Decorations --------------------- */
+
+footer
+{
+	font: bold 9px Cutive,Junge,Georgia;
+	color: rgba(0,0,0,0.8);
+	text-shadow:  1px 1px rgba(255,255,255,0.3);
+}
+
+/* --------------------- Button Decorations --------------------- */
+
+button, #langchange, #tests, #forus, #forus-bg
+{
+	font: 12px/20px Cutive,Junge,Georgia;
+	background: rgba(100,100,100,0.3);
+    color: rgba(0,0,0,0.5);
+    font-size: 12px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border: 2px solid rgba(255,255,255,0.3);
+    position: relative;
+    cursor: pointer;
+    font-family: 'Just Me Again Down Here', cursive;
+    font-size: 15px;
+    -webkit-transition: background 0.4s, -webkit-box-shadow 0.3s ease-out, color 0.3s;
+    -moz-transition: background 0.4s, -moz-box-shadow 0.3s ease-out, color 0.3s;
+    -o-transition: background 0.4s, box-shadow 0.3s ease-out, color 0.3s;
+}
+
+button:disabled 
+{
+	border: solid 2px rgba(0,0,0,0.2);
+	color: rgba(150,150,150,1);
+    cursor: default;
+    background: rgba(0,0,0,0.3);
+}
+
+
+button:hover
+{
+    background: rgba(200,200,200,0.1);
+    color: rgba(0,0,0,1);
+    -webkit-box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
+    -moz-box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
+    box-shadow:0px 0px 10px #ccc, 0 2px 3px rgba(0,0,0,0.6);
+}
+
+button:disabled:hover
+{
+    background: rgba(0,0,0,0.3);
+    color: rgba(150,150,150,1);
+    -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.6);
+}
+
+button:active
+{
+    background: rgba(255,255,255,0.1);
+    -webkit-box-shadow:0 0px 10px rgba(0,0,0,1);   
+}
+
+a.switch
+{
+    color: rgba(255,255,255,0.5);
+    background-color: rgba(0,0,0,0);
+    box-shadow: 0px 0px;
+    border: 0px;
+    border-bottom: 1px solid rgba(255,255,255,1);
+    font-family: 'Antic Didone', cursive;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 1px 15px;
+    font-size: 15px;
+    margin-right: 5px;
+    -webkit-transition: -webkit-box-shadow 0.2s ease-out, color 0.2s, border 0.3s ease-out;
+    -moz-transition: -moz-box-shadow 0.2s ease-out, color 0.2s, border 0.3s ease-out;
+    -o-transition: box-shadow 0.2s ease-out, color 0.2s, border 0.3s ease-out;
+}
+
+a.switch:hover
+{
+    color: rgba(50,50,50,0.8);
+    border-bottom: 2px solid rgba(170,10,10,1);
+}
+
+
+
+/* --------------------- Input Decorations --------------------- */
+
+input[type=number]
+{
+	background-color: rgba(255,255,255,0.9);
+	color: black;
+	border-radius: 5px;
+	width: 110px;
+	box-shadow:  0px 0px 2px 2px rgba(255,255,255,0.6)
+
+}
+#robo_path,#robo_output,#out_path, #out_path-bg, #robo_path-bg
+{
+    background-color: rgba(200,200,255,0.1);
+    color: black;
+    font-weight: bold;
+    font-size: 15px;
+    border-radius: 5px;
+    width: 250px;
+    height: 200px;
+    box-shadow:  0px 0px 2px 2px rgba(255,255,255,0.6);
+    border: 7px solid rgba(0,0,0,0.1);
+    border-left: 0px;
+    border-right: 0px;
+
+}
+::-webkit-input-placeholder  
+{
+	font: 13px Junge,Georgia;
+    font-family: 'Junge', cursive;
+	color: rgba(0,0,0,0.4);
+}
+
+input:-moz-placeholder {
+	font: 13px Junge,Georgia;
+    font-family: 'Junge', cursive;
+	color: rgba(0,0,0,0.4);
+}
+
+#out_path::-webkit-input-placeholder, #out_path-bg::-webkit-input-placeholder
+{
+    font-size: 15px;
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* ------------------- Table Decorations ------------------------ */
+
+#tableform , #tablespeed, #tablepath
+{
+	border: solid 5px rgba(0,0,0,0.1);
+    -moz-border: solid 5px rgba(0,0,0,0.1);
+    -webkit-border: solid 5px rgba(0,0,0,0.1);
+	border-radius: 10px;
+	background: rgba(105,60,9,0.3);
+	box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.3);
+}
+
+#tableform td, #tablespeed td, #tablepath td
+{
+	text-align: center;
+}
+#tableform th , #tablespeed th, #tablepath th
+{
+	background: rgba(255,255,255,0.2);
+	border-radius: 3px;
+	border: solid 2px rgba(0,0,0,0.2);
+    -moz-border: solid 2px rgba(0,0,0,0.1);
+    -webkit-border: solid 2px rgba(0,0,0,0.1);
+    border-right: 0px;
+    border-left: 0px;
+	font-family: 'Antic Didone', 'Times New Roman', Serif;
+	font-size: 16px;
+	color: rgba(0,0,0,0.7);
+}
+#tableform
+{
+	position: absolute;
+	right: 100px;
+	margin-top: 100px;
+}
+#tablepath
+{
+	margin-top: 30px;
+}
+
+#tablepath tr, table.welcome tr, table.welcomebul tr
+{
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 5px;
+}
+#tablepath tr.top, table.welcome tr.top, table.welcomebul tr.top
+{
+    border: 1px solid white;
+}
+#tablepath, #tableform, table.welcome, table.welcomebul
+{
+    border: solid 10px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    background: rgba(255,255,255,0.4);
+    box-shadow: 0px 0px 5px 5px rgba(255,255,255,0.3);
+}
+
+#tableform input
+{
+    border-radius: 15px 0px 0px 15px;
+    border: 2px solid rgba(0,0,0,0.4);
+    font-size: 15px;
+    color: #660000;
+    font-weight: bold;
+}
+
+/* ----------------------- Dialog Box Decorations --------------------- */
+
+#dialog-overlay, #dialog-overlay-bg /* Darken the whole window */
+{
+ 	width: 100%; 
+    height: 100%;
+	filter:alpha(opacity=50); 
+    -moz-opacity:0.7; 
+    -khtml-opacity: 0.7; 
+    opacity: 0.7; 
+    background:#000; 
+ 	position:absolute; 
+    top:0; left:0;
+ 	display:none;
+}
+ 
+#dialog-box, #dialog-box-bg
+{
+	-webkit-box-shadow: 0px 0px 20px rgba(255,255,255,1), 0px 0px 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 0px 20px rgba(255,255,255,1), 0px 0px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 50px rgba(255,255,255,1), 0px 0px 10px rgba(0, 0, 0, 0.5);
+	border: 10px solid rgba(0,0,0,0.7);
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgb(255,255,255);
+    width:400px;  
+    position:absolute; 
+    z-index:5000; 
+    display:none;
+}
+ 
+#dialog-box .dialog-content, #dialog-box-bg .dialog-content-bg
+
+{
+    text-align:center;
+    font-weight: bold;
+    padding:25px;
+    color:#666; 
+    font-family:'Cutive',arial;
+    font-size:13px;
+}
+
+#dialog-box .dialog-content p, #dialog-box-bg .dialog-content-bg p
+{
+    font-weight:700; margin:0;
+}
+ 
+#dialog-box .dialog-content ul, #dialog-box-bg .dialog-content-bg ul
+{
+    margin:10px 0 10px 20px; 
+    padding:0; 
+    height:50px;
+}
+
+a.button, a.button-bg
+{
+    margin:10px auto 0 auto;
+    text-align: middle;
+    display: block;
+    width:75px;
+    padding: 4px 0px;
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    font-weight: normal;
+    line-height: 1; 
+    background: rgba(149,184,245,0.7); 
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.5);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    -moz-border-bottom: 1px solid rgba(0,0,0,0.25);
+    -webkit-border-bottom: 1px solid rgba(0,0,0,0.25);
+    cursor: pointer;
+    border: 3px solid rgba(0,0,0,0.1);
+    -webkit-transition: -webkit-box-shadow 0.3s ease-out, -webkit-transform 0.3s ease-out, color 0.3s, text-shadow 0.3s, background 0.3s;
+    -moz-transition: -moz-box-shadow 0.3s ease-out, -moz-transform 0.3s ease-out, color 0.3s, text-shadow 0.3s, background 0.3s;
+    -o-transition: box-shadow 0.3s ease-out, -o-transform 0.3s ease-out, color 0.3s, text-shadow 0.3s, background 0.3s;
+}
+
+a.button:hover,a.button-bg:hover
+{
+    background: rgba(0,0,200,0.7);
+    background: rgba(149,184,245,1); 
+    color: rgba(0,0,0,0.6);
+    color: white;
+    border: 3px solid rgba(0,0,0,0.1);
+}
+
+a.button:active, a.button-bg:active
+{
+    -moz-box-shadow: 0px 0px;
+    -webkit-box-shadow: 0px 0px;
+    box-shadow: 0px 0px;  
+}
+
+table a
+{
+    color: black;
+    text-decoration: none;
+}
+table a:hover
+{
+    color: white;
+}
+button.welcome
+{
+    color: black;
+    background: rgba(255,255,255,0.3);
+    width: 240px;
+    border-radius: 0px;
+    border: 1px solid rgba(255,255,255,0.5);
+    font-size: 30px;
+    height: 50px;
+    font-family: 'Just Me Again Down Here', cursive;
+    text-shadow:  1px 1px rgba(255,255,255,0.8);
+    text-align: center;
+ 
+    /*Transition*/
+    -webkit-transition: -webkit-box-shadow 0.5s ease-out, -webkit-transform 0.5s ease-out, color 0.6s, text-shadow 0.5s;
+    -moz-transition: -moz-box-shadow 0.5s ease-out, -moz-transform 0.5s ease-out, color 0.6s, text-shadow 0.5s;
+    -o-transition: box-shadow 0.5s ease-out, -o-transform 0.5s ease-out, color 0.6s, text-shadow 0.5s;
+}
+button.welcome:hover
+{
+   -moz-box-shadow: 0px 0px 18px rgba(255,255,255,0.8);
+    -webkit-box-shadow: 0px 0px 18px rgba(255,255,255,0.8);
+    box-shadow: 0px 0px 18px rgba(255,255,255,0.8);
+    color: white;
+    text-shadow:  1px 1px rgba(0,0,0,0.8);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+}
+
+button.welcome:active
+{
+    box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.3);
+}
+
+th.wel, th.wel1, center.choose
+{
+    font: bold 16px Junge,Georgia;
+    color: rgba(0,0,0,0.9);
+}
+
+th.wel1 {
+    border-radius: 10px 10px 0px 0px;
+    
+}
+
+th.wel ,th.wel1
+{
+    background: rgba(255,255,255,0.5);
+    border: 4px solid rgba(255,255,255,0.3);
+}
+
+center.choose
+{
+    font-size: 18px;
+}
+
+#langchange, #tests, #forus, #forus-bg
+{
+    color: black;
+    padding: 3px;
+    padding-left: 5px;
+    -webkit-box-shadow: 0px 0px 15px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 0px 15px rgba(0,0,0,0.4);
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.4);
+    font-family: cursive;
+    text-shadow: 1px 1px white;
+    -webkit-transition: -webkit-transform 0.5s ease-out, color 0.5s, text-shadow 0.5s, -webkit-box-shadow 0.5s;
+    -moz-transition: -moz-transform 0.5s ease-out, color 0.5s, text-shadow 0.5s, -moz-box-shadow 0.5s;
+    -o-transition: -o-transform 0.5s ease-out, color 0.5s, text-shadow 0.5s, box-shadow 0.5s;
+    border: 0px solid rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0);
+}
+#langchange img, #tests img
+{
+    border-radius: 2px;
+    vertical-align: bottom;
+    border: 1px solid rgba(255,255,255,0.1);
+    -webkit-transition: -webkit-box-shadow 0.5s ease-out, -webkit-transform 0.5s ease-out, margin 0.5s, border 0.5s;
+    -moz-transition: -moz-box-shadow 0.5s ease-out, -moz-transform 0.5s ease-out, margin 0.5s, border 0.5s;
+    -o-transition: box-shadow 0.5s ease-out, -o-transform 0.5s ease-out, margin 0.5s, border 0.5s;
+}
+
+#langchange:hover img, #tests:hover img
+{
+    -webkit-transform: scale(2);
+    -moz-transform: scale(2);
+    -o-transform: scale(2);
+    margin-left: 15px;
+}
+
+#langchange:hover, #tests:hover, #forus, #forus-bg:hover
+{
+    -webkit-box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+}
+
+#tests .raq
+{
+    -webkit-transition: margin 0.4s ease-out, color 0.5s, text-shadow 0.5s, font-size 0.5s;
+    -moz-transition: margin 0.4s ease-out, color 0.5s, text-shadow 0.5s, font-size 0.5s;
+    -o-transition: margin 0.4s ease-out, color 0.5s, text-shadow 0.5s, font-size 0.5s;
+}
+
+#tests:hover .raq {
+    margin-left: 20px;
+    margin-right:5px;
+    color: rgba(117,117,117,1);
+}
+
+#langchange:active, #tests:active, #forus, #forus-bg:active
+{
+    -webkit-box-shadow: 0px 0px 15px rgba(0,0,0,0.8);
+    -moz-box-shadow: 0px 0px 15px rgba(0,0,0,0.8);
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.8);
+}
+
+div.simulate-en button, div.simulate-bg button
+{
+    font-family: 'Antic Didone', cursive;
+}
+
+div.simulate-en button:disabled, div.simulate-bg button:disabled
+{
+    color: rgb(180,180,180);
+}
+a.logo
+{
+    cursor: pointer;
+}
+
+h1
+{
+    margin-bottom: 20px;
+}
+
+#tablespeed
+{
+    background: rgba(255,255,255,0.0);
+    box-shadow: 0px 0px;
+    border: 5px solid rgba(0,0,0,0.1);
+    box-shadow: 0px 0px 15px rgba(255,255,255,1);
+    border-top: 0px;
+    margin-top: -5px;
+    padding: 5px;
+    border-radius: 0px 0px 10px 10px;
+}
+#tablespeed th
+{
+    background: rgba(255,255,255,0.1);
+    border-right: 0px;
+    border-left: 0px;
+}
+
+#forus, #forus-bg 
+{
+    -webkit-transition: margin 0.4s ease-out, color 0.5s, text-shadow 0.5s, font-size 0.5s, display 0.5s;
+    -moz-transition: margin 0.4s ease-out, color 0.5s, text-shadow 0.5s, font-size 0.5s, display 0.5s;
+    -o-transition: margin 0.4s ease-out, color 0.5s, text-shadow 0.5s, font-size 0.5s, display 0.5s;
+}
+
+.box
+{ 
+    background-color: #B4C9D6; 
+    border: 5px solid rgba(0,0,0,0.5); 
+    height: 50px; 
+    width: 200px; 
+    padding: 5px; 
+    display:none; 
+    position:absolute; 
+    border-radius: 0px 10px 10px 10px;
+    font-family: 'Antic Didone', cursive;
+    font-size: 13px;
+    font-weight: bold;
+    color: black;
+} 
+.boxl
+{
+    background-color: rgba(0,0,0,0); 
+    border-radius: 50px;
+    height: 55px; 
+    width: 55px;
+    display:none; 
+}
