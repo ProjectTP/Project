@@ -176,15 +176,15 @@ function runTests() {
   })
 
   test('Textareas', function() {
-    generate_path('e');
-    equal(document.getElementById('out_path').value, "",'out_path is OK');
-    equal(document.getElementById('out_path-bg').value, "", 'out_path-bg is OK');
-    equal(document.getElementById('path').disabled, true, 'Path is OK');
-    equal(document.getElementById('replace_path').disabled, true, 'replace_path is OK');
-    equal(document.getElementById('path-bg').disabled, true, 'path-bg is OK');
-    equal(document.getElementById('replace_path-bg').disabled, true, 'replace_path-bg is OK');
-    equal(document.getElementById('out_path').style.color, "green", 'out_path color is OK');
-    equal(document.getElementById('out_path-bg').style.color, "green", 'out_path-bg color is OK');
+      generate_path('e');
+      equal(document.getElementById('out_path').value, "",'out_path is OK');
+      equal(document.getElementById('out_path-bg').value, "", 'out_path-bg is OK');
+      equal(document.getElementById('path').disabled, true, 'Path is OK');
+      equal(document.getElementById('replace_path').disabled, true, 'replace_path is OK');
+      equal(document.getElementById('path-bg').disabled, true, 'path-bg is OK');
+      equal(document.getElementById('replace_path-bg').disabled, true, 'replace_path-bg is OK');
+      equal(document.getElementById('out_path').style.color, "green", 'out_path color is OK');
+      equal(document.getElementById('out_path-bg').style.color, "green", 'out_path-bg color is OK');
   })
 
   test('calc_distance function', function() {

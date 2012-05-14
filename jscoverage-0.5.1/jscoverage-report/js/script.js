@@ -5,20 +5,20 @@
 		var height 		 	 = 450; 				
 		var bgColor 	 	 = "black";	
 		var objectColor  	 = "white";	
-		var roboX			 = 0;
-		var roboY			 = 0; 					
-		var roboWidth		 = 0;				
-		var roboHeight		 = 0;				
+		var roboX;
+		var roboY; 					
+		var roboWidth;				
+		var roboHeight;				
 		var roboColor 	 	 = "red";	
 		var radian 			 = (Math.PI/180) * 0;		
-		var degrees 		 = 0;
-		var speed			 = 0;
+		var degrees;
+		var speed;
 		var start		 	 = true;
 		var crash		 	 = false;
-		var lWheelPosX		 = 0;
-		var lWheelPosY		 = 0;
-		var rWheelPosX		 = 0;
-		var rWheelPosY		 = 0;
+		var lWheelPosX;
+		var lWheelPosY;
+		var rWheelPosX;
+		var rWheelPosY;
 		var distance     	 = 0;
 		var motorA		 	 = false;
 		var motorB		 	 = false;
@@ -30,16 +30,9 @@
 		var resize_			 = false;
 		var stop_   		 = false;
 		var submit_			 = false;
-		var play_page		 = false;
-		var rightDown 		 = false;
-		var leftDown 		 = false;
-		var upDown 			 = false;
-		var w 				 = 0;
-		var lang			 = 'e';
-		var change_lang_	 = false;
+		var w 				 = 0
 		
-		function loadanime() 
-		{
+		function loadanime() {
 			$("#my_canvas").animate({
 				    	width:  450,
 				    	height: 450 
@@ -68,11 +61,7 @@
 			}			
 			speed 			 = speed_;
 			clearInterval(gameInterval);
-			if(play_page){
-				gameInterval = setInterval(draw_PlayPage, 20);
-			}else{
-				gameInterval = setInterval(draw, 20);
-			}			
+			gameInterval 	 = setInterval(draw, 20);
 		}
 
 		function reset_data()
@@ -97,22 +86,6 @@
 			distance 	 = 0;
 		}
 
-		function change_page()
-		{	
-			reset_data();
-			steps = 0;
-			document.getElementById('out_path').value 	 = "";
-			document.getElementById('out_path-bg').value = "";	
-			resetpos();
-		}
-
-		function change_lang(val)
-		{
-			lang=val;
-			change_lang_=true;
-			display();
-			change_lang_=false;
-		}
 
 		function popup(message) 
 		{					  
@@ -165,7 +138,7 @@
 			}
 
 		// resizing the canvas width and height
-		function resize()
+		function resize(lang)
 		{
 			if (lang == 'e') {
  				if (document.getElementById('width1').value >= 150 && document.getElementById('width1').value <= 1000 && 
@@ -315,7 +288,7 @@
 		}
 
 		// resizing the robot width and height
-		function robo_resize()
+		function robo_resize(lang)
 		{
 			resize_ = true;
 			if (lang == 'e') {
@@ -392,7 +365,7 @@
 		}
 
 		// resizing the robot wheels
-		function wheel_resize()
+		function wheel_resize(lang)
 		{
 			resize_ = true;
 			if (lang == 'e') {
@@ -482,48 +455,6 @@
 			}
 		}
 
-		function draw_PlayPage()
-		{
-			display();
-			check_rect_angles();
-			check_LeftRight_key();
-			check_Up_key();
-		}
-
-		function check_LeftRight_key()
-		{
-			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
-				if (rightDown) {						
-					radian+=(Math.PI/180)*speed;							
-				} else if (leftDown) {					
-					radian-=(Math.PI/180)*speed;					
-				}			
-			}	
-		}
-
-		function check_Up_key()
-		{
-			if (roboY + (roboHeight/2) < height && roboY > roboHeight/2) {
-				if (upDown) {
-					calc_coord_play_page();
-					if (roboX + roboWidth/2 > width) {
-						crash=true;
-						roboX-=speed+1;			
-					}
-					if (roboX < roboWidth/2) {
-						crash=true;
-						roboX+=speed+1;
-					}
-				} 
-			} else if (roboHeight/2 + roboY < height) {
-				roboY += speed + 1;
-				crash=true;					
-			} else {
-				roboY -= speed + 1;   	
-				crash=true;		
-			}	
-		}
-
 		function calc_new_coords_for_draw()
 		{
 			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
@@ -548,6 +479,9 @@
 				} 
 			} else if (roboHeight/2 + roboY < height) {
 				crash = true;					
+			} else if (roboHeight/2 + roboY > height + rWheelHeight) {
+				ctx.font = "bold 50pt Calibri,Times New Roman";
+				ctx.fillText("TESTING", width/2-100, height/2 + 10);	
 			} else {			 	
 				crash = true;	
 			}				 	
@@ -566,14 +500,12 @@
 		// check if any angle of the robo is out of the table
 		function check_rect_angles()
 		{
-			if (roboX + check_angleX(1) > width  || roboX + check_angleX(2) > width  || 
-				roboX + check_angleX(3) > width  || roboX + check_angleX(4) > width  || 
-				roboX + check_angleX(1) < 0 	 || roboX + check_angleX(2) < 0 	 || 
-				roboX + check_angleX(3) < 0 	 || roboX + check_angleX(4) < 0 	 ||	
-				roboY + check_angleY(1) > height || roboY + check_angleY(2) > height || 
-				roboY + check_angleY(3) > height || roboY + check_angleY(4) > height || 
-				roboY + check_angleY(1) < 0 	 || roboY + check_angleY(2) < 0 	 || 
-				roboY + check_angleY(3) < 0 	 || roboY + check_angleY(4) < 0 ) {
+			if (roboX + check_angleX(1) > width  || roboX + check_angleX(2) > width  || roboX + check_angleX(3) > width  || 
+				roboX + check_angleX(4) > width  || roboX + check_angleX(1) < 0 	 || roboX + check_angleX(2) < 0 	 || 
+				roboX + check_angleX(3) < 0 	 || roboX + check_angleX(4) < 0 	 ||	roboY + check_angleY(1) > height || 
+				roboY + check_angleY(2) > height || roboY + check_angleY(3) > height || roboY + check_angleY(4) > height || 
+				roboY + check_angleY(1) < 0 	 || roboY + check_angleY(2) < 0 	 || roboY + check_angleY(3) < 0 	 || 
+				roboY + check_angleY(4) < 0 ) {
 				crash = true;
 			} else {
 				crash = false;	
@@ -647,33 +579,6 @@
 			}			
 		}
 
-		function calc_coord_play_page()
-		{
-			degrees=make_degrees();
-
-			if (degrees >= 0 && degrees <= 90) {
-				if (upDown) {
-					roboX+=calc_distance_cos(90);
-					roboY-=calc_distance_sin(90);	
-				}
-			} else if (degrees > 90 && degrees <= 180) {
-				if (upDown) {
-					roboX+=calc_distance_sin(180);
-					roboY+=calc_distance_cos(180);	
-				}			
-			} else if (degrees > 180 && degrees <= 270) {
-				if (upDown) {
-					roboX-=calc_distance_cos(270);
-					roboY+=calc_distance_sin(270);	
-				}				
-			} else if (degrees > 270 && degrees <= 360) {
-				if (upDown) {
-					roboX-=calc_distance_sin(360);
-					roboY-=calc_distance_cos(360);
-				}
-			}							
-		}
-
 		function calc_distance_sin(val)
 		{
 			return Math.sin(((Math.PI/180) * val) - ((Math.PI/180) * degrees) ) * speed;
@@ -699,7 +604,7 @@
 			return val;
 		}
 
- 		function check_inpath_free_space()
+ 		function check_inpath_free_space(lang)
 		{
 			temp_input = "";
 			if (lang == 'e') {
@@ -725,11 +630,11 @@
 		}
 
 		// generate new path
-		function generate_path()
+		function generate_path(lang)
 		{
 				document.getElementById('out_path').value 			= "";
 				document.getElementById('out_path-bg').value 		= "";
-				check_inpath_free_space();		
+				check_inpath_free_space(lang);		
 				document.getElementById('path').disabled  		 	= true;	
 				document.getElementById('replace_path').disabled 	= true;	
 				document.getElementById('path-bg').disabled 		= true;	
@@ -764,10 +669,8 @@
 				distance   = steps[last_step + 1] * 1;	
 				w = 3;
 				calc_distance();		
-				document.getElementById('out_path').value 	 += steps[last_step] + 
-				' ' + steps[last_step+1] + '\n';
-				document.getElementById('out_path-bg').value += steps[last_step] + 
-				' ' + steps[last_step+1] + '\n';							
+				document.getElementById('out_path').value 	 += steps[last_step] + ' ' + steps[last_step+1] + '\n';
+				document.getElementById('out_path-bg').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';							
 				last_step += 2;
 			} else {
 				stop_simulation();
@@ -781,7 +684,7 @@
 			clear();	
 
 			if (crash) {		
-				crash_mess();
+				crash_mess('e');
 			}
 			ctx.fillStyle	= objectColor;
 			ctx.save();		
@@ -790,7 +693,7 @@
 			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth, roboHeight);
 			ctx.font 		= "bold 19pt Calibri,Times New Roman";
 
-			if (get_path && distance == 0 && !play_page ) {
+			if (get_path && distance == 0) {
 				get_new_step();
 			}		
 			w = -w;			
@@ -814,11 +717,9 @@
 			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth/2, 10);
 
 			/* Wheel Animation */
-			
 			for (i = 10; i <= 90; i+=10) {
 				drawWheelLines(i);
 			} 			
-
 		}
 
 		function drawWheelLines(hei)
@@ -843,7 +744,7 @@
 			document.getElementById('robo_path-bg').value = document.getElementById('out_path-bg').value;	
 		}
 
-		function crash_mess()
+		function crash_mess(lang)
 		{
 			ctx.fillStyle = "white";	
 			if (lang == 'e') {
@@ -862,7 +763,8 @@
 					ctx.font = "bold 50pt Calibri,Times New Roman";
 					ctx.fillText("Сблъсък!", width/2-100, height/2 + 10);				
 				}
-			}	
+			}
+	
 			if (!stop_){
 				document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
 				document.getElementById('out_path-bg').value += "Сблъсък на ред " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
@@ -871,8 +773,7 @@
 				document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';
 				document.getElementById('out_path-bg').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';		
 			}
-			if(!play_page)
-				stop_simulation();
+			stop_simulation();
 		}
 
 		function stopgen()
@@ -1011,63 +912,3 @@
 				dd.style.display = "none";
 			} 
 		}
-
-		function onKeyDown(evt) 
-		{
-			if (evt.keyCode == 39)
-				rightDown = true;
-			else if (evt.keyCode == 37)
-				leftDown = true;
-			else if (evt.keyCode == 38)
-				upDown = true;
-		}
-
-		function onKeyUp(evt) 
-		{
-			if (evt.keyCode == 39)
-				rightDown = false;
-			else if (evt.keyCode == 37)
-				leftDown = false;
-			else if (evt.keyCode == 38)
-				upDown = false;			
-		}
-
-		document.addEventListener('keydown',onKeyDown);
-		document.addEventListener('keyup',onKeyUp);
-
-		var ar=new Array(33,34,35,36,37,38,39,40);
-		// function to disable the scrolling when pressing the arrow keys.
-
-		$(document).keydown(function(e) 
-		{
-		     var key = e.which;
-		      
-		      if($.inArray(key,ar) > -1) {
-		          e.preventDefault();
-		          return false;
-		      }
-		      return true;
-		});
-
-
-	function loadscript() {
-		fade('body');
-		slide2('table.welcome');
-		fadeo('div.logo');
-		fadelogo('div.logo-en');
-		start=true;
-		init(6); 
-		document.getElementById('but1-bg').disabled=false;
-		document.getElementById('but2-bg').disabled=true;
-		document.getElementById('but3-bg').disabled=false;
-		document.getElementById('but1').disabled=false;
-		document.getElementById('but2').disabled=true;
-		document.getElementById('but3').disabled=false;
-		document.getElementById('but1-play').disabled=false;
-		document.getElementById('but2-play').disabled=true;
-		document.getElementById('but3-play').disabled=false;
-		document.getElementById('but1-play-bg').disabled=false;
-		document.getElementById('but2-play-bg').disabled=true;
-		document.getElementById('but3-play-bg').disabled=false;
-		loadanime(); 
-	}
