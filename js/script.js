@@ -733,6 +733,8 @@
 				check_inpath_free_space();		
 				document.getElementById('path').disabled  		 	= true;	
 				document.getElementById('replace_path').disabled 	= true;	
+				document.getElementById('clear_text').disabled 		= true;	
+				document.getElementById('clear_text-bg').disabled 	= true;	
 				document.getElementById('path-bg').disabled 		= true;	
 				document.getElementById('replace_path-bg').disabled = true;
 				document.getElementById('out_path').style.color  	= "green";				
@@ -836,6 +838,14 @@
 			ctx.closePath();
 		}
 
+		function clear_textareas()
+		{
+			document.getElementById('robo_path').value 	  = "";
+			document.getElementById('robo_path-bg').value = "";
+			document.getElementById('out_path').value     = "";			
+			document.getElementById('out_path-bg').value  = "";
+		}
+
 		function replace_path()
 		{
 			document.getElementById('robo_path').value 	  = document.getElementById('out_path').value;
@@ -887,6 +897,8 @@
 			w = 0;
 			document.getElementById('path').disabled 			 = false;	
 			document.getElementById('replace_path').disabled	 = false;
+			document.getElementById('clear_text').disabled 		 = false;	
+			document.getElementById('clear_text-bg').disabled    = false;	
 			document.getElementById('path-bg').disabled 		 = false;	
 			document.getElementById('replace_path-bg').disabled  = false;
 			document.getElementById('play').disabled 			 = true;	
