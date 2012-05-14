@@ -1044,3 +1044,26 @@
 		      }
 		      return true;
 		});
+
+
+	function loadscript() {
+		fade('body');
+		slide2('table.welcome');
+		fadeo('div.logo');
+		fadelogo('div.logo-en');
+		start=true;
+		init(6); 
+		document.getElementById('but1-bg').disabled=false;
+		document.getElementById('but2-bg').disabled=true;
+		document.getElementById('but3-bg').disabled=false;
+		document.getElementById('but1').disabled=false;
+		document.getElementById('but2').disabled=true;
+		document.getElementById('but3').disabled=false;
+		document.getElementById('but1-play').disabled=false;
+		document.getElementById('but2-play').disabled=true;
+		document.getElementById('but3-play').disabled=false;
+		document.getElementById('but1-play-bg').disabled=false;
+		document.getElementById('but2-play-bg').disabled=true;
+		document.getElementById('but3-play-bg').disabled=false;
+		loadanime(); 
+	}

@@ -24,7 +24,7 @@ canvas
 
 /* --------------------- Header Decorations --------------------- */
 
-h1.showw, a.logo, h1.en
+h1.showw, a.logo, h1.en, h1.bul
 { 
 	font: 65px/75px Ruthie,Georgia, serif;
 	color: rgb(200,10,10);
@@ -214,6 +214,7 @@ input:-moz-placeholder {
 	font-size: 16px;
 	color: rgba(0,0,0,0.7);
 }
+
 #tableform
 {
 	position: absolute;
@@ -225,16 +226,16 @@ input:-moz-placeholder {
 	margin-top: 30px;
 }
 
-#tablepath tr, table.welcome tr
+#tablepath tr, table.welcome tr, table.welcomebul tr
 {
     border: 1px solid rgba(255,255,255,0.3);
     border-radius: 5px;
 }
-#tablepath tr.top, table.welcome tr.top
+#tablepath tr.top, table.welcome tr.top, table.welcomebul tr.top
 {
     border: 1px solid white;
 }
-#tablepath, #tableform, table.welcome
+#tablepath, #tableform, table.welcome, table.welcomebul
 {
     border: solid 10px rgba(0,0,0,0.1);
     border-radius: 5px;
@@ -249,6 +250,12 @@ input:-moz-placeholder {
     font-size: 15px;
     color: #660000;
     font-weight: bold;
+}
+
+#tablespeed button
+{
+    font-family: 'Antic Didone', cursive;
+    font-size: 16px;
 }
 
 /* ----------------------- Dialog Box Decorations --------------------- */
