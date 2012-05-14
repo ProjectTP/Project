@@ -279,51 +279,7 @@
 
 			<br/>
 
-			<table id = "tableform">
-			  	<tr>
-			    	<th colspan="2">Canvas</th>
-			  	</tr>
-				<tr>
-				    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"
-				    	onclick = "HideText('width-info'); return true;" onmouseover="ShowText('width-info'); return true;" 
-				    	onmouseout="HideText('width-info'); return true;"/></td>
-				    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"
-				    	onclick = "HideText('height-info'); return true;" onmouseover="ShowText('height-info'); return true;" 
-				    	onmouseout="HideText('height-info'); return true;"/></td>
-				</tr>
-				<tr>
-				    <td><button  onclick ="resize()"> Resize! </button></td>
-					<td><button  onclick ="reset()"> Reset! </button></td>
-				</tr>
-				<tr>
-					<th>Robot</th>
-					<th>Wheels</th>
-				</tr>
-				<tr>
-					<td><input type="number" id="width_r" min="20" max = "100" step = "1" placeholder = "Width"
-						onclick = "HideText('widthr-info'); return true;" onmouseover="ShowText('widthr-info'); return true;" 
-				    	onmouseout="HideText('widthr-info'); return true;"/></td>
-					<td><input type="number" id="width_w" min="5" max = "15" step = "1" placeholder = "Width"
-						onclick = "HideText('widthw-info'); return true;" onmouseover="ShowText('widthw-info'); return true;" 
-				    	onmouseout="HideText('widthw-info'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><input type="number" id="height_r" min="20" max = "150" step = "1" placeholder = "Height"
-						onclick = "HideText('heightr-info'); return true;" onmouseover="ShowText('heightr-info'); return true;" 
-				    	onmouseout="HideText('heightr-info'); return true;"/></td>
-					<td><input type="number" id="height_w" min="10" max = "100" step = "1" placeholder = "Height"
-						onclick = "HideText('heightw-info'); return true;" onmouseover="ShowText('heightw-info'); return true;" 
-				    	onmouseout="HideText('heightw-info'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_resize()"> Resize! </button></td>
-					<td><button  onclick ="wheel_resize()" > Resize! </button></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_reset()"> Reset! </button></td>
-					<td><button  onclick ="wheel_reset()" > Reset! </button></td>
-				</tr>
-			</table>
+			
 		</div>
 
 		<!-- Bulgarian simulate page-->
@@ -345,51 +301,7 @@
 
 			<br/>
 
-			<table id = "tableform">
-			  	<tr>
-			    	<th colspan="2">Поле</th>
-			  	</tr>
-				<tr>
-				    <td><input type="number" id="width1-bg" min="150" max = "1000" step = "25" placeholder = "Ширина"
-				    	onclick = "HideText('width-info-bg'); return true;" onmouseover="ShowText('width-info-bg'); return true;" 
-			    		onmouseout="HideText('width-info-bg'); return true;"/></td>
-				    <td><input type="number" id="height1-bg" min="150" max = "1000" step = "25" placeholder = "Дължина"
-				    	onclick = "HideText('height-info-bg'); return true;" onmouseover="ShowText('height-info-bg'); return true;" 
-			    		onmouseout="HideText('height-info-bg'); return true;"/></td>
-				</tr>
-				<tr>
-				    <td><button  onclick ="resize()"> Преоразмери! </button></td>
-					<td><button  onclick ="reset()"> Възстанови! </button></td>
-				</tr>
-				<tr>
-					<th>Робот</th>
-					<th>Колела</th>
-				</tr>
-				<tr>
-					<td><input type="number" id="width_r-bg" min="20" max = "100" step = "1" placeholder = "Ширина"
-						onclick = "HideText('widthr-info-bg'); return true;" onmouseover="ShowText('widthr-info-bg'); return true;" 
-			    		onmouseout="HideText('widthr-info-bg'); return true;"/></td>
-					<td><input type="number" id="width_w-bg" min="5" max = "15" step = "1" placeholder = "Ширина"
-						onclick = "HideText('widthw-info-bg'); return true;" onmouseover="ShowText('widthw-info-bg'); return true;" 
-			    		onmouseout="HideText('widthw-info-bg'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><input type="number" id="height_r-bg" min="20" max = "150" step = "1" placeholder = "Дължина"
-						onclick = "HideText('heightr-info-bg'); return true;" onmouseover="ShowText('heightr-info-bg'); return true;" 
-			    		onmouseout="HideText('heightr-info-bg'); return true;"/></td>
-					<td><input type="number" id="height_w-bg" min="10" max = "100" step = "1" placeholder = "Дължина"
-						onclick = "HideText('heightw-info-bg'); return true;" onmouseover="ShowText('heightw-info-bg'); return true;" 
-			    		onmouseout="HideText('heightw-info-bg'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_resize()"> Преоразмери! </button></td>
-					<td><button  onclick ="wheel_resize()" > Преоразмери! </button></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_reset()"> Възстанови! </button></td>
-					<td><button  onclick ="wheel_reset()" > Възстанови! </button></td>
-				</tr>
-			</table>
+			
 		</div>
 
 		<!-- ###################################################   PLAY PAGE   ##################################################  -->
@@ -482,7 +394,8 @@
 						</td>
 					</tr>
 					</table>				
-
+					<table class = "wrap">
+						<td>
 					<table  id = "tablepath">
 						<tr>
 							<th colspan = "3">Path</th> 
@@ -521,10 +434,60 @@ AB 120
 								javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;
 								javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;"> Submit </button>
 								<button  id="replace_path" onclick ="replace_path()"> Replace in input </button>
+								<button  id="clear_text" onclick =" clear_textareas();"> Clear </button>
 							</td>
 						</tr>
 					</tr>
-				</table>				
+				</table>
+			</td>
+			<td>
+				<table id = "tableform">
+			  	<tr>
+			    	<th colspan="2">Canvas</th>
+			  	</tr>
+				<tr>
+				    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"
+				    	onclick = "HideText('width-info'); return true;" onmouseover="ShowText('width-info'); return true;" 
+				    	onmouseout="HideText('width-info'); return true;"/></td>
+				    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"
+				    	onclick = "HideText('height-info'); return true;" onmouseover="ShowText('height-info'); return true;" 
+				    	onmouseout="HideText('height-info'); return true;"/></td>
+				</tr>
+				<tr>
+				    <td><button  onclick ="resize()"> Resize! </button></td>
+					<td><button  onclick ="reset()"> Reset! </button></td>
+				</tr>
+				<tr>
+					<th>Robot</th>
+					<th>Wheels</th>
+				</tr>
+				<tr>
+					<td><input type="number" id="width_r" min="20" max = "100" step = "1" placeholder = "Width"
+						onclick = "HideText('widthr-info'); return true;" onmouseover="ShowText('widthr-info'); return true;" 
+				    	onmouseout="HideText('widthr-info'); return true;"/></td>
+					<td><input type="number" id="width_w" min="5" max = "15" step = "1" placeholder = "Width"
+						onclick = "HideText('widthw-info'); return true;" onmouseover="ShowText('widthw-info'); return true;" 
+				    	onmouseout="HideText('widthw-info'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><input type="number" id="height_r" min="20" max = "150" step = "1" placeholder = "Height"
+						onclick = "HideText('heightr-info'); return true;" onmouseover="ShowText('heightr-info'); return true;" 
+				    	onmouseout="HideText('heightr-info'); return true;"/></td>
+					<td><input type="number" id="height_w" min="10" max = "100" step = "1" placeholder = "Height"
+						onclick = "HideText('heightw-info'); return true;" onmouseover="ShowText('heightw-info'); return true;" 
+				    	onmouseout="HideText('heightw-info'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_resize()"> Resize! </button></td>
+					<td><button  onclick ="wheel_resize()" > Resize! </button></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_reset()"> Reset! </button></td>
+					<td><button  onclick ="wheel_reset()" > Reset! </button></td>
+				</tr>
+			</table>
+			</td>	
+			</table>		
 				
 	  		</center>
 	  		<br/>
@@ -585,7 +548,8 @@ AB 120
 						</td>
 					</tr>
 					</table>
-
+					<table class = "wrap">
+					<td>
 					<table  id = "tablepath">
 						<tr>
 							<th colspan = "3">Път</th> 
@@ -624,11 +588,60 @@ AB 120
 									javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;
 									javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;"> Генерирай </button>
 									<button  id="replace_path-bg" onclick ="replace_path('b')"> Замести в полето </button>
+									<button  id="clear_text-bg" onclick ="clear_textareas();"> Изчисти </button>
 								</td>
 							</tr>
 						</tr>
-					</table>			
-					
+					</table>
+					</td>
+					<td>
+					<table id = "tableform">
+			  	<tr>
+			    	<th colspan="2">Поле</th>
+			  	</tr>
+				<tr>
+				    <td><input type="number" id="width1-bg" min="150" max = "1000" step = "25" placeholder = "Ширина"
+				    	onclick = "HideText('width-info-bg'); return true;" onmouseover="ShowText('width-info-bg'); return true;" 
+			    		onmouseout="HideText('width-info-bg'); return true;"/></td>
+				    <td><input type="number" id="height1-bg" min="150" max = "1000" step = "25" placeholder = "Дължина"
+				    	onclick = "HideText('height-info-bg'); return true;" onmouseover="ShowText('height-info-bg'); return true;" 
+			    		onmouseout="HideText('height-info-bg'); return true;"/></td>
+				</tr>
+				<tr>
+				    <td><button  onclick ="resize()"> Преоразмери! </button></td>
+					<td><button  onclick ="reset()"> Възстанови! </button></td>
+				</tr>
+				<tr>
+					<th>Робот</th>
+					<th>Колела</th>
+				</tr>
+				<tr>
+					<td><input type="number" id="width_r-bg" min="20" max = "100" step = "1" placeholder = "Ширина"
+						onclick = "HideText('widthr-info-bg'); return true;" onmouseover="ShowText('widthr-info-bg'); return true;" 
+			    		onmouseout="HideText('widthr-info-bg'); return true;"/></td>
+					<td><input type="number" id="width_w-bg" min="5" max = "15" step = "1" placeholder = "Ширина"
+						onclick = "HideText('widthw-info-bg'); return true;" onmouseover="ShowText('widthw-info-bg'); return true;" 
+			    		onmouseout="HideText('widthw-info-bg'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><input type="number" id="height_r-bg" min="20" max = "150" step = "1" placeholder = "Дължина"
+						onclick = "HideText('heightr-info-bg'); return true;" onmouseover="ShowText('heightr-info-bg'); return true;" 
+			    		onmouseout="HideText('heightr-info-bg'); return true;"/></td>
+					<td><input type="number" id="height_w-bg" min="10" max = "100" step = "1" placeholder = "Дължина"
+						onclick = "HideText('heightw-info-bg'); return true;" onmouseover="ShowText('heightw-info-bg'); return true;" 
+			    		onmouseout="HideText('heightw-info-bg'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_resize()"> Преоразмери! </button></td>
+					<td><button  onclick ="wheel_resize()" > Преоразмери! </button></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_reset()"> Възстанови! </button></td>
+					<td><button  onclick ="wheel_reset()" > Възстанови! </button></td>
+				</tr>
+			</table>
+					</td>		
+					</table>
 	  		</center>
 	  		<br/>
 	

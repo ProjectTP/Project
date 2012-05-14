@@ -856,16 +856,16 @@
 			} else if (lang == 'b') {
 				if (width < 200) {
 					ctx.font = "bold 30pt Calibri,Times New Roman";
-					ctx.fillText("Сблъсък!", width/2-65, height/2 + 10);
+					ctx.fillText("Сблъсък!", width/2-55, height/2 + 10);
 				} else {
 					ctx.font = "bold 50pt Calibri,Times New Roman";
-					ctx.fillText("Сблъсък!", width/2-100, height/2 + 10);				
+					ctx.fillText("Сблъсък!", width/2-125, height/2 + 10);				
 				}
 			}	
 			if (!stop_){
 				document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
 				document.getElementById('out_path-bg').value += "Сблъсък на ред " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
-			}
+			} 
 			for (; steps[last_step + 1] * 1 > 0; last_step += 2) {
 				document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';
 				document.getElementById('out_path-bg').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';		

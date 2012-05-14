@@ -141,6 +141,13 @@ a.switch:hover
 
 /* --------------------- Input Decorations --------------------- */
 
+input::-webkit-placeholder  
+{
+    font: 13px Junge,Georgia;
+    font-family: 'Junge', cursive;
+    color: rgba(0,0,0,0.4);
+}
+
 input[type=number]
 {
 	background-color: rgba(255,255,255,0.9);
@@ -165,20 +172,18 @@ input[type=number]
     border-right: 0px;
 
 }
-::-webkit-input-placeholder  
+
+
+input:-moz-placeholder
 {
 	font: 13px Junge,Georgia;
     font-family: 'Junge', cursive;
 	color: rgba(0,0,0,0.4);
 }
 
-input:-moz-placeholder {
-	font: 13px Junge,Georgia;
-    font-family: 'Junge', cursive;
-	color: rgba(0,0,0,0.4);
-}
-
-#out_path::-webkit-input-placeholder, #out_path-bg::-webkit-input-placeholder
+#out_path::-webkit-input-placeholder, #out_path-bg::-webkit-input-placeholder, #robo_path::-webkit-input-placeholder, #robo_path-bg::-webkit-input-placeholder,
+#out_path::-moz-input-placeholder, #out_path-bg::-moz-input-placeholder, #robo_path::-moz-input-placeholder, #robo_path-bg::-moz-input-placeholder,
+#out_path::-o-input-placeholder, #out_path-bg::-o-input-placeholder, #robo_path::-o-input-placeholder, #robo_path-bg::-o-input-placeholder
 {
     font-size: 15px;
     font-weight: bold;
@@ -203,7 +208,7 @@ input:-moz-placeholder {
 }
 #tableform th , #tablespeed th, #tablepath th
 {
-	background: rgba(255,255,255,0.2);
+	background: rgba(100,100,100,0.2);
 	border-radius: 3px;
 	border: solid 2px rgba(0,0,0,0.2);
     -moz-border: solid 2px rgba(0,0,0,0.1);
@@ -217,13 +222,8 @@ input:-moz-placeholder {
 
 #tableform
 {
-	position: absolute;
-	right: 100px;
-	margin-top: 100px;
-}
-#tablepath
-{
-	margin-top: 30px;
+	
+	border-left: 0px 0px;
 }
 
 #tablepath tr, table.welcome tr, table.welcomebul tr
@@ -256,6 +256,28 @@ input:-moz-placeholder {
 {
     font-family: 'Antic Didone', cursive;
     font-size: 16px;
+}
+
+
+#tableform, #tablepath
+{
+    height:350px;
+}
+
+#tablepath
+{
+    border-right: 0px;
+    border-radius: 5px 0px 0px 5px;
+}
+
+#tableform
+{
+    border-left: 0px;
+    border-radius: 0px 5px 5px 0px;
+}
+.wrap
+{
+    margin-top: 50px;
 }
 
 /* ----------------------- Dialog Box Decorations --------------------- */
@@ -445,7 +467,7 @@ center.choose
     border: 1px solid rgba(255,255,255,0.1);
     -webkit-transition: -webkit-box-shadow 0.5s ease-out, -webkit-transform 0.5s ease-out, margin 0.5s, border 0.5s;
     -moz-transition: -moz-box-shadow 0.5s ease-out, -moz-transform 0.5s ease-out, margin 0.5s, border 0.5s;
-    -o-transition: box-shadow 0.5s ease-out, -o-transform 0.5s ease-out, margin 0.5s, border 0.5s;
+    -o-transition: box-shadow 0.5s ease-out, -o-transform 0.5s ease-out, margin-left 0.5s, border 0.5s;
 }
 
 #langchange:hover img, #tests:hover img
@@ -467,7 +489,7 @@ center.choose
 {
     -webkit-transition: margin 0.4s ease-out, color 0.5s, text-shadow 0.5s, font-size 0.5s;
     -moz-transition: margin 0.4s ease-out, color 0.5s, text-shadow 0.5s, font-size 0.5s;
-    -o-transition: margin 0.4s ease-out, color 0.5s, text-shadow 0.5s, font-size 0.5s;
+    -o-transition: margin-left 0.4s ease-out, margin-right 0.4s ease-out, color 0.5s, text-shadow 0.5s, font-size 0.5s;
 }
 
 #tests:hover .raq {
