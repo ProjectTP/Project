@@ -1,4 +1,4 @@
-		var gameInterval 	 = 0;
+ 		var gameInterval 	 = 0;
 		var canvas;
 		var ctx;
 		var width 		 	 = 450; 				
@@ -765,6 +765,8 @@
 				} else {
 					document.getElementById('out_path').value 	 += 'Wrong Input - ' 
 					+ steps[last_step] + ' ' + steps[last_step+1] + '\n';
+					document.getElementById('out_path-bg').value 	 += 'Грешни данни - ' 
+					+ steps[last_step] + ' ' + steps[last_step+1] + '\n';
 					stop_simulation();
 					return;
 				}
@@ -783,12 +785,17 @@
 			} else {
 				if (steps[last_step + 1] != undefined && !isCoord(steps[last_step + 1])) {
 					document.getElementById('out_path').value 	 += 'Wrong Input - ' ;
+					document.getElementById('out_path-bg').value 	 += 'Грешни данни - ' ;
 					for (i = 0; steps[last_step + i] != undefined && !isCoord(steps[last_step + i]); i++) {
 						document.getElementById('out_path').value 	 += steps[last_step + i] + ' ';
+						document.getElementById('out_path-bg').value 	 += steps[last_step + i] + ' ';
 					}
 					document.getElementById('out_path').value += '\n';
+					document.getElementById('out_path-bg').value += '\n';
 				} else {
 					document.getElementById('out_path').value 	 += 'Wrong Input - ' 
+						+ steps[last_step] + '\n';
+					document.getElementById('out_path-bg').value 	 += 'Грешни данни - ' 
 						+ steps[last_step] + '\n';
 				}
 					stop_simulation();
