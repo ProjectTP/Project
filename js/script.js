@@ -468,9 +468,10 @@
 		function draw()
 		{
 			if (!pause_ && !stop_) {
-				display();
+				
 				check_rect_angles();
 				calc_new_coords_for_draw();
+				display();
 			}	
 			if ( (pause_ || stop_ )&& resetpos_) {
 				resetpos_ = false;
@@ -779,7 +780,6 @@
 			ctx.beginPath();
 			ctx.fillStyle 	= bgColor;						
 			clear();	
-
 			if (crash) {		
 				crash_mess();
 			}
@@ -789,14 +789,13 @@
 			ctx.rotate(radian);			
 			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth, roboHeight);
 			ctx.font 		= "bold 19pt Calibri,Times New Roman";
-
 			if (get_path && distance == 0 && !play_page ) {
 				get_new_step();
-			}		
-			w = -w;			
-
+			}	
+			if(!change_lang_ && !play_page) {
+				w 			= -w;			
+			}
 			display_robo_and_wheels();	
-
 			ctx.font 		= "bold 30pt Calibri";
 			ctx.restore();
 			ctx.fillStyle 	= "white";
