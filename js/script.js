@@ -36,6 +36,7 @@
 		var upDown 			 = false;
 		var w 				 = 0;
 		var lang			 = 'e';
+		var change_lang_	 = false;
 		
 		function loadanime() 
 		{
@@ -108,6 +109,9 @@
 		function change_lang(val)
 		{
 			lang=val;
+			change_lang_=true;
+			display();
+			change_lang_=false;
 		}
 
 		function popup(message) 
@@ -786,7 +790,7 @@
 			ctx.rect(-roboWidth/2, -roboHeight/2, roboWidth, roboHeight);
 			ctx.font 		= "bold 19pt Calibri,Times New Roman";
 
-			if (get_path && distance == 0 && !play_page) {
+			if (get_path && distance == 0 && !play_page ) {
 				get_new_step();
 			}		
 			w = -w;			
