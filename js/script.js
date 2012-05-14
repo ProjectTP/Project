@@ -293,8 +293,8 @@ function reset()
 		roboX 	  = width/2;
 		roboY 	  = height/2;
 		radian 	  = (Math.PI/180) * 0;
-		}
-		document.getElementById('width1').value  	= "";
+	}
+	document.getElementById('width1').value  	= "";
 	document.getElementById('height1').value 	= "";
 	document.getElementById('width1-bg').value  = "";
 	document.getElementById('height1-bg').value = "";
@@ -372,13 +372,9 @@ function robo_resize()
 // reset the data for the robot
 function robo_data_reset()
 {
-	if (!pause_ && !stop_) {
-		roboX 	= width/2;
-		roboY 	= height/2;
-		radian 	= (Math.PI/180) * 0;
-	}
-			
-	start = false;
+	lWheelPosX 	 = -roboWidth/2 - 7;
+	lWheelPosX 	-= lWheelWidth -7;
+	rWheelPosX   = roboWidth/2;
 	display();
 }
 
@@ -813,7 +809,7 @@ function get_new_step()
 			}
 			document.getElementById('out_path').value 	 += '\n';
 			document.getElementById('out_path-bg').value += '\n';
-		} else {
+		} else if (!change_page) {
 			document.getElementById('out_path').value 	 += 'Wrong Input  ' 
 				+ steps[last_step] + '\n';
 			document.getElementById('out_path-bg').value += 'Грешни данни  ' 
