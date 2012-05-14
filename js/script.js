@@ -102,6 +102,7 @@ function change_page()
 	steps = 0;
 	document.getElementById('out_path').value 	 = "";
 	document.getElementById('out_path-bg').value = "";	
+	stop_simulation();
 	resetpos();
 }
 
@@ -809,7 +810,7 @@ function get_new_step()
 			}
 			document.getElementById('out_path').value 	 += '\n';
 			document.getElementById('out_path-bg').value += '\n';
-		} else if (!change_page) {
+		} else {
 			document.getElementById('out_path').value 	 += 'Wrong Input  ' 
 				+ steps[last_step] + '\n';
 			document.getElementById('out_path-bg').value += 'Грешни данни  ' 
