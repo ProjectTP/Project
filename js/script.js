@@ -762,6 +762,8 @@
 				}else if (steps[last_step] == "AB") {
 					motorA = true;
 					motorB = true;
+				}else {
+					stop_simulation();
 				}
 
 				distance   = steps[last_step + 1] * 1;	
@@ -872,7 +874,6 @@
 					ctx.fillText("Сблъсък!", width/2-125, height/2 + 10);				
 				}
 			}	
-
 			if(!play_page){
 				if (!stop_){
 					document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
@@ -897,11 +898,11 @@
 		{
 			w = 0;
 			document.getElementById('path').disabled 			 = false;	
-			document.getElementById('replace_path').disabled	 = false;
-			document.getElementById('clear_text').disabled 		 = false;	
-			document.getElementById('clear_text-bg').disabled    = false;	
 			document.getElementById('path-bg').disabled 		 = false;	
+			document.getElementById('replace_path').disabled	 = false;
 			document.getElementById('replace_path-bg').disabled  = false;
+			document.getElementById('clear_text').disabled 		 = false;	
+			document.getElementById('clear_text-bg').disabled    = false;					
 			document.getElementById('play').disabled 			 = true;	
 			document.getElementById('pause').disabled 			 = true;	
 			document.getElementById('stop').disabled 			 = true;

@@ -430,11 +430,12 @@ AB 120
 						</tr>
 						<tr>
 							<td>
-								<button  id="path" onclick ="generate_path(); get_new_step(); 
-								javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;
-								javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;"> Submit </button>
+								<button  id="path" onclick ="javascript:document.getElementById('play').disabled=true; 
+								javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;
+								javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;
+								generate_path(); get_new_step(); "> Submit </button>
 								<button  id="replace_path" onclick ="replace_path()"> Replace in input </button>
-								<button  id="clear_text" onclick =" clear_textareas();"> Clear </button>
+								<button  id="clear_text" onclick =" clear_textareas()"> Clear </button>
 							</td>
 						</tr>
 					</tr>
@@ -584,12 +585,10 @@ AB 120
 							</tr>
 							<tr>
 								<td>
-									<button  id="path-bg" onclick ="generate_path(); get_new_step(); 
-									javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;
-									javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;"> Генерирай </button>
-
+									<button  id="path-bg" onclick ="javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;
+									javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;generate_path(); get_new_step(); "> Генерирай </button>
 									<button  id="replace_path-bg" onclick ="replace_path()"> Замести в полето </button>
-									<button  id="clear_text-bg" onclick =" clear_textareas();"> Изчисти </button>
+									<button  id="clear_text-bg" onclick =" clear_textareas()"> Изчисти </button>
 								</td>
 							</tr>
 						</tr>
