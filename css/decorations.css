@@ -159,7 +159,7 @@ input[type=number]
 }
 #robo_path,#robo_output,#out_path, #out_path-bg, #robo_path-bg
 {
-    background-color: rgba(200,200,255,0.1);
+    background-color: rgba(180,180,180,0.3);
     color: black;
     font-weight: bold;
     font-size: 15px;
@@ -198,10 +198,17 @@ input:-moz-placeholder
     -moz-border: solid 5px rgba(0,0,0,0.1);
     -webkit-border: solid 5px rgba(0,0,0,0.1);
 	border-radius: 10px;
-	background: rgba(105,60,9,0.3);
+	/*background: rgba(105,60,9,0.3);*/
+
+    
 	box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.3);
 }
 
+table
+{
+    background: url(../img/c.png);
+    border-radius: 15px;
+}
 #tableform td, #tablespeed td, #tablepath td
 {
 	text-align: center;
@@ -222,7 +229,6 @@ input:-moz-placeholder
 
 #tableform
 {
-	
 	border-left: 0px 0px;
 }
 
@@ -239,7 +245,6 @@ input:-moz-placeholder
 {
     border: solid 10px rgba(0,0,0,0.1);
     border-radius: 5px;
-    background: rgba(255,255,255,0.4);
     box-shadow: 0px 0px 5px 5px rgba(255,255,255,0.3);
 }
 
@@ -571,4 +576,9 @@ h1
     height: 55px; 
     width: 55px;
     display:none; 
+}
+
+table
+{
+
 }

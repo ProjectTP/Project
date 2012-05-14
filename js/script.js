@@ -70,7 +70,7 @@
 			clearInterval(gameInterval);
 			if(play_page){
 				gameInterval = setInterval(draw_PlayPage, 20);
-			}else{
+			} else{
 				gameInterval = setInterval(draw, 20);
 			}			
 		}
@@ -716,7 +716,7 @@
 			for(var k=0;k<temp.length;k++){
 				if ( temp[k]!=' ' && temp[k]!='\n' ){
 					temp_input+=temp[k];
-				}else if ((temp[k]==' ' || temp[k]=='\n') && k!=0){
+				} else if ((temp[k]==' ' || temp[k]=='\n') && k!=0){
 					if (temp[k-1]!=' ' && temp[k-1]!='\n' ){
 						temp_input+=temp[k];
 					}     
@@ -757,11 +757,16 @@
 				motorB 	   = false;
 				if (steps[last_step] == "A") {
 					motorA = true;
-				}else if (steps[last_step] == "B") {
+				} else if (steps[last_step] == "B") {
 					motorB = true;
-				}else if (steps[last_step] == "AB") {
+				} else if (steps[last_step] == "AB") {
 					motorA = true;
 					motorB = true;
+				} else {
+					document.getElementById('out_path').value 	 += 'Wrong Input - ' 
+					+ steps[last_step] + ' ' + steps[last_step+1] + '\n';
+					stop_simulation();
+					return;
 				}
 
 				distance   = steps[last_step + 1] * 1;	
@@ -772,9 +777,27 @@
 				document.getElementById('out_path-bg').value += steps[last_step] + 
 				' ' + steps[last_step+1] + '\n';							
 				last_step += 2;
-			} else {
+			} else if ( (isCoord(steps[last_step]) || steps[last_step] == '\n' || steps[last_step] == '') && 
+													  steps[last_step - 1] != undefined)  {
 				stop_simulation();
-			}	
+			} else {
+				if (steps[last_step + 1] != undefined && !isCoord(steps[last_step + 1])) {
+					document.getElementById('out_path').value 	 += 'Wrong Input - ' ;
+					for (i = 0; steps[last_step + i] != undefined && !isCoord(steps[last_step + i]); i++) {
+						document.getElementById('out_path').value 	 += steps[last_step + i] + ' ';
+					}
+					document.getElementById('out_path').value += '\n';
+				} else {
+					document.getElementById('out_path').value 	 += 'Wrong Input - ' 
+						+ steps[last_step] + '\n';
+				}
+					stop_simulation();
+					return;
+			} 
+		}
+
+		function isCoord(val) {
+			return val == "A" || val == "B" || val == "AB";
 		}
 
 		function display()
