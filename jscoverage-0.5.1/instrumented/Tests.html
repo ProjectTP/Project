@@ -6,6 +6,8 @@
 		<meta charset="utf-8">
 		<link rel="shortcut icon" href="http://www.overcode.bg/images/fb/smiles/robot.gif">
 		<script type="text/javascript" src="script.js"></script>
+		<script type="text/javascript" src="js/jquery.js"></script>
+ 	 	<script type="text/javascript" src="tests.js"></script>
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
 		<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
   		<script src="http://www.bitstorm.org/jquery/color-animation/jquery.animate-colors.js"></script>
@@ -108,14 +110,7 @@
  
 	</head>
 	
-	<body onload = "javascript:fade('body'); javascript:slide2('table.welcome'); javascript:fadeo('div.logo'); javascript:fadelogo('div.logo-en'); start=true; init(6); 
-	javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; 
-	javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but1').disabled=false; 
-	javascript:document.getElementById('but2').disabled=true;	javascript:document.getElementById('but3').disabled=false;
-	javascript:document.getElementById('but1-play').disabled=false; javascript:document.getElementById('but2-play').disabled=true; 
-	javascript:document.getElementById('but3-play').disabled=false; javascript:document.getElementById('but1-play-bg').disabled=false; 
-	javascript:document.getElementById('but2-play-bg').disabled=true;javascript:document.getElementById('but3-play-bg').disabled=false; 
-	loadanime(); " style = "display:none;">
+	<body onload = "javascript:loadscript();" style = "display:none;">
 
 	<!-- ###################################################    WELCOME PAGE   ##################################################  -->
 
@@ -164,7 +159,7 @@
 
 					<tr>
 						<th  class = "wel" style = "border-radius: 0px 0px 10px 10px; border-top : 0px; padding: 10px;">
-							<a id = "langchange" onclick = "javascript:hiding('div.welcome-en'); javascript:showing('div.welcome-bg');">
+							<a id = "langchange" onclick = "javascript:hiding('div.welcome-en'); javascript:showing('div.welcome-bg'); change_lang('b');">
 								Българска версия
 								<img src = "img/bg.png" width = 35 height = 35 align = "top"/>
 							</a>
@@ -239,13 +234,13 @@
 					</tr>
 					<tr>
 						<th  class = "wel" style = "border-top: 0px; padding: 10px; border-radius: 0px 0px 10px 10px;">
-							<a id = "langchange" onclick = "javascript:showing('div.welcome-en'); javascript:hiding('div.welcome-bg');">
+							<a id = "langchange" onclick = "javascript:showing('div.welcome-en'); javascript:hiding('div.welcome-bg'); change_lang('e');">
 								English version
 								<img src = "img/en.png" width = 35 height = 35/>
 							</a>
 							<br/>
 							<br/>
-							<a id = "tests" onclick = "javascript:hiding('div.welcome-bg'); javascript:showing('div.tests'); javascript:runTests();">
+							<a id = "tests" href = "Tests.html">
 								Към тестовете <span class = "raq">&raquo;</span>
 							</a><br/><br/>
 							<a href = "#" id = "forus-bg" onclick = "showinfo('info-bg'); return false;">
@@ -279,56 +274,12 @@
 			<center>
 				<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.play-en'); play_page=true; change_page();" style = "width: 180px;">Go to Play Page</a>
 
-				<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.simulate-bg');" style = "width: 180px;">Change language</a>
+				<a class = "switch" onclick = "javascript:hiding('div.simulate-en'); javascript:showing('div.simulate-bg'); change_lang('b');" style = "width: 180px;">Change language</a>
 			</center>
 
 			<br/>
 
-			<table id = "tableform">
-			  	<tr>
-			    	<th colspan="2">Canvas</th>
-			  	</tr>
-				<tr>
-				    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"
-				    	onclick = "HideText('width-info'); return true;" onmouseover="ShowText('width-info'); return true;" 
-				    	onmouseout="HideText('width-info'); return true;"/></td>
-				    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"
-				    	onclick = "HideText('height-info'); return true;" onmouseover="ShowText('height-info'); return true;" 
-				    	onmouseout="HideText('height-info'); return true;"/></td>
-				</tr>
-				<tr>
-				    <td><button  onclick ="resize('e')"> Resize! </button></td>
-					<td><button  onclick ="reset()"> Reset! </button></td>
-				</tr>
-				<tr>
-					<th>Robot</th>
-					<th>Wheels</th>
-				</tr>
-				<tr>
-					<td><input type="number" id="width_r" min="20" max = "100" step = "1" placeholder = "Width"
-						onclick = "HideText('widthr-info'); return true;" onmouseover="ShowText('widthr-info'); return true;" 
-				    	onmouseout="HideText('widthr-info'); return true;"/></td>
-					<td><input type="number" id="width_w" min="5" max = "15" step = "1" placeholder = "Width"
-						onclick = "HideText('widthw-info'); return true;" onmouseover="ShowText('widthw-info'); return true;" 
-				    	onmouseout="HideText('widthw-info'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><input type="number" id="height_r" min="20" max = "150" step = "1" placeholder = "Height"
-						onclick = "HideText('heightr-info'); return true;" onmouseover="ShowText('heightr-info'); return true;" 
-				    	onmouseout="HideText('heightr-info'); return true;"/></td>
-					<td><input type="number" id="height_w" min="10" max = "100" step = "1" placeholder = "Height"
-						onclick = "HideText('heightw-info'); return true;" onmouseover="ShowText('heightw-info'); return true;" 
-				    	onmouseout="HideText('heightw-info'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_resize('e')"> Resize! </button></td>
-					<td><button  onclick ="wheel_resize('e')" > Resize! </button></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_reset()"> Reset! </button></td>
-					<td><button  onclick ="wheel_reset()" > Reset! </button></td>
-				</tr>
-			</table>
+			
 		</div>
 
 		<!-- Bulgarian simulate page-->
@@ -345,56 +296,12 @@
 			<center>
 				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.play-bg'); play_page=true; change_page();" style = "width: 180px;">Страница за игра</a>
 
-				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.simulate-en'); " style = "width: 180px;">Смени езика</a>
+				<a class = "switch" onclick = "javascript:hiding('div.simulate-bg'); javascript:showing('div.simulate-en'); change_lang('e'); " style = "width: 180px;">Смени езика</a>
 			</center>
 
 			<br/>
 
-			<table id = "tableform">
-			  	<tr>
-			    	<th colspan="2">Поле</th>
-			  	</tr>
-				<tr>
-				    <td><input type="number" id="width1-bg" min="150" max = "1000" step = "25" placeholder = "Ширина"
-				    	onclick = "HideText('width-info-bg'); return true;" onmouseover="ShowText('width-info-bg'); return true;" 
-			    		onmouseout="HideText('width-info-bg'); return true;"/></td>
-				    <td><input type="number" id="height1-bg" min="150" max = "1000" step = "25" placeholder = "Дължина"
-				    	onclick = "HideText('height-info-bg'); return true;" onmouseover="ShowText('height-info-bg'); return true;" 
-			    		onmouseout="HideText('height-info-bg'); return true;"/></td>
-				</tr>
-				<tr>
-				    <td><button  onclick ="resize('b')"> Преоразмери! </button></td>
-					<td><button  onclick ="reset()"> Възстанови! </button></td>
-				</tr>
-				<tr>
-					<th>Робот</th>
-					<th>Колела</th>
-				</tr>
-				<tr>
-					<td><input type="number" id="width_r-bg" min="20" max = "100" step = "1" placeholder = "Ширина"
-						onclick = "HideText('widthr-info-bg'); return true;" onmouseover="ShowText('widthr-info-bg'); return true;" 
-			    		onmouseout="HideText('widthr-info-bg'); return true;"/></td>
-					<td><input type="number" id="width_w-bg" min="5" max = "15" step = "1" placeholder = "Ширина"
-						onclick = "HideText('widthw-info-bg'); return true;" onmouseover="ShowText('widthw-info-bg'); return true;" 
-			    		onmouseout="HideText('widthw-info-bg'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><input type="number" id="height_r-bg" min="20" max = "150" step = "1" placeholder = "Дължина"
-						onclick = "HideText('heightr-info-bg'); return true;" onmouseover="ShowText('heightr-info-bg'); return true;" 
-			    		onmouseout="HideText('heightr-info-bg'); return true;"/></td>
-					<td><input type="number" id="height_w-bg" min="10" max = "100" step = "1" placeholder = "Дължина"
-						onclick = "HideText('heightw-info-bg'); return true;" onmouseover="ShowText('heightw-info-bg'); return true;" 
-			    		onmouseout="HideText('heightw-info-bg'); return true;"/></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_resize('b')"> Преоразмери! </button></td>
-					<td><button  onclick ="wheel_resize('b')" > Преоразмери! </button></td>
-				</tr>
-				<tr>
-					<td><button  onclick ="robo_reset()"> Възстанови! </button></td>
-					<td><button  onclick ="wheel_reset()" > Възстанови! </button></td>
-				</tr>
-			</table>
+			
 		</div>
 
 		<!-- ###################################################   PLAY PAGE   ##################################################  -->
@@ -412,7 +319,7 @@
 			<center>
 				<a class = "switch" onclick = "javascript:hiding('div.play-en'); javascript:showing('div.simulate-en'); play_page=false; change_page();" style = "width: 180px;">Go to Simulation Page</a>
 
-				<a class = "switch" onclick = "javascript:hiding('div.play-en'); javascript:showing('div.play-bg');" style = "width: 180px;">Change language</a>
+				<a class = "switch" onclick = "javascript:hiding('div.play-en'); javascript:showing('div.play-bg'); change_lang('b');" style = "width: 180px;">Change language</a>
 			</center>
 
 			<br/>
@@ -431,7 +338,7 @@
 			<center>
 				<a class = "switch" onclick = "javascript:hiding('div.play-bg'); javascript:showing('div.simulate-bg'); play_page=false; change_page();" style = "width: 180px;">Страница за симулация</a>
 
-				<a class = "switch" onclick = "javascript:hiding('div.play-bg'); javascript:showing('div.play-en'); " style = "width: 180px;">Смени езика</a>
+				<a class = "switch" onclick = "javascript:hiding('div.play-bg'); javascript:showing('div.play-en');change_lang('e'); " style = "width: 180px;">Смени езика</a>
 			</center>
 
 			<br/>			
@@ -487,7 +394,8 @@
 						</td>
 					</tr>
 					</table>				
-
+					<table class = "wrap">
+						<td>
 					<table  id = "tablepath">
 						<tr>
 							<th colspan = "3">Path</th> 
@@ -522,14 +430,65 @@ AB 120
 						</tr>
 						<tr>
 							<td>
-								<button  id="path" onclick ="generate_path('e'); get_new_step(); 
-								javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;
-								javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;"> Submit </button>
+								<button  id="path" onclick ="javascript:document.getElementById('play').disabled=true; 
+								javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;
+								javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;
+								generate_path(); get_new_step(); "> Submit </button>
 								<button  id="replace_path" onclick ="replace_path()"> Replace in input </button>
+								<button  id="clear_text" onclick =" clear_textareas()"> Clear </button>
 							</td>
 						</tr>
 					</tr>
-				</table>				
+				</table>
+			</td>
+			<td>
+				<table id = "tableform">
+			  	<tr>
+			    	<th colspan="2">Canvas</th>
+			  	</tr>
+				<tr>
+				    <td><input type="number" id="width1" min="150" max = "1000" step = "25" placeholder = "Width"
+				    	onclick = "HideText('width-info'); return true;" onmouseover="ShowText('width-info'); return true;" 
+				    	onmouseout="HideText('width-info'); return true;"/></td>
+				    <td><input type="number" id="height1" min="150" max = "1000" step = "25" placeholder = "Height"
+				    	onclick = "HideText('height-info'); return true;" onmouseover="ShowText('height-info'); return true;" 
+				    	onmouseout="HideText('height-info'); return true;"/></td>
+				</tr>
+				<tr>
+				    <td><button  onclick ="resize()"> Resize! </button></td>
+					<td><button  onclick ="reset()"> Reset! </button></td>
+				</tr>
+				<tr>
+					<th>Robot</th>
+					<th>Wheels</th>
+				</tr>
+				<tr>
+					<td><input type="number" id="width_r" min="20" max = "100" step = "1" placeholder = "Width"
+						onclick = "HideText('widthr-info'); return true;" onmouseover="ShowText('widthr-info'); return true;" 
+				    	onmouseout="HideText('widthr-info'); return true;"/></td>
+					<td><input type="number" id="width_w" min="5" max = "15" step = "1" placeholder = "Width"
+						onclick = "HideText('widthw-info'); return true;" onmouseover="ShowText('widthw-info'); return true;" 
+				    	onmouseout="HideText('widthw-info'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><input type="number" id="height_r" min="20" max = "150" step = "1" placeholder = "Height"
+						onclick = "HideText('heightr-info'); return true;" onmouseover="ShowText('heightr-info'); return true;" 
+				    	onmouseout="HideText('heightr-info'); return true;"/></td>
+					<td><input type="number" id="height_w" min="10" max = "100" step = "1" placeholder = "Height"
+						onclick = "HideText('heightw-info'); return true;" onmouseover="ShowText('heightw-info'); return true;" 
+				    	onmouseout="HideText('heightw-info'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_resize()"> Resize! </button></td>
+					<td><button  onclick ="wheel_resize()" > Resize! </button></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_reset()"> Reset! </button></td>
+					<td><button  onclick ="wheel_reset()" > Reset! </button></td>
+				</tr>
+			</table>
+			</td>	
+			</table>		
 				
 	  		</center>
 	  		<br/>
@@ -590,7 +549,8 @@ AB 120
 						</td>
 					</tr>
 					</table>
-
+					<table class = "wrap">
+					<td>
 					<table  id = "tablepath">
 						<tr>
 							<th colspan = "3">Път</th> 
@@ -625,15 +585,63 @@ AB 120
 							</tr>
 							<tr>
 								<td>
-									<button  id="path-bg" onclick ="generate_path('b'); get_new_step(); 
-									javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;
-									javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;"> Генерирай </button>
-									<button  id="replace_path-bg" onclick ="replace_path('b')"> Замести в полето </button>
+									<button  id="path-bg" onclick ="javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;
+									javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;generate_path(); get_new_step(); "> Генерирай </button>
+									<button  id="replace_path-bg" onclick ="replace_path()"> Замести в полето </button>
+									<button  id="clear_text-bg" onclick =" clear_textareas()"> Изчисти </button>
 								</td>
 							</tr>
 						</tr>
-					</table>			
-					
+					</table>
+					</td>
+					<td>
+					<table id = "tableform">
+			  	<tr>
+			    	<th colspan="2">Поле</th>
+			  	</tr>
+				<tr>
+				    <td><input type="number" id="width1-bg" min="150" max = "1000" step = "25" placeholder = "Ширина"
+				    	onclick = "HideText('width-info-bg'); return true;" onmouseover="ShowText('width-info-bg'); return true;" 
+			    		onmouseout="HideText('width-info-bg'); return true;"/></td>
+				    <td><input type="number" id="height1-bg" min="150" max = "1000" step = "25" placeholder = "Дължина"
+				    	onclick = "HideText('height-info-bg'); return true;" onmouseover="ShowText('height-info-bg'); return true;" 
+			    		onmouseout="HideText('height-info-bg'); return true;"/></td>
+				</tr>
+				<tr>
+				    <td><button  onclick ="resize()"> Преоразмери! </button></td>
+					<td><button  onclick ="reset()"> Възстанови! </button></td>
+				</tr>
+				<tr>
+					<th>Робот</th>
+					<th>Колела</th>
+				</tr>
+				<tr>
+					<td><input type="number" id="width_r-bg" min="20" max = "100" step = "1" placeholder = "Ширина"
+						onclick = "HideText('widthr-info-bg'); return true;" onmouseover="ShowText('widthr-info-bg'); return true;" 
+			    		onmouseout="HideText('widthr-info-bg'); return true;"/></td>
+					<td><input type="number" id="width_w-bg" min="5" max = "15" step = "1" placeholder = "Ширина"
+						onclick = "HideText('widthw-info-bg'); return true;" onmouseover="ShowText('widthw-info-bg'); return true;" 
+			    		onmouseout="HideText('widthw-info-bg'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><input type="number" id="height_r-bg" min="20" max = "150" step = "1" placeholder = "Дължина"
+						onclick = "HideText('heightr-info-bg'); return true;" onmouseover="ShowText('heightr-info-bg'); return true;" 
+			    		onmouseout="HideText('heightr-info-bg'); return true;"/></td>
+					<td><input type="number" id="height_w-bg" min="10" max = "100" step = "1" placeholder = "Дължина"
+						onclick = "HideText('heightw-info-bg'); return true;" onmouseover="ShowText('heightw-info-bg'); return true;" 
+			    		onmouseout="HideText('heightw-info-bg'); return true;"/></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_resize()"> Преоразмери! </button></td>
+					<td><button  onclick ="wheel_resize()" > Преоразмери! </button></td>
+				</tr>
+				<tr>
+					<td><button  onclick ="robo_reset()"> Възстанови! </button></td>
+					<td><button  onclick ="wheel_reset()" > Възстанови! </button></td>
+				</tr>
+			</table>
+					</td>		
+					</table>
 	  		</center>
 	  		<br/>
 	
@@ -723,7 +731,7 @@ AB 120
 					</tr>
 					<tr>
 						<td>
-							<button id="but1-play-bg" class = "speedyplay" onclick="init(3); 
+							<button id="but1-play-bg" onclick="init(3); 
 							javascript:document.getElementById('but1-bg').disabled=true; javascript:document.getElementById('but2-bg').disabled=false; 
 							javascript:document.getElementById('but3-bg').disabled=false;  javascript:document.getElementById('but1').disabled=true; 
 							javascript:document.getElementById('but2').disabled=false;	javascript:document.getElementById('but3').disabled=false;
@@ -732,7 +740,7 @@ AB 120
 							</button>
 						</td>
 						<td>
-							<button id="but2-play-bg" class = "speedyplay" disabled onclick="init(6); 
+							<button id="but2-play-bg" disabled onclick="init(6); 
 							javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=true; 
 							javascript:document.getElementById('but3-bg').disabled=false; javascript:document.getElementById('but1').disabled=false; 
 							javascript:document.getElementById('but2').disabled=true;	javascript:document.getElementById('but3').disabled=false;
@@ -741,7 +749,7 @@ AB 120
 							</button>
 						</td>
 						<td>
-							<button id="but3-play-bg" class = "speedyplay" onclick="init(9); 
+							<button id="but3-play-bg" onclick="init(9); 
 							javascript:document.getElementById('but1-bg').disabled=false; javascript:document.getElementById('but2-bg').disabled=false; 
 							javascript:document.getElementById('but3-bg').disabled=true;  javascript:document.getElementById('but1').disabled=false; 
 							javascript:document.getElementById('but2').disabled=false;	javascript:document.getElementById('but3').disabled=true;

@@ -61,7 +61,10 @@
 				ctx 		 = canvas.getContext("2d");
 				width 		 = canvas.width;
 				height 	 	 = canvas.height;
-				reset_data();				
+				reset_data();
+				document.getElementById('play').disabled  = true;	
+				document.getElementById('pause').disabled = true;	
+				document.getElementById('stop').disabled  = true;
 			}			
 			speed 			 = speed_;
 			clearInterval(gameInterval);
@@ -291,8 +294,8 @@
 				roboY 	  = height/2;
 				radian 	  = (Math.PI/180) * 0;
  			}
- 			document.getElementById('width1').value  = "";
-			document.getElementById('height1').value = "";
+ 			document.getElementById('width1').value  	= "";
+			document.getElementById('height1').value 	= "";
 			document.getElementById('width1-bg').value  = "";
 			document.getElementById('height1-bg').value = "";
 			resetpos();
@@ -776,13 +779,13 @@
 				document.getElementById('out_path-bg').value += steps[last_step] + 
 				' ' + steps[last_step+1] + '\n';							
 				last_step += 2;
-			} else if ( (isCoord(steps[last_step]) || steps[last_step] == '\n' || steps[last_step] == '') && 
-													  steps[last_step - 1] != undefined)  {
+			} else if ((isCoord(steps[last_step]) || steps[last_step] == '\n' || steps[last_step] == '' ||
+					   steps[last_step + 1] == undefined || last_step == 1 ) && steps[last_step - 1] != undefined)  {
 				stop_simulation();
 			} else {
 				if (steps[last_step + 1] != undefined && !isCoord(steps[last_step + 1])) {
-					document.getElementById('out_path').value 	 += 'Wrong Input - ' ;
-					document.getElementById('out_path-bg').value 	 += 'Грешни данни - ' ;
+					document.getElementById('out_path').value 	 += 'Wrong Input  ' ;
+					document.getElementById('out_path-bg').value 	 += 'Грешни данни  ' ;
 					for (i = 0; steps[last_step + i] != undefined && !isCoord(steps[last_step + i]); i++) {
 						document.getElementById('out_path').value 	 += steps[last_step + i] + ' ';
 						document.getElementById('out_path-bg').value 	 += steps[last_step + i] + ' ';
@@ -790,9 +793,9 @@
 					document.getElementById('out_path').value += '\n';
 					document.getElementById('out_path-bg').value += '\n';
 				} else {
-					document.getElementById('out_path').value 	 += 'Wrong Input - ' 
+					document.getElementById('out_path').value 	 += 'Wrong Input  ' 
 						+ steps[last_step] + '\n';
-					document.getElementById('out_path-bg').value 	 += 'Грешни данни - ' 
+					document.getElementById('out_path-bg').value 	 += 'Грешни данни  ' 
 						+ steps[last_step] + '\n';
 				}
 					stop_simulation();
@@ -1094,19 +1097,19 @@
 		slide2('table.welcome');
 		fadeo('div.logo');
 		fadelogo('div.logo-en');
-		start=true;
+		start = true;
 		init(6); 
-		document.getElementById('but1-bg').disabled=false;
-		document.getElementById('but2-bg').disabled=true;
-		document.getElementById('but3-bg').disabled=false;
-		document.getElementById('but1').disabled=false;
-		document.getElementById('but2').disabled=true;
-		document.getElementById('but3').disabled=false;
-		document.getElementById('but1-play').disabled=false;
-		document.getElementById('but2-play').disabled=true;
-		document.getElementById('but3-play').disabled=false;
-		document.getElementById('but1-play-bg').disabled=false;
-		document.getElementById('but2-play-bg').disabled=true;
-		document.getElementById('but3-play-bg').disabled=false;
+		document.getElementById('but1-bg').disabled 	 = false;
+		document.getElementById('but2-bg').disabled 	 = true;
+		document.getElementById('but3-bg').disabled 	 = false;
+		document.getElementById('but1').disabled 		 = false;
+		document.getElementById('but2').disabled 		 = true;
+		document.getElementById('but3').disabled 		 = false;
+		document.getElementById('but1-play').disabled 	 = false;
+		document.getElementById('but2-play').disabled 	 = true;
+		document.getElementById('but3-play').disabled 	 = false;
+		document.getElementById('but1-play-bg').disabled = false;
+		document.getElementById('but2-play-bg').disabled = true;
+		document.getElementById('but3-play-bg').disabled = false;
 		loadanime(); 
 	}
