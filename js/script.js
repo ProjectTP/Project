@@ -495,9 +495,9 @@
 		{
 			if (roboX + roboWidth/2 < width && roboX > roboWidth/2) {						
 				if (rightDown) {						
-					radian+=(Math.PI/180)*speed;							
+					radian += (Math.PI/180)*speed;							
 				} else if (leftDown) {					
-					radian-=(Math.PI/180)*speed;					
+					radian -= (Math.PI/180)*speed;					
 				}			
 			}	
 		}
@@ -508,20 +508,20 @@
 				if (upDown) {
 					calc_coord_play_page();
 					if (roboX + roboWidth/2 > width) {
-						crash=true;
-						roboX-=speed+1;			
+						crash = true;
+						roboX -= speed + 2;			
 					}
 					if (roboX < roboWidth/2) {
-						crash=true;
-						roboX+=speed+1;
+						crash = true;
+						roboX += speed + 2;
 					}
 				} 
 			} else if (roboHeight/2 + roboY < height) {
-				roboY += speed + 1;
-				crash=true;					
+				roboY += speed + 2;
+				crash = true;					
 			} else {
-				roboY -= speed + 1;   	
-				crash=true;		
+				roboY -= speed + 2;   	
+				crash = true;		
 			}	
 		}
 
@@ -733,6 +733,8 @@
 				check_inpath_free_space();		
 				document.getElementById('path').disabled  		 	= true;	
 				document.getElementById('replace_path').disabled 	= true;	
+				document.getElementById('clear_text').disabled 		= true;	
+				document.getElementById('clear_text-bg').disabled 	= true;	
 				document.getElementById('path-bg').disabled 		= true;	
 				document.getElementById('replace_path-bg').disabled = true;
 				document.getElementById('out_path').style.color  	= "green";				
@@ -836,6 +838,14 @@
 			ctx.closePath();
 		}
 
+		function clear_textareas()
+		{
+			document.getElementById('robo_path').value 	  = "";
+			document.getElementById('robo_path-bg').value = "";
+			document.getElementById('out_path').value     = "";			
+			document.getElementById('out_path-bg').value  = "";
+		}
+
 		function replace_path()
 		{
 			document.getElementById('robo_path').value 	  = document.getElementById('out_path').value;
@@ -862,16 +872,18 @@
 					ctx.fillText("Сблъсък!", width/2-125, height/2 + 10);				
 				}
 			}	
-			if (!stop_){
-				document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
-				document.getElementById('out_path-bg').value += "Сблъсък на ред " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
-			} 
-			for (; steps[last_step + 1] * 1 > 0; last_step += 2) {
-				document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';
-				document.getElementById('out_path-bg').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';		
-			}
-			if(!play_page)
+
+			if(!play_page){
+				if (!stop_){
+					document.getElementById('out_path').value += "Crash on line " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
+					document.getElementById('out_path-bg').value += "Сблъсък на ред " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
+				}
+				for (; steps[last_step + 1] * 1 > 0; last_step += 2) {
+					document.getElementById('out_path').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';
+					document.getElementById('out_path-bg').value += steps[last_step] + ' ' + steps[last_step+1] + '\n';		
+				}			
 				stop_simulation();
+			}
 		}
 
 		function stopgen()
@@ -886,6 +898,8 @@
 			w = 0;
 			document.getElementById('path').disabled 			 = false;	
 			document.getElementById('replace_path').disabled	 = false;
+			document.getElementById('clear_text').disabled 		 = false;	
+			document.getElementById('clear_text-bg').disabled    = false;	
 			document.getElementById('path-bg').disabled 		 = false;	
 			document.getElementById('replace_path-bg').disabled  = false;
 			document.getElementById('play').disabled 			 = true;	
