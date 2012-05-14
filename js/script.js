@@ -809,7 +809,7 @@ function get_new_step()
 			}
 			document.getElementById('out_path').value 	 += '\n';
 			document.getElementById('out_path-bg').value += '\n';
-		} else {
+		} else if (!change_page) {
 			document.getElementById('out_path').value 	 += 'Wrong Input  ' 
 				+ steps[last_step] + '\n';
 			document.getElementById('out_path-bg').value += 'Грешни данни  ' 
