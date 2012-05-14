@@ -58,7 +58,6 @@ function notNull(val)
 }
 
 
-
 /* -------------- Tests ------------ */
 
 function runTests() {
@@ -210,5 +209,92 @@ function runTests() {
     equal(stop_, true, 'stop_ is OK');
   })
 
+  test('wheel_reset function', function() {
+    wheel_reset();
+    equal(resize_, true, 'resize_ is OK');
+    equal(lWheelWidth, 7, 'lWheelWidth is OK');
+    equal(lWheelHeight, 40, 'lWheelHeight is OK');
+    equal(rWheelWidth, 7, 'rWheelWidth is OK');
+    equal(rWheelHeight, 40, 'rWheelHeight is OK');
+    equal(lWheelPosX, -roboWidth/2 - 7, 'lWheelPosX is OK');
+    equal(rWheelPosX, roboWidth/2, 'rWheelPosX is OK');
+    equal(document.getElementById('width_w').value, "", 'width_w input is OK');
+    equal(document.getElementById('height_w').value, "", 'height_w input is OK');
+  })
 
+  test('check_rect_angles function', function() {
+    check_rect_angles();
+    ok(checkBool(crash), 'crash is OK');
+  })
+
+  test('resize function', function() {
+    resize();
+    equal(resize_, true, 'resize_ is OK');
+    equal(roboX, width/2, 'roboX is OK');
+    equal(roboY, height/2, 'roboY is OK');
+    equal(radian,(Math.PI/180) * 0, 'radian is OK');
+  })
+
+  test('robo_data_reset function', function() {
+    robo_data_reset();
+    equal(start, false, 'start is OK');
+  })
+
+  test('robo_reset function', function() {
+    robo_reset();
+    equal(resize_, true, 'resize_ is OK');
+    equal(roboWidth, 50, 'roboWidth is OK');
+    equal(roboHeight, 53, 'roboHeight is OK');
+    equal(document.getElementById('width_r').value, "", 'width_r input is OK');
+    equal(document.getElementById('height_r').value, "", 'height_r input is OK');
+  })
+
+  test('change_page function', function() {
+    change_page();
+    equal(steps, 0, 'steps is ok');
+    equal(document.getElementById('out_path').value, "", 'out_path textarea is OK');
+    equal(document.getElementById('out_path-bg').value, "", 'out_path-bg textarea is OK');
+  })
+
+  test('change_lang function', function() {
+    change_lang('e');
+    equal(lang, 'e', 'lang is OK');
+    equal(change_lang_, false, 'change_lang_ is OK');
+  })
+
+  test('testing functions', function(){
+    popup();
+    popupbg();
+
+    document.getElementById('width1').value = 700;
+    document.getElementById('height1').value = 700;
+    document.getElementById('width1-bg').value = 700;
+    document.getElementById('height1-bg').value = 700;
+    document.getElementById('width_r').value = 25;
+    document.getElementById('height_r').value = 25;
+    document.getElementById('width_r-bg').value = 25;
+    document.getElementById('height_r-bg').value = 25;
+    document.getElementById('width_w').value = 25;
+    document.getElementById('height_w').value = 25;
+    document.getElementById('width_w-bg').value = 25;
+    document.getElementById('height_w-bg').value = 25;
+
+    change_lang('e');
+    resize();
+    robo_resize();
+    wheel_resize();
+    change_lang('b');
+    resize();
+    robo_resize();
+    wheel_resize();
+
+    draw_PlayPage();
+    check_LeftRight_key();
+    check_Up_key();
+    calc_new_coords_for_draw();
+    get_new_step();
+    crash_mess();
+    ok(true);
+
+  })
 }

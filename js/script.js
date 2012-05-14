@@ -108,10 +108,10 @@
 
 		function change_lang(val)
 		{
-			lang=val;
-			change_lang_=true;
+			lang 		 = val;
+			change_lang_ = true;
 			display();
-			change_lang_=false;
+			change_lang_ = false;
 		}
 
 		function popup(message) 
@@ -587,10 +587,10 @@
 			degrees = make_degrees();
 
 			if (angle == 1) {
-				x=Math.cos((Math.PI/180)*90 - (Math.PI/180) * degrees) * roboHeight/2;
+				x=Math.cos((Math.PI/180) * 90 - (Math.PI/180) * degrees) * roboHeight/2;
 				return x - (Math.cos((Math.PI/180)*degrees) * roboWidth/2);
 			} else if (angle == 2) {
-				x=Math.cos((Math.PI/180)*90 - (Math.PI/180) * degrees) * roboHeight/2;
+				x=Math.cos((Math.PI/180) * 90 - (Math.PI/180) * degrees) * roboHeight/2;
 				return x + (Math.cos((Math.PI/180) * degrees) * roboWidth/2);
 			} else if (angle == 3) {
 				x= -Math.sin((Math.PI/180) * degrees) * roboHeight/2;
@@ -645,12 +645,12 @@
 					roboX -= calc_distance_sin(360);
 					roboY -= calc_distance_cos(360);
 				}
-			}			
+			}		
 		}
 
 		function calc_coord_play_page()
 		{
-			degrees=make_degrees();
+			degrees = make_degrees();
 
 			if (degrees >= 0 && degrees <= 90) {
 				if (upDown) {
