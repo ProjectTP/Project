@@ -417,21 +417,21 @@ AB 120
 						</tr>
 						<tr>
 							<td>
-								<button  id="play" onclick ="pause_=false;	document.getElementById('play').disabled=true;	
+								<button disabled id="play" onclick ="pause_=false;	document.getElementById('play').disabled=true;	
 								document.getElementById('pause').disabled=false;document.getElementById('stop').disabled=false;
 								document.getElementById('play-bg').disabled=true; document.getElementById('pause-bg').disabled=false;
 								document.getElementById('stop-bg').disabled=false;"> Play </button>
-								<button  id="pause" onclick ="pause_=true;	document.getElementById('play').disabled=false;	
+								<button disabled id="pause" onclick ="pause_=true;	document.getElementById('play').disabled=false;	
 								document.getElementById('pause').disabled=true;	document.getElementById('stop').disabled=false;
 								document.getElementById('play-bg').disabled=false;	document.getElementById('pause-bg').disabled=true;
 								document.getElementById('stop-bg').disabled=false;"> Pause </button>
-								<button  id="stop" onclick ="stopgen();"> Stop </button>
+								<button disabled id="stop" onclick ="stopgen();"> Stop </button>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<button  id="path"    onclick ="javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;
-								javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false; generate_path(); get_new_step();"> Submit </button>
+								<button  id="path"    onclick ="javascript:document.getElementById('play').disabled=true; javascript:document.getElementById('pause').disabled=false; javascript:document.getElementById('stop').disabled=false;javascript:document.getElementById('play-bg').disabled=true; javascript:document.getElementById('pause-bg').disabled=false; javascript:document.getElementById('stop-bg').disabled=false;
+								 generate_path(); get_new_step();"> Submit </button>
 								<button  id="replace_path" onclick ="replace_path()"> Replace in input </button>
 								<button  id="clear_text" onclick =" clear_textareas()"> Clear </button>
 							</td>

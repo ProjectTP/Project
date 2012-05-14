@@ -61,10 +61,7 @@
 				ctx 		 = canvas.getContext("2d");
 				width 		 = canvas.width;
 				height 	 	 = canvas.height;
-				reset_data();
-				document.getElementById('play').disabled  = true;	
-				document.getElementById('pause').disabled = true;	
-				document.getElementById('stop').disabled  = true;
+				reset_data();				
 			}			
 			speed 			 = speed_;
 			clearInterval(gameInterval);
