@@ -291,7 +291,11 @@ function runTests() {
     draw_PlayPage();
     check_LeftRight_key();
     check_Up_key();
+    calc_coord();
+    calc_coord_play_page();
     calc_new_coords_for_draw();
+    check_inpath_free_space();
+    clear_textareas();
     get_new_step();
     crash_mess();
     ok(true);
