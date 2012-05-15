@@ -931,8 +931,8 @@ function crash_mess()
 	}	
 	if (!play_page) {
 		if (!stop_) {
-			document.getElementById('out_path').value    += "Crash on line "  + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
-			document.getElementById('out_path-bg').value += "Сблъсък на ред " + (last_step/2+1)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
+			document.getElementById('out_path').value    += "Crash on line "  + (last_step/2)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
+			document.getElementById('out_path-bg').value += "Сблъсък на ред " + (last_step/2)+ " ("+ steps[last_step-2]+ ' ' + steps[last_step-1] + ')' + '\n';
 		}
 		for (; steps[last_step + 1] * 1 > 0; last_step += 2) {
 			document.getElementById('out_path').value    += steps[last_step] + ' ' + steps[last_step+1] + '\n';
